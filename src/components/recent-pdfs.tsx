@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { motion } from "framer-motion"
 import { PdfDetailModal } from "@/components/pdf-detail-modal"
 import { MONTHS } from "@/lib/constants"
 
@@ -19,11 +20,22 @@ export function RecentPdfs({ pdfs }: { pdfs: RecentPdf[] }) {
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <motion.div
+        className="grid grid-cols-1 md:grid-cols-2 gap-3"
+        variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-40px" }}
+      >
         {pdfs.map((pdf) => (
-          <div
+          <motion.div
             key={pdf.id}
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.25, 0.4, 0.25, 1] as const } },
+            }}
             onClick={() => setSelectedPdfId(pdf.id)}
+            whileHover={{ scale: 1.02, y: -2 }}
             className="border border-border rounded-lg p-4 space-y-1.5 hover:shadow-sm transition-shadow cursor-pointer"
           >
             <p className="text-sm font-medium">{pdf.title}</p>
@@ -36,9 +48,9 @@ export function RecentPdfs({ pdfs }: { pdfs: RecentPdf[] }) {
             {pdf.description && (
               <p className="text-xs text-muted-foreground">{pdf.description}</p>
             )}
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
       <PdfDetailModal
         pdfId={selectedPdfId}
         onClose={() => setSelectedPdfId(null)}
