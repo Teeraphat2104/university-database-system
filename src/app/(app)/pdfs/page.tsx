@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { PdfList } from "./pdf-list"
+import { MONTHS, getYears } from "@/lib/constants"
 
 export default async function PdfsPage({
   searchParams,
@@ -32,20 +33,14 @@ export default async function PdfsPage({
   const role = (session?.user as any)?.role
   const canEdit = role === "admin" || role === "editor"
   const canDelete = role === "admin"
-  const months = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December",
-  ]
-  const years = Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - i)
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">PDFs</h1>
       <PdfList
         pdfs={pdfs}
         categories={categories}
-        years={years}
-        months={months}
+        years={getYears()}
+        months={[...MONTHS]}
         canEdit={canEdit}
         canDelete={canDelete}
         initialQ={params.q || ""}
