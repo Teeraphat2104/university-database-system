@@ -10,7 +10,8 @@ type RecentPdf = {
   description: string | null
   year: number
   month: number
-  category: { name: string }
+  categoryId: string
+  category: { name: string; imagePath?: string | null }
 }
 
 export function RecentPdfs({ pdfs }: { pdfs: RecentPdf[] }) {
@@ -26,7 +27,10 @@ export function RecentPdfs({ pdfs }: { pdfs: RecentPdf[] }) {
             className="border border-border rounded-lg p-4 space-y-1.5 hover:shadow-sm transition-shadow cursor-pointer"
           >
             <p className="text-sm font-medium">{pdf.title}</p>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground flex items-center gap-1">
+              {pdf.category.imagePath && (
+                <img src={`/api/categories/${pdf.categoryId}/image`} alt="" className="w-3.5 h-3.5 rounded object-cover" />
+              )}
               {pdf.category.name} &middot; {MONTHS[pdf.month - 1]} {pdf.year}
             </p>
             {pdf.description && (

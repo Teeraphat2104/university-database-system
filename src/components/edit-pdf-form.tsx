@@ -10,7 +10,7 @@ export function EditPdfForm({
   onSuccess,
 }: {
   pdf: { id: string; title: string; description: string | null; year: number; month: number; categoryId: string }
-  categories: { id: string; name: string }[]
+  categories: { id: string; name: string; imagePath?: string | null }[]
   months: string[]
   onSuccess: () => void
 }) {

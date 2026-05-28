@@ -10,7 +10,7 @@ import { MONTHS, getYears } from "@/lib/constants"
 
 type Step = 1 | 2 | "uploading" | "done"
 
-export function UploadZone({ categories }: { categories: { id: string; name: string }[] }) {
+export function UploadZone({ categories }: { categories: { id: string; name: string; imagePath?: string | null }[] }) {
   const router = useRouter()
   const [step, setStep] = useState<Step>(1)
   const [file, setFile] = useState<File | null>(null)

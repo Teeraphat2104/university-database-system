@@ -1,13 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { useActionState } from "react"
 import { Modal } from "@/components/modal"
 import { usePersistedState } from "@/hooks/use-persisted-state"
 import {
   IconFolderPlus, IconTrash, IconEdit, IconTable, IconLayoutGrid,
-  IconFolder,
+  IconFolder, IconPhoto, IconX,
 } from "@tabler/icons-react"
 import { createCategoryAction, deleteCategoryAction, updateCategoryAction } from "@/lib/actions/category"
 
@@ -18,9 +18,56 @@ type CategoryData = {
   name: string
   pdfCount: number
   createdAt?: string
+  imagePath?: string | null
+}
+
+function ImagePreview({ src, onRemove }: { src: string; onRemove?: () => void }) {
+  return (
+    <div className="relative inline-flex">
+      <img src={src} alt="" className="w-20 h-20 rounded-lg object-cover border border-border" />
+      {onRemove && (
+        <button type="button" onClick={onRemove} className="absolute -top-1.5 -right-1.5 rounded-full bg-red-500 text-white p-0.5 shadow-sm">
+          <IconX className="h-3 w-3" />
+        </button>
+      )}
+    </div>
+  )
+}
+
+function ImageInput({ name, currentImage, onRemove }: { name: string; currentImage?: string | null; onRemove?: () => void }) {
+  const [preview, setPreview] = useState<string | null>(null)
+  const fileRef = useRef<HTMLInputElement>(null)
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (file) {
+      setPreview(URL.createObjectURL(file))
+    }
+  }
+
+  return (
+    <div className="space-y-1.5">
+      <label className="text-sm font-medium">Category Image <span className="text-muted-foreground font-normal">(optional)</span></label>
+      {preview ? (
+        <ImagePreview src={preview} onRemove={() => { setPreview(null); if (fileRef.current) fileRef.current.value = "" }} />
+      ) : currentImage ? (
+        <div className="flex items-center gap-3">
+          <ImagePreview src={`/api/categories/${currentImage}/image`} />
+          <button type="button" onClick={onRemove} className="text-xs text-red-500 hover:text-red-600 underline">Remove</button>
+        </div>
+      ) : (
+        <label className="flex items-center gap-2 rounded-lg border border-dashed border-border px-4 py-3 text-sm text-muted-foreground hover:border-primary/50 hover:text-primary cursor-pointer transition-colors">
+          <IconPhoto className="h-4 w-4" />
+          Upload image
+          <input ref={fileRef} type="file" name={name} accept=".png,.jpg,.jpeg,.webp,.svg" onChange={handleChange} className="hidden" />
+        </label>
+      )}
+    </div>
+  )
 }
 
 function CreateCategoryForm({ onSuccess }: { onSuccess: () => void }) {
+  const [showImageInput, setShowImageInput] = useState(false)
   const [state, action, pending] = useActionState(
     async (_prev: { error: string | null } | null, formData: FormData) => {
       const res = await createCategoryAction(formData)
@@ -36,6 +83,20 @@ function CreateCategoryForm({ onSuccess }: { onSuccess: () => void }) {
         <label htmlFor="name" className="text-sm font-medium">Category Name</label>
         <input id="name" name="name" required className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
       </div>
+      <div className="space-y-1.5">
+        <label className="text-sm font-medium">Category Image <span className="text-muted-foreground font-normal">(optional)</span></label>
+        {showImageInput ? (
+          <div className="flex items-center gap-3">
+            <input type="file" name="image" accept=".png,.jpg,.jpeg,.webp,.svg" className="block w-full text-sm text-muted-foreground file:mr-3 file:rounded-lg file:border-0 file:bg-primary/10 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-primary hover:file:bg-primary/20 transition-colors" />
+            <button type="button" onClick={() => setShowImageInput(false)} className="text-xs text-muted-foreground hover:text-primary shrink-0">Cancel</button>
+          </div>
+        ) : (
+          <button type="button" onClick={() => setShowImageInput(true)} className="flex items-center gap-2 rounded-lg border border-dashed border-border px-4 py-3 text-sm text-muted-foreground hover:border-primary/50 hover:text-primary transition-colors w-full">
+            <IconPhoto className="h-4 w-4" />
+            Add category image
+          </button>
+        )}
+      </div>
       {state?.error && (
         <div className="rounded-lg bg-red-50 dark:bg-red-950 px-3 py-2 text-sm text-red-600 dark:text-red-400">{state.error}</div>
       )}
@@ -48,7 +109,7 @@ function CreateCategoryForm({ onSuccess }: { onSuccess: () => void }) {
   )
 }
 
-function EditCategoryForm({ category, onSuccess }: { category: CategoryData; onSuccess: () => void }) {
+function EditCategoryForm({ category, onSuccess }: { category: CategoryData & { imagePath?: string | null }; onSuccess: () => void }) {
   const [state, action, pending] = useActionState(
     async (_prev: { error: string | null } | null, formData: FormData) => {
       const res = await updateCategoryAction(formData)
@@ -58,12 +119,35 @@ function EditCategoryForm({ category, onSuccess }: { category: CategoryData; onS
     null,
   )
 
+  const [removeImage, setRemoveImage] = useState(false)
+
   return (
     <form action={action} className="space-y-4">
       <input type="hidden" name="id" value={category.id} />
+      {removeImage && <input type="hidden" name="removeImage" value="true" />}
       <div className="space-y-1.5">
         <label htmlFor="edit-name" className="text-sm font-medium">Category Name</label>
         <input id="edit-name" name="name" defaultValue={category.name} required className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+      </div>
+      <div className="space-y-1.5">
+        <label className="text-sm font-medium">Category Image <span className="text-muted-foreground font-normal">(optional)</span></label>
+        {removeImage ? (
+          <div className="flex items-center gap-3">
+            <input type="file" name="image" accept=".png,.jpg,.jpeg,.webp,.svg" className="block w-full text-sm text-muted-foreground file:mr-3 file:rounded-lg file:border-0 file:bg-primary/10 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-primary hover:file:bg-primary/20 transition-colors" />
+            <button type="button" onClick={() => setRemoveImage(false)} className="text-xs text-muted-foreground hover:text-primary shrink-0">Cancel</button>
+          </div>
+        ) : category.imagePath ? (
+          <div className="flex items-center gap-3">
+            <ImagePreview src={`/api/categories/${category.id}/image`} />
+            <button type="button" onClick={() => setRemoveImage(true)} className="text-xs text-red-500 hover:text-red-600 underline">Remove</button>
+          </div>
+        ) : (
+          <label className="flex items-center gap-2 rounded-lg border border-dashed border-border px-4 py-3 text-sm text-muted-foreground hover:border-primary/50 hover:text-primary cursor-pointer transition-colors">
+            <IconPhoto className="h-4 w-4" />
+            Upload image
+            <input type="file" name="image" accept=".png,.jpg,.jpeg,.webp,.svg" className="hidden" />
+          </label>
+        )}
       </div>
       {state?.error && (
         <div className="rounded-lg bg-red-50 dark:bg-red-950 px-3 py-2 text-sm text-red-600 dark:text-red-400">{state.error}</div>
@@ -154,7 +238,16 @@ export function CategoriesClient({
                 <tr key={c.id} className="hover:bg-muted/20 transition-colors">
                   <td className="px-4 py-3 text-xs text-muted-foreground">{i + 1}</td>
                   <td className="px-4 py-3">
-                    <p className="text-sm font-medium">{c.name}</p>
+                    <div className="flex items-center gap-3">
+                      {c.imagePath ? (
+                        <img src={`/api/categories/${c.id}/image`} alt="" className="w-8 h-8 rounded-md object-cover border border-border shrink-0" />
+                      ) : (
+                        <div className="w-8 h-8 rounded-md bg-primary/10 flex items-center justify-center shrink-0">
+                          <IconFolder className="h-4 w-4 text-primary" />
+                        </div>
+                      )}
+                      <p className="text-sm font-medium">{c.name}</p>
+                    </div>
                   </td>
                   <td className="px-4 py-3 text-center">
                     <span className="inline-flex items-center justify-center text-xs font-medium tabular-nums bg-primary/10 text-primary rounded-full px-2 py-0.5 min-w-[28px]">
@@ -214,9 +307,13 @@ export function CategoriesClient({
                   className="group border border-border rounded-xl p-4 hover:shadow-sm transition-all space-y-3"
                 >
                   <div className="flex items-start justify-between">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <IconFolder className="h-5 w-5 text-primary" />
-                    </div>
+                    {c.imagePath ? (
+                      <img src={`/api/categories/${c.id}/image`} alt="" className="w-10 h-10 rounded-lg object-cover border border-border" />
+                    ) : (
+                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                        <IconFolder className="h-5 w-5 text-primary" />
+                      </div>
+                    )}
                     {c.pdfCount === 0 && (
                       <button
                         onClick={() => setDeleteTarget({ id: c.id, name: c.name })}
@@ -236,7 +333,7 @@ export function CategoriesClient({
                       onClick={() => setEditTarget(c)}
                       className="flex-1 rounded-md border border-border px-2 py-1.5 text-xs font-medium text-muted-foreground hover:text-primary hover:border-primary/30 transition-colors"
                     >
-                      Rename
+                      Edit
                     </button>
                   </div>
                 </div>
@@ -252,7 +349,7 @@ export function CategoriesClient({
       </Modal>
 
       {/* Edit modal */}
-      <Modal open={!!editTarget} onClose={() => setEditTarget(null)} title="Rename Category">
+      <Modal open={!!editTarget} onClose={() => setEditTarget(null)} title="Edit Category">
         {editTarget && (
           <EditCategoryForm category={editTarget} onSuccess={() => { setEditTarget(null); router.refresh() }} />
         )}

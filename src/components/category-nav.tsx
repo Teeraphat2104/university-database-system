@@ -9,6 +9,7 @@ type CategoryItem = {
   id: string
   name: string
   slug: string
+  imagePath?: string | null
   _count: { pdfs: number }
   pdfs: { id: string; title: string }[]
 }
@@ -45,7 +46,11 @@ export function CategoryNav({ categories }: { categories: CategoryItem[] }) {
                 <IconChevronRight
                   className={`h-3.5 w-3.5 shrink-0 transition-transform ${isExpanded ? "rotate-90" : ""}`}
                 />
-                <IconFolder className="h-4 w-4 shrink-0" />
+                {cat.imagePath ? (
+                  <img src={`/api/categories/${cat.id}/image`} alt="" className="h-4 w-4 shrink-0 rounded object-cover" />
+                ) : (
+                  <IconFolder className="h-4 w-4 shrink-0" />
+                )}
                 <span className="flex-1 text-left truncate">{cat.name}</span>
                 <span className="text-xs text-muted-foreground">{cat._count.pdfs}</span>
               </button>

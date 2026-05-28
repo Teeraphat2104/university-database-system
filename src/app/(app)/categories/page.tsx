@@ -20,6 +20,7 @@ export default async function CategoriesPage() {
         name: c.name,
         pdfCount: c._count.pdfs,
         createdAt: c.createdAt.toISOString(),
+        imagePath: c.imagePath,
       }))}
     />
   )

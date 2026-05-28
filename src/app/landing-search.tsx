@@ -8,7 +8,7 @@ export function LandingSearch({
   years,
   months,
 }: {
-  categories: { id: string; name: string }[]
+  categories: { id: string; name: string; imagePath?: string | null }[]
   years: number[]
   months: string[]
 }) {

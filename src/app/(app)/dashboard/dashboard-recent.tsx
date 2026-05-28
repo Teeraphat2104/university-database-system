@@ -10,7 +10,8 @@ type RecentPdf = {
   title: string
   year: number
   month: number
-  category: { name: string }
+  categoryId: string
+  category: { name: string; imagePath?: string | null }
 }
 
 export function DashboardRecent({ pdfs }: { pdfs: RecentPdf[] }) {
@@ -30,7 +31,10 @@ export function DashboardRecent({ pdfs }: { pdfs: RecentPdf[] }) {
                 {pdf.title}
               </p>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium">
+                <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium">
+                  {pdf.category.imagePath && (
+                    <img src={`/api/categories/${pdf.categoryId}/image`} alt="" className="w-3 h-3 rounded object-cover" />
+                  )}
                   {pdf.category.name}
                 </span>
                 <span className="flex items-center gap-1">

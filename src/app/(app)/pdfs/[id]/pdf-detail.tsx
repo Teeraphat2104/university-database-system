@@ -25,10 +25,10 @@ export function PdfDetail({
     fileSize: number
     originalName: string
     createdAt: Date
-    category: { name: string }
+    category: { name: string; imagePath?: string | null }
     uploadedBy: { name: string }
   }
-  categories: { id: string; name: string }[]
+    categories: { id: string; name: string; imagePath?: string | null }[]
   months: string[]
   years: number[]
   canEdit: boolean
@@ -97,7 +97,12 @@ export function PdfDetail({
             <p className="text-xs text-muted-foreground flex items-center gap-1">
               <IconFolder className="h-3 w-3" /> Category
             </p>
-            <p className="text-sm font-medium">{pdf.category.name}</p>
+            <div className="flex items-center gap-2">
+              {pdf.category.imagePath && (
+                <img src={`/api/categories/${pdf.categoryId}/image`} alt="" className="w-5 h-5 rounded object-cover border border-border" />
+              )}
+              <p className="text-sm font-medium">{pdf.category.name}</p>
+            </div>
           </div>
           <div className="space-y-1">
             <p className="text-xs text-muted-foreground flex items-center gap-1">

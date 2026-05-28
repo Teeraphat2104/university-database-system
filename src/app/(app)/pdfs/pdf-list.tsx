@@ -27,7 +27,7 @@ export function PdfList({
   initialMonth = "",
 }: {
   pdfs: any[]
-  categories: { id: string; name: string }[]
+  categories: { id: string; name: string; imagePath?: string | null }[]
   years: number[]
   months: string[]
   canEdit: boolean
@@ -193,7 +193,10 @@ export function PdfList({
                         <p className="text-sm font-medium truncate max-w-[300px]">{pdf.title}</p>
                       </td>
                       <td className="px-4 py-3">
-                        <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2 py-0.5 text-xs font-medium">
+                          {pdf.category?.imagePath && (
+                            <img src={`/api/categories/${pdf.categoryId}/image`} alt="" className="w-3.5 h-3.5 rounded object-cover" />
+                          )}
                           {pdf.category?.name}
                         </span>
                       </td>
@@ -286,7 +289,10 @@ export function PdfList({
                   <div className="space-y-1.5">
                     <p className="text-sm font-medium leading-snug line-clamp-2">{pdf.title}</p>
                     <div className="flex flex-wrap gap-1.5">
-                      <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium">
+                        {pdf.category?.imagePath && (
+                          <img src={`/api/categories/${pdf.categoryId}/image`} alt="" className="w-3 h-3 rounded object-cover" />
+                        )}
                         {pdf.category?.name}
                       </span>
                     </div>
