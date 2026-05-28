@@ -6,6 +6,7 @@ import {
   IconUpload, IconFileDescription, IconX, IconChevronLeft,
   IconFile, IconCircleCheck, IconAlertCircle, IconProgress,
 } from "@tabler/icons-react"
+import { Select, type SelectOption } from "@/components/ui/select"
 import { MONTHS, getYears } from "@/lib/constants"
 
 type Step = 1 | 2 | "uploading" | "done"
@@ -20,6 +21,9 @@ export function UploadZone({ categories }: { categories: { id: string; name: str
   const [messageType, setMessageType] = useState<"error" | "success">("error")
   const formRef = useRef<HTMLFormElement>(null)
   const years = getYears()
+  const [categoryId, setCategoryId] = useState("")
+  const [yearVal, setYearVal] = useState(String(years[0]))
+  const [monthVal, setMonthVal] = useState(String(new Date().getMonth() + 1))
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault()
@@ -232,48 +236,36 @@ export function UploadZone({ categories }: { categories: { id: string; name: str
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label htmlFor="category" className="text-sm font-medium">Category</label>
-                <select
-                  id="category"
+                <label className="text-sm font-medium">Category</label>
+                <Select
+                  options={categories.map((c) => ({ value: c.id, label: c.name }))}
+                  value={categoryId}
+                  onChange={setCategoryId}
+                  placeholder="Select category"
                   name="categoryId"
                   required
-                  defaultValue=""
-                  className="w-full rounded-lg border border-border px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-                >
-                  <option value="" disabled>Select category</option>
-                  {categories.map((c) => (
-                    <option key={c.id} value={c.id}>{c.name}</option>
-                  ))}
-                </select>
+                />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
-                  <label htmlFor="year" className="text-sm font-medium">Year</label>
-                  <select
-                    id="year"
+                  <label className="text-sm font-medium">Year</label>
+                  <Select
+                    options={years.map((y) => ({ value: String(y), label: String(y) }))}
+                    value={yearVal}
+                    onChange={setYearVal}
                     name="year"
                     required
-                    defaultValue={years[0]}
-                    className="w-full rounded-lg border border-border px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-                  >
-                    {years.map((y) => (
-                      <option key={y} value={y}>{y}</option>
-                    ))}
-                  </select>
+                  />
                 </div>
                 <div className="space-y-1.5">
-                  <label htmlFor="month" className="text-sm font-medium">Month</label>
-                  <select
-                    id="month"
+                  <label className="text-sm font-medium">Month</label>
+                  <Select
+                    options={MONTHS.map((m, i) => ({ value: String(i + 1), label: m }))}
+                    value={monthVal}
+                    onChange={setMonthVal}
                     name="month"
                     required
-                    defaultValue={new Date().getMonth() + 1}
-                    className="w-full rounded-lg border border-border px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-                  >
-                    {MONTHS.map((m, i) => (
-                      <option key={i + 1} value={i + 1}>{m}</option>
-                    ))}
-                  </select>
+                  />
                 </div>
               </div>
             </div>

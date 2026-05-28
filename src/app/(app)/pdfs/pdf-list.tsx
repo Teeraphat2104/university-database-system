@@ -7,6 +7,7 @@ import {
   IconSearch, IconTrash, IconDownload, IconEdit, IconFileDescription,
   IconTable, IconLayoutGrid, IconUpload, IconCalendar, IconWeight,
 } from "@tabler/icons-react"
+import { Select, type SelectOption } from "@/components/ui/select"
 import { Modal } from "@/components/modal"
 import { EditPdfForm } from "@/components/edit-pdf-form"
 import { PdfDetailModal } from "@/components/pdf-detail-modal"
@@ -112,36 +113,36 @@ export function PdfList({
             className="w-full rounded-lg border border-border pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
           />
         </div>
-        <select
+        <Select
+          options={[
+            { value: "", label: "All Categories" },
+            ...categories.map((c) => ({ value: c.id, label: c.name })),
+          ]}
           value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-        >
-          <option value="">All Categories</option>
-          {categories.map((c) => (
-            <option key={c.id} value={c.id}>{c.name}</option>
-          ))}
-        </select>
-        <select
+          onChange={setCategory}
+          placeholder="All Categories"
+          className="min-w-[130px]"
+        />
+        <Select
+          options={[
+            { value: "", label: "All Years" },
+            ...years.map((y) => ({ value: String(y), label: String(y) })),
+          ]}
           value={year}
-          onChange={(e) => setYear(e.target.value)}
-          className="rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-        >
-          <option value="">All Years</option>
-          {years.map((y) => (
-            <option key={y} value={y}>{y}</option>
-          ))}
-        </select>
-        <select
+          onChange={setYear}
+          placeholder="All Years"
+          className="min-w-[110px]"
+        />
+        <Select
+          options={[
+            { value: "", label: "All Months" },
+            ...months.map((m, i) => ({ value: String(i + 1), label: m })),
+          ]}
           value={month}
-          onChange={(e) => setMonth(e.target.value)}
-          className="rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-        >
-          <option value="">All Months</option>
-          {months.map((m, i) => (
-            <option key={i + 1} value={i + 1}>{m}</option>
-          ))}
-        </select>
+          onChange={setMonth}
+          placeholder="All Months"
+          className="min-w-[120px]"
+        />
       </div>
 
       {/* Empty state */}

@@ -9,11 +9,13 @@ import {
   IconUserPlus, IconTrash, IconTable, IconLayoutGrid,
   IconUser, IconShield, IconEdit,
 } from "@tabler/icons-react"
+import { Select, type SelectOption } from "@/components/ui/select"
 import { createAdminAction, deleteAdminAction } from "@/lib/actions/admin"
 
 type ViewMode = "table" | "card"
 
 function CreateAdminForm({ onSuccess }: { onSuccess: () => void }) {
+  const [role, setRole] = useState("editor")
   const [state, action, pending] = useActionState(
     async (_prev: { error: string | null } | null, formData: FormData) => {
       const res = await createAdminAction(formData)
@@ -38,11 +40,17 @@ function CreateAdminForm({ onSuccess }: { onSuccess: () => void }) {
         <input id="password" name="password" type="password" required className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
       </div>
       <div className="space-y-1.5">
-        <label htmlFor="role" className="text-sm font-medium">Role</label>
-        <select id="role" name="role" required className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
-          <option value="editor">Editor</option>
-          <option value="admin">Admin</option>
-        </select>
+        <label className="text-sm font-medium">Role</label>
+        <Select
+          options={[
+            { value: "editor", label: "Editor" },
+            { value: "admin", label: "Admin" },
+          ]}
+          value={role}
+          onChange={setRole}
+          name="role"
+          required
+        />
       </div>
       {state?.error && (
         <div className="rounded-lg bg-red-50 dark:bg-red-950 px-3 py-2 text-sm text-red-600 dark:text-red-400">{state.error}</div>

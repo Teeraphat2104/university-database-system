@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { Select, type SelectOption } from "@/components/ui/select"
 
 export function EditPdfForm({
   pdf,
@@ -17,6 +18,9 @@ export function EditPdfForm({
   const router = useRouter()
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
+  const [categoryId, setCategoryId] = useState(pdf.categoryId)
+  const [yearVal, setYearVal] = useState(String(pdf.year))
+  const [monthVal, setMonthVal] = useState(String(pdf.month))
 
   const currentYear = new Date().getFullYear()
   const years = Array.from({ length: 30 }, (_, i) => currentYear - i)
@@ -47,23 +51,35 @@ export function EditPdfForm({
         <input id="edit-title" name="title" defaultValue={pdf.title} required className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
       </div>
       <div className="space-y-1.5">
-        <label htmlFor="edit-category" className="text-sm font-medium">Category</label>
-        <select id="edit-category" name="categoryId" defaultValue={pdf.categoryId} required className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
-          {categories.map((c) => (<option key={c.id} value={c.id}>{c.name}</option>))}
-        </select>
+        <label className="text-sm font-medium">Category</label>
+        <Select
+          options={categories.map((c) => ({ value: c.id, label: c.name }))}
+          value={categoryId}
+          onChange={setCategoryId}
+          name="categoryId"
+          required
+        />
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1.5">
-          <label htmlFor="edit-year" className="text-sm font-medium">Year</label>
-          <select id="edit-year" name="year" defaultValue={pdf.year} required className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
-            {years.map((y) => (<option key={y} value={y}>{y}</option>))}
-          </select>
+          <label className="text-sm font-medium">Year</label>
+          <Select
+            options={years.map((y) => ({ value: String(y), label: String(y) }))}
+            value={yearVal}
+            onChange={setYearVal}
+            name="year"
+            required
+          />
         </div>
         <div className="space-y-1.5">
-          <label htmlFor="edit-month" className="text-sm font-medium">Month</label>
-          <select id="edit-month" name="month" defaultValue={pdf.month} required className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
-            {months.map((m, i) => (<option key={i + 1} value={i + 1}>{m}</option>))}
-          </select>
+          <label className="text-sm font-medium">Month</label>
+          <Select
+            options={months.map((m, i) => ({ value: String(i + 1), label: m }))}
+            value={monthVal}
+            onChange={setMonthVal}
+            name="month"
+            required
+          />
         </div>
       </div>
       <div className="space-y-1.5">
