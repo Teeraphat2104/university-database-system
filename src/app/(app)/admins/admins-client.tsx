@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useActionState } from "react"
 import { Modal } from "@/components/modal"
+import { usePersistedState } from "@/hooks/use-persisted-state"
 import {
   IconUserPlus, IconTrash, IconTable, IconLayoutGrid,
   IconUser, IconShield, IconEdit,
@@ -76,7 +77,7 @@ export function AdminsClient({
   currentUserEmail: string
 }) {
   const router = useRouter()
-  const [view, setView] = useState<ViewMode>("table")
+  const [view, setView] = usePersistedState<ViewMode>("view-admins", "table")
   const [createOpen, setCreateOpen] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null)
   const [deletePending, setDeletePending] = useState(false)

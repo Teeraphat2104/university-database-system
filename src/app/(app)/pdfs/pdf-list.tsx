@@ -10,6 +10,7 @@ import {
 import { Modal } from "@/components/modal"
 import { EditPdfForm } from "@/components/edit-pdf-form"
 import { PdfDetailModal } from "@/components/pdf-detail-modal"
+import { usePersistedState } from "@/hooks/use-persisted-state"
 
 type ViewMode = "table" | "card"
 
@@ -37,7 +38,7 @@ export function PdfList({
   initialMonth?: string
 }) {
   const router = useRouter()
-  const [view, setView] = useState<ViewMode>("table")
+  const [view, setView] = usePersistedState<ViewMode>("view-pdfs", "table")
   const [search, setSearch] = useState(initialQ)
   const [category, setCategory] = useState(initialCategory)
   const [year, setYear] = useState(initialYear)

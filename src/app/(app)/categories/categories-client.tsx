@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useActionState } from "react"
 import { Modal } from "@/components/modal"
+import { usePersistedState } from "@/hooks/use-persisted-state"
 import {
   IconFolderPlus, IconTrash, IconEdit, IconTable, IconLayoutGrid,
   IconFolder,
@@ -82,7 +83,7 @@ export function CategoriesClient({
   categories: CategoryData[]
 }) {
   const router = useRouter()
-  const [view, setView] = useState<ViewMode>("table")
+  const [view, setView] = usePersistedState<ViewMode>("view-categories", "table")
   const [createOpen, setCreateOpen] = useState(false)
   const [editTarget, setEditTarget] = useState<CategoryData | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null)
