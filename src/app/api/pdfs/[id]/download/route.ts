@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma"
-import { auth } from "@/lib/auth"
 import { readFile } from "fs/promises"
 import path from "path"
 
@@ -7,11 +6,6 @@ export async function GET(
   _req: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const session = await auth()
-  if (!session?.user) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 })
-  }
-
   const { id } = await params
   const pdf = await prisma.pdf.findUnique({ where: { id } })
   if (!pdf) {

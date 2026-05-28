@@ -22,22 +22,26 @@ const cardVariants = {
 
 export function CategoryShowcase({
   categories,
+  hideHeader,
 }: {
   categories: { id: string; name: string; imagePath?: string | null }[]
+  hideHeader?: boolean
 }) {
   if (categories.length === 0) return null
 
   return (
     <section className="space-y-5">
-      <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold">Browse by Category</h2>
-        <Link
-          href="/categories"
-          className="text-xs text-muted-foreground hover:text-primary transition-colors"
-        >
-          View all categories
-        </Link>
-      </div>
+      {!hideHeader && (
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold">Browse by Category</h2>
+          <Link
+            href="/browse/categories"
+            className="text-xs text-muted-foreground hover:text-primary transition-colors"
+          >
+            View all categories
+          </Link>
+        </div>
+      )}
 
       <motion.div
         className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3"
@@ -49,7 +53,7 @@ export function CategoryShowcase({
         {categories.map((cat) => (
           <motion.div key={cat.id} variants={cardVariants}>
             <Link
-              href={`/pdfs?category=${cat.id}`}
+              href={`/browse/categories/${cat.id}`}
               className="group block relative rounded-xl overflow-hidden border border-border hover:shadow-md transition-all duration-300"
             >
               <div className="aspect-[4/3] relative">

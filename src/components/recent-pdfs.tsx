@@ -1,8 +1,7 @@
 "use client"
 
-import { useState } from "react"
 import { motion } from "framer-motion"
-import { PdfDetailModal } from "@/components/pdf-detail-modal"
+import Link from "next/link"
 import { MONTHS } from "@/lib/constants"
 
 type RecentPdf = {
@@ -16,25 +15,21 @@ type RecentPdf = {
 }
 
 export function RecentPdfs({ pdfs }: { pdfs: RecentPdf[] }) {
-  const [selectedPdfId, setSelectedPdfId] = useState<string | null>(null)
-
   return (
-    <>
-      <motion.div
-        className="grid grid-cols-1 md:grid-cols-2 gap-3"
-        variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-40px" }}
-      >
-        {pdfs.map((pdf) => (
+    <motion.div
+      className="grid grid-cols-1 md:grid-cols-2 gap-3"
+      variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-40px" }}
+    >
+      {pdfs.map((pdf) => (
+        <Link key={pdf.id} href={`/browse/pdfs/${pdf.id}`} className="block">
           <motion.div
-            key={pdf.id}
             variants={{
               hidden: { opacity: 0, y: 20 },
               visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.25, 0.4, 0.25, 1] as const } },
             }}
-            onClick={() => setSelectedPdfId(pdf.id)}
             whileHover={{ scale: 1.02, y: -2 }}
             className="border border-border rounded-lg p-4 space-y-1.5 hover:shadow-sm transition-shadow cursor-pointer"
           >
@@ -49,12 +44,8 @@ export function RecentPdfs({ pdfs }: { pdfs: RecentPdf[] }) {
               <p className="text-xs text-muted-foreground">{pdf.description}</p>
             )}
           </motion.div>
-        ))}
-      </motion.div>
-      <PdfDetailModal
-        pdfId={selectedPdfId}
-        onClose={() => setSelectedPdfId(null)}
-      />
-    </>
+        </Link>
+      ))}
+    </motion.div>
   )
 }
