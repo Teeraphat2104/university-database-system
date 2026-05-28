@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import { LandingSearch } from "./landing-search"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export default async function HomePage() {
   const categories = await prisma.category.findMany({ orderBy: { name: "asc" } })
@@ -22,12 +23,15 @@ export default async function HomePage() {
       <header className="border-b">
         <div className="mx-auto max-w-5xl px-4 py-4 flex items-center justify-between">
           <span className="text-lg font-semibold">University DB</span>
-          <Link
-            href="/login"
-            className="rounded-lg bg-foreground text-background px-4 py-2 text-sm font-medium"
-          >
-            Sign in
-          </Link>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <Link
+              href="/login"
+              className="rounded-lg bg-foreground text-background px-4 py-2 text-sm font-medium"
+            >
+              Sign in
+            </Link>
+          </div>
         </div>
       </header>
 

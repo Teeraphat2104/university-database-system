@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { auth, signOut } from "@/lib/auth"
 import { redirect } from "next/navigation"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export async function Sidebar() {
   const session = await auth()
@@ -47,7 +48,8 @@ export async function Sidebar() {
         )}
       </nav>
 
-      <div className="mt-auto space-y-2">
+      <div className="mt-auto space-y-1">
+        <ThemeToggle />
         <div className="text-xs text-muted-foreground px-3">
           {session.user.name} ({role})
         </div>
