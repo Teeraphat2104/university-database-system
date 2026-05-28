@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import { LandingSearch } from "./landing-search"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { RecentPdfs } from "@/components/recent-pdfs"
 
 export default async function HomePage() {
   const categories = await prisma.category.findMany({ orderBy: { name: "asc" } })
@@ -62,22 +63,7 @@ export default async function HomePage() {
         {recentPdfs.length > 0 && (
           <section className="space-y-4">
             <h2 className="text-sm font-semibold">Recent Documents</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {recentPdfs.map((pdf) => (
-                <div
-                  key={pdf.id}
-                  className="border border-border rounded-lg p-4 space-y-1.5 hover:shadow-sm transition-shadow"
-                >
-                  <p className="text-sm font-medium">{pdf.title}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {pdf.category.name} &middot; {months[pdf.month - 1]} {pdf.year}
-                  </p>
-                  {pdf.description && (
-                    <p className="text-xs text-muted-foreground">{pdf.description}</p>
-                  )}
-                </div>
-              ))}
-            </div>
+            <RecentPdfs pdfs={recentPdfs} />
           </section>
         )}
       </main>

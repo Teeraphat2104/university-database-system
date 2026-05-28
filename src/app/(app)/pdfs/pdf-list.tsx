@@ -6,6 +6,7 @@ import Link from "next/link"
 import { IconSearch, IconTrash, IconDownload, IconEdit, IconFileDescription } from "@tabler/icons-react"
 import { Modal } from "@/components/modal"
 import { EditPdfForm } from "@/components/edit-pdf-form"
+import { PdfDetailModal } from "@/components/pdf-detail-modal"
 
 export function PdfList({
   pdfs,
@@ -35,6 +36,7 @@ export function PdfList({
   const [category, setCategory] = useState(initialCategory)
   const [year, setYear] = useState(initialYear)
   const [month, setMonth] = useState(initialMonth)
+  const [selectedPdfId, setSelectedPdfId] = useState<string | null>(null)
   const [editPdf, setEditPdf] = useState<any | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<any | null>(null)
   const [deleting, setDeleting] = useState(false)
@@ -125,7 +127,8 @@ export function PdfList({
           {filtered.map((pdf) => (
             <div
               key={pdf.id}
-              className="border rounded-lg p-4 flex items-center justify-between gap-4 hover:shadow-sm transition-shadow"
+              onClick={() => setSelectedPdfId(pdf.id)}
+              className="border rounded-lg p-4 flex items-center justify-between gap-4 hover:shadow-sm transition-shadow cursor-pointer"
             >
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">{pdf.title}</p>
@@ -137,6 +140,7 @@ export function PdfList({
               <div className="flex items-center gap-1 shrink-0">
                 <a
                   href={`/api/pdfs/${pdf.id}/download`}
+                  onClick={(e) => e.stopPropagation()}
                   className="rounded-md p-2 text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors"
                   title="Download"
                 >
@@ -144,7 +148,7 @@ export function PdfList({
                 </a>
                 {canEdit && (
                   <button
-                    onClick={() => setEditPdf(pdf)}
+                    onClick={(e) => { e.stopPropagation(); setEditPdf(pdf) }}
                     className="rounded-md p-2 text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors"
                     title="Edit"
                   >
@@ -153,7 +157,7 @@ export function PdfList({
                 )}
                 {canDelete && (
                   <button
-                    onClick={() => setDeleteTarget(pdf)}
+                    onClick={(e) => { e.stopPropagation(); setDeleteTarget(pdf) }}
                     className="rounded-md p-2 text-muted-foreground hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950 transition-colors"
                     title="Delete"
                   >
@@ -166,6 +170,11 @@ export function PdfList({
         </div>
       )}
 
+      <PdfDetailModal
+        pdfId={selectedPdfId}
+        onClose={() => setSelectedPdfId(null)}
+        onSuccess={() => router.refresh()}
+      />
       <Modal open={!!editPdf} onClose={() => setEditPdf(null)} title="Edit PDF">
         {editPdf && (
           <EditPdfForm
