@@ -59,7 +59,19 @@ export default async function DashboardPage() {
       <section className="space-y-4">
         <h2 className="text-sm font-semibold">Recently Added PDFs</h2>
         {recentPdfs.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No PDFs yet.</p>
+          <div className="text-center py-12 space-y-3 border border-dashed border-border rounded-xl">
+            <IconFileDescription className="h-8 w-8 mx-auto text-muted-foreground" />
+            <div>
+              <p className="text-sm font-medium">No PDFs yet</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Upload your first document to get started.</p>
+            </div>
+            <Link
+              href="/pdfs/upload"
+              className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary/80 font-medium transition-colors"
+            >
+              Upload a PDF
+            </Link>
+          </div>
         ) : (
           <div className="border border-border rounded-lg divide-y divide-border">
             {recentPdfs.map((pdf) => (

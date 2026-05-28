@@ -2,6 +2,21 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import {
+  IconLayoutDashboard,
+  IconFileDescription,
+  IconUpload,
+  IconFolder,
+  IconShield,
+} from "@tabler/icons-react"
+
+const linkIcons: Record<string, React.ReactNode> = {
+  "/dashboard": <IconLayoutDashboard className="h-4 w-4" />,
+  "/pdfs": <IconFileDescription className="h-4 w-4" />,
+  "/pdfs/upload": <IconUpload className="h-4 w-4" />,
+  "/categories": <IconFolder className="h-4 w-4" />,
+  "/admins": <IconShield className="h-4 w-4" />,
+}
 
 export function NavLinks({ role }: { role: string }) {
   const pathname = usePathname()
@@ -17,7 +32,7 @@ export function NavLinks({ role }: { role: string }) {
   return (
     <nav className="flex flex-col gap-0.5 px-3">
       {links.map((link) => {
-        const isActive = pathname === link.href
+        const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href))
         return (
           <Link
             key={link.href}
@@ -28,7 +43,8 @@ export function NavLinks({ role }: { role: string }) {
                 : "text-sidebar-foreground/80 hover:text-primary hover:bg-primary/10"
             }`}
           >
-            <span className="nav-text">{link.label}</span>
+            {linkIcons[link.href]}
+            <span>{link.label}</span>
           </Link>
         )
       })}

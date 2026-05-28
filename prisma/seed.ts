@@ -5,10 +5,10 @@ import bcrypt from "bcryptjs"
 
 const adapter = new PrismaMariaDb({
   host: "localhost",
-  port: 3307,
-  user: "appuser",
-  password: "apppassword",
-  database: "university_db",
+  port: 3306,
+  user: "user",
+  password: "1111",
+  database: "my_database",
   connectionLimit: 5,
 })
 

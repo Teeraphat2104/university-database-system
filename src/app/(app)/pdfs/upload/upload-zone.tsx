@@ -36,7 +36,7 @@ export function UploadZone({ categories }: { categories: { id: string; name: str
     const formData = new FormData(e.currentTarget)
     formData.set("file", file)
 
-    const res = await fetch("/api/pdfs/upload", { method: "POST", body: formData })
+    const res = await fetch("/api/upload", { method: "POST", body: formData })
     const data = await res.json()
     setUploading(false)
 
@@ -107,7 +107,7 @@ export function UploadZone({ categories }: { categories: { id: string; name: str
             <label htmlFor="category" className="text-sm font-medium">Category</label>
             <select
               id="category"
-              name="category"
+              name="categoryId"
               required
               className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
             >

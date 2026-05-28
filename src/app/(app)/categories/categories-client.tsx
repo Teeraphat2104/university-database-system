@@ -88,7 +88,13 @@ export function CategoriesClient({
           </div>
         ))}
         {categories.length === 0 && (
-          <p className="px-4 py-6 text-sm text-muted-foreground text-center">No categories yet.</p>
+          <div className="px-4 py-12 text-center space-y-2">
+            <IconFolderPlus className="h-8 w-8 mx-auto text-muted-foreground" />
+            <div>
+              <p className="text-sm font-medium">No categories yet</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Create a category to organize PDFs.</p>
+            </div>
+          </div>
         )}
       </div>
 

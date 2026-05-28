@@ -1,17 +1,30 @@
 services:
-  mysql:
+  db:
     image: mysql:8.0
-    container_name: university-db-mysql
-    restart: unless-stopped
+    container_name: mysql_db
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: university_db
-      MYSQL_USER: appuser
-      MYSQL_PASSWORD: apppassword
+      MYSQL_DATABASE: my_database
+      MYSQL_USER: user
+      MYSQL_PASSWORD: "1111"
     ports:
-      - "3307:3306"
+      - "3306:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin_ui
+    restart: always
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    ports:
+      - "8080:80"
 
 volumes:
-  mysql_data:
+  db_data:
