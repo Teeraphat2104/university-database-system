@@ -37,8 +37,8 @@ export function LoginForm() {
               required
               autoFocus
               autoComplete="username"
-              placeholder="you@example.com"
-              className="w-full rounded-lg border pl-9 pr-3 py-2 text-sm placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              placeholder="name@example.com"
+              className="w-full rounded-lg border border-border bg-background pl-9 pr-3 py-2 text-sm placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
             />
           </div>
         </div>
@@ -64,7 +64,7 @@ export function LoginForm() {
               required
               autoComplete="current-password"
               placeholder="Enter your password"
-              className="w-full rounded-lg border pl-9 pr-3 py-2 text-sm placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              className="w-full rounded-lg border border-border bg-background pl-9 pr-3 py-2 text-sm placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
             />
           </div>
         </div>
@@ -77,7 +77,7 @@ export function LoginForm() {
             className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary/20"
           />
           <label htmlFor="remember_me" className="text-sm text-muted-foreground">
-            Keep me signed in
+            Remember me
           </label>
         </div>
 
@@ -100,14 +100,14 @@ export function LoginForm() {
         </button>
       </form>
 
-      <div className="flex items-center gap-3 my-6">
+      <div className="flex items-center gap-3 my-5">
         <div className="flex-1 h-px bg-border" />
         <span className="text-xs text-muted-foreground">or</span>
         <div className="flex-1 h-px bg-border" />
       </div>
 
       <div className="space-y-2">
-        <p className="text-xs text-muted-foreground text-center">Test login</p>
+        <p className="text-xs text-muted-foreground text-center">Quick test login</p>
         <div className="flex gap-2">
           <button
             type="button"

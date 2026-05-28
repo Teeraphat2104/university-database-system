@@ -15,20 +15,20 @@ export function NavLinks({ role }: { role: string }) {
   ]
 
   return (
-    <nav className="flex flex-col gap-1">
+    <nav className="flex flex-col gap-0.5 px-3">
       {links.map((link) => {
         const isActive = pathname === link.href
         return (
           <Link
             key={link.href}
             href={link.href}
-            className={`rounded-md px-3 py-2 text-sm transition-colors ${
+            className={`rounded-lg px-3 py-2 text-sm flex items-center gap-3 transition-colors ${
               isActive
-                ? "bg-white/15 text-sidebar-foreground"
-                : "text-sidebar-foreground/80 hover:bg-white/10 hover:text-sidebar-foreground"
+                ? "text-primary bg-primary/10"
+                : "text-sidebar-foreground/80 hover:text-primary hover:bg-primary/10"
             }`}
           >
-            {link.label}
+            <span className="nav-text">{link.label}</span>
           </Link>
         )
       })}

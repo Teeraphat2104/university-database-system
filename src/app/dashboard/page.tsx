@@ -20,41 +20,53 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
+        <h1 className="text-xl font-semibold tracking-tight">Dashboard</h1>
         <p className="text-sm text-muted-foreground mt-1">
           Welcome back, {session.user.name}
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="border rounded-xl p-5 space-y-2 hover:shadow-sm transition-shadow">
-          <IconFileDescription className="h-5 w-5 text-primary" />
-          <p className="text-2xl font-bold">{pdfCount}</p>
-          <p className="text-sm text-muted-foreground">Total PDFs</p>
+        <div className="border border-border rounded-xl p-4 flex items-center gap-4 hover:shadow-sm transition-shadow">
+          <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+            <IconFileDescription className="h-5 w-5" />
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground">Total PDFs</p>
+            <p className="text-xl font-bold">{pdfCount}</p>
+          </div>
         </div>
-        <div className="border rounded-xl p-5 space-y-2 hover:shadow-sm transition-shadow">
-          <IconFolder className="h-5 w-5 text-primary" />
-          <p className="text-2xl font-bold">{categoryCount}</p>
-          <p className="text-sm text-muted-foreground">Categories</p>
+        <div className="border border-border rounded-xl p-4 flex items-center gap-4 hover:shadow-sm transition-shadow">
+          <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+            <IconFolder className="h-5 w-5" />
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground">Categories</p>
+            <p className="text-xl font-bold">{categoryCount}</p>
+          </div>
         </div>
-        <div className="border rounded-xl p-5 space-y-2 hover:shadow-sm transition-shadow">
-          <IconUsers className="h-5 w-5 text-primary" />
-          <p className="text-2xl font-bold">{adminCount}</p>
-          <p className="text-sm text-muted-foreground">Users</p>
+        <div className="border border-border rounded-xl p-4 flex items-center gap-4 hover:shadow-sm transition-shadow">
+          <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+            <IconUsers className="h-5 w-5" />
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground">Users</p>
+            <p className="text-xl font-bold">{adminCount}</p>
+          </div>
         </div>
       </div>
 
       <section className="space-y-4">
-        <h2 className="text-lg font-semibold">Recently Added PDFs</h2>
+        <h2 className="text-sm font-semibold">Recently Added PDFs</h2>
         {recentPdfs.length === 0 ? (
           <p className="text-sm text-muted-foreground">No PDFs yet.</p>
         ) : (
-          <div className="grid grid-cols-1 gap-2">
+          <div className="border border-border rounded-lg divide-y divide-border">
             {recentPdfs.map((pdf) => (
               <Link
                 key={pdf.id}
                 href={`/pdfs/${pdf.id}`}
-                className="border rounded-lg p-4 flex items-center justify-between hover:shadow-sm transition-shadow group"
+                className="flex items-center justify-between px-4 py-3 hover:bg-muted/50 transition-colors group"
               >
                 <div className="space-y-0.5">
                   <p className="text-sm font-medium group-hover:text-primary transition-colors">{pdf.title}</p>

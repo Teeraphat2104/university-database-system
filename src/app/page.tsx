@@ -20,16 +20,16 @@ export default async function HomePage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="border-b border-white/10 bg-[#1e293b]">
-        <div className="mx-auto max-w-5xl px-4 py-4 flex items-center justify-between">
-          <span className="text-lg font-semibold text-white">University DB</span>
+      <header className="border-b border-border bg-background">
+        <div className="mx-auto max-w-5xl px-4 py-3 flex items-center justify-between">
+          <span className="text-sm font-semibold">University DB</span>
           <div className="flex items-center gap-2">
-            <div className="[&_button]:text-white/70 [&_button]:hover:text-white [&_button]:transition-colors">
+            <div className="[&_button]:flex [&_button]:items-center [&_button]:gap-1.5 [&_button]:text-xs [&_button]:text-muted-foreground [&_button]:hover:text-primary [&_button]:transition-colors">
               <ThemeToggle />
             </div>
             <Link
               href="/login"
-              className="rounded-lg border border-white/30 text-white px-4 py-2 text-sm font-medium hover:bg-white/10 transition-colors"
+              className="rounded-lg bg-primary text-primary-foreground px-4 py-1.5 text-sm font-medium hover:brightness-110 transition-all"
             >
               Sign in
             </Link>
@@ -37,21 +37,21 @@ export default async function HomePage() {
         </div>
       </header>
 
-      <section className="bg-[#1e293b]">
-        <div className="mx-auto max-w-5xl px-4 py-20 text-center space-y-5">
-          <h1 className="text-4xl font-bold tracking-tight text-white">
+      <section className="bg-muted/50 border-b border-border">
+        <div className="mx-auto max-w-5xl px-4 py-16 text-center space-y-4">
+          <h1 className="text-3xl font-bold tracking-tight">
             University Database System
           </h1>
-          <p className="text-blue-200 max-w-lg mx-auto">
+          <p className="text-muted-foreground max-w-lg mx-auto">
             Browse and search the university&apos;s archive of PDF documents,
             organized by category, year, and month.
           </p>
         </div>
       </section>
 
-      <main className="flex-1 mx-auto max-w-5xl w-full px-4 -mt-8 pb-16 space-y-12">
-        <section className="bg-background border rounded-xl shadow-sm p-6 space-y-4">
-          <h2 className="text-lg font-semibold">Browse Documents</h2>
+      <main className="flex-1 mx-auto max-w-5xl w-full px-4 -mt-6 pb-16 space-y-10">
+        <section className="bg-background border border-border rounded-xl shadow-sm p-5 space-y-4">
+          <h2 className="text-sm font-semibold">Browse Documents</h2>
           <LandingSearch
             categories={categories}
             years={years}
@@ -61,12 +61,12 @@ export default async function HomePage() {
 
         {recentPdfs.length > 0 && (
           <section className="space-y-4">
-            <h2 className="text-lg font-semibold">Recent Documents</h2>
+            <h2 className="text-sm font-semibold">Recent Documents</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {recentPdfs.map((pdf) => (
                 <div
                   key={pdf.id}
-                  className="border rounded-lg p-4 space-y-1 border-l-[3px] border-l-primary hover:shadow-sm transition-shadow"
+                  className="border border-border rounded-lg p-4 space-y-1.5 hover:shadow-sm transition-shadow"
                 >
                   <p className="text-sm font-medium">{pdf.title}</p>
                   <p className="text-xs text-muted-foreground">
@@ -82,7 +82,7 @@ export default async function HomePage() {
         )}
       </main>
 
-      <footer className="border-t py-6 text-center text-sm text-muted-foreground">
+      <footer className="border-t border-border py-6 text-center text-xs text-muted-foreground">
         University Database System
       </footer>
     </div>
