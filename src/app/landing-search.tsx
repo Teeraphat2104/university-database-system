@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { Search } from "lucide-react"
+import { IconSearch } from "@tabler/icons-react"
 
 export function LandingSearch({
   categories,
@@ -32,7 +32,7 @@ export function LandingSearch({
   return (
     <form onSubmit={handleSubmit} className="flex flex-wrap gap-2">
       <div className="relative flex-1 min-w-[200px]">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <IconSearch className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <input
           name="q"
           placeholder="Search documents..."
@@ -68,7 +68,7 @@ export function LandingSearch({
       </select>
       <button
         type="submit"
-        className="rounded-lg bg-foreground text-background px-4 py-2 text-sm font-medium"
+        className="rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:brightness-110 transition-all"
       >
         Search
       </button>

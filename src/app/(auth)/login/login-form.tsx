@@ -38,7 +38,7 @@ export function LoginForm() {
               autoFocus
               autoComplete="username"
               placeholder="you@example.com"
-              className="w-full rounded-lg border pl-9 pr-3 py-2 text-sm placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-foreground/20"
+              className="w-full rounded-lg border pl-9 pr-3 py-2 text-sm placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
             />
           </div>
         </div>
@@ -50,7 +50,7 @@ export function LoginForm() {
             </label>
             <button
               type="button"
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+              className="text-xs text-primary hover:text-primary/80 transition-colors"
             >
               Forgot password?
             </button>
@@ -64,7 +64,7 @@ export function LoginForm() {
               required
               autoComplete="current-password"
               placeholder="Enter your password"
-              className="w-full rounded-lg border pl-9 pr-3 py-2 text-sm placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-foreground/20"
+              className="w-full rounded-lg border pl-9 pr-3 py-2 text-sm placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
             />
           </div>
         </div>
@@ -74,7 +74,7 @@ export function LoginForm() {
             id="remember_me"
             name="remember"
             type="checkbox"
-            className="h-4 w-4 rounded border-gray-300 text-foreground focus:ring-foreground/20"
+            className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary/20"
           />
           <label htmlFor="remember_me" className="text-sm text-muted-foreground">
             Keep me signed in
@@ -90,7 +90,7 @@ export function LoginForm() {
         <button
           type="submit"
           disabled={pending}
-          className="w-full rounded-lg bg-foreground text-background px-4 py-2.5 text-sm font-medium flex items-center justify-center gap-1.5 disabled:opacity-50 transition-opacity"
+          className="w-full rounded-lg bg-primary text-primary-foreground px-4 py-2.5 text-sm font-medium flex items-center justify-center gap-1.5 disabled:opacity-50 hover:brightness-110 transition-all"
         >
           {pending ? "Signing in..." : (
             <>
@@ -112,14 +112,14 @@ export function LoginForm() {
           <button
             type="button"
             onClick={() => fillTestLogin("admin@university.edu")}
-            className="flex-1 rounded-lg border px-3 py-2 text-xs font-medium hover:bg-muted transition-colors flex items-center justify-center gap-1.5"
+            className="flex-1 rounded-lg border border-primary text-primary px-3 py-2 text-xs font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
           >
             Admin
           </button>
           <button
             type="button"
             onClick={() => fillTestLogin("editor@university.edu")}
-            className="flex-1 rounded-lg border px-3 py-2 text-xs font-medium hover:bg-muted transition-colors flex items-center justify-center gap-1.5"
+            className="flex-1 rounded-lg border border-primary text-primary px-3 py-2 text-xs font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
           >
             Editor
           </button>

@@ -1,203 +1,176 @@
 "use client"
 
-import { useState, useCallback } from "react"
-import { useDropzone } from "react-dropzone"
-import { Upload } from "lucide-react"
+import { useCallback, useState } from "react"
+import { useRouter } from "next/navigation"
+import { IconUpload, IconFileDescription, IconX } from "@tabler/icons-react"
 
-type Category = { id: string; name: string }
-type Month = { value: number; label: string }
-
-export function UploadZone({
-  categories,
-  years,
-  months,
-}: {
-  categories: Category[]
-  years: number[]
-  months: Month[]
-}) {
-  const [files, setFiles] = useState<
-    { file: File; title: string; categoryId: string; year: number; month: number; description: string }[]
-  >([])
+export function UploadZone({ categories }: { categories: { id: string; name: string }[] }) {
+  const router = useRouter()
+  const [file, setFile] = useState<File | null>(null)
+  const [dragging, setDragging] = useState(false)
   const [uploading, setUploading] = useState(false)
-  const [success, setSuccess] = useState<string[]>([])
-  const [error, setError] = useState<string | null>(null)
+  const [message, setMessage] = useState<string | null>(null)
 
-  const onDrop = useCallback(
-    (accepted: File[]) => {
-      setError(null)
-      setSuccess([])
-      const newFiles = accepted
-        .filter((f) => f.type === "application/pdf")
-        .map((file) => ({
-          file,
-          title: file.name.replace(/\.pdf$/i, ""),
-          categoryId: categories[0]?.id || "",
-          year: new Date().getFullYear(),
-          month: new Date().getMonth() + 1,
-          description: "",
-        }))
-      setFiles((prev) => [...prev, ...newFiles])
-    },
-    [categories],
-  )
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+  ]
+  const currentYear = new Date().getFullYear()
+  const years = Array.from({ length: 30 }, (_, i) => currentYear - i)
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: { "application/pdf": [".pdf"] },
-  })
-
-  async function handleUploadAll() {
-    setUploading(true)
-    setError(null)
-    setSuccess([])
-
-    for (const item of files) {
-      const formData = new FormData()
-      formData.set("file", item.file)
-      formData.set("title", item.title)
-      formData.set("categoryId", item.categoryId)
-      formData.set("year", item.year.toString())
-      formData.set("month", item.month.toString())
-      formData.set("description", item.description)
-
-      const res = await fetch("/api/upload", { method: "POST", body: formData })
-      const data = await res.json()
-
-      if (!res.ok) {
-        setError(data.error)
-        break
-      }
-      setSuccess((prev) => [...prev, item.title])
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    setDragging(false)
+    const dropped = e.dataTransfer.files[0]
+    if (dropped?.type === "application/pdf") {
+      setFile(dropped)
     }
+  }, [])
 
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    if (!file) return
+    setUploading(true)
+    setMessage(null)
+
+    const formData = new FormData(e.currentTarget)
+    formData.set("file", file)
+
+    const res = await fetch("/api/pdfs/upload", { method: "POST", body: formData })
+    const data = await res.json()
     setUploading(false)
-    if (!error) setFiles([])
-  }
 
-  function removeFile(index: number) {
-    setFiles((prev) => prev.filter((_, i) => i !== index))
-  }
-
-  function updateFile(index: number, field: string, value: string | number) {
-    setFiles((prev) =>
-      prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)),
-    )
+    if (!res.ok) {
+      setMessage(data.error || "Upload failed")
+    } else {
+      router.push("/pdfs")
+      router.refresh()
+    }
   }
 
   return (
-    <div className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-6">
       <div
-        {...getRootProps()}
-        className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${isDragActive ? "border-foreground bg-muted" : "border-border hover:border-muted-foreground"}`}
+        onDragOver={(e) => { e.preventDefault(); setDragging(true) }}
+        onDragLeave={() => setDragging(false)}
+        onDrop={handleDrop}
+        className={`border-2 border-dashed rounded-xl p-12 text-center space-y-3 transition-colors ${
+          dragging
+            ? "border-primary bg-primary/5"
+            : "border-muted-foreground/30 hover:border-primary/50"
+        }`}
       >
-        <input {...getInputProps()} />
-        <Upload className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
-        <p className="text-sm text-muted-foreground">
-          {isDragActive
-            ? "Drop PDFs here"
-            : "Drag & drop PDF files here, or click to select"}
-        </p>
+        {file ? (
+          <div className="space-y-2">
+            <IconFileDescription className="h-8 w-8 mx-auto text-primary" />
+            <p className="text-sm font-medium">{file.name}</p>
+            <p className="text-xs text-muted-foreground">
+              {(file.size / 1024).toFixed(0)} KB
+            </p>
+            <button
+              type="button"
+              onClick={() => setFile(null)}
+              className="inline-flex items-center gap-1 text-sm text-red-500 hover:text-red-600"
+            >
+              <IconX className="h-3 w-3" /> Remove
+            </button>
+          </div>
+        ) : (
+          <>
+            <IconUpload className="h-8 w-8 mx-auto text-muted-foreground" />
+            <p className="text-sm text-muted-foreground">
+              Drag & drop a PDF here, or click to select
+            </p>
+            <input
+              type="file"
+              name="file"
+              accept="application/pdf"
+              onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+              className="text-sm text-muted-foreground file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-primary-foreground hover:file:brightness-110 file:cursor-pointer file:transition-all"
+            />
+          </>
+        )}
       </div>
 
-      {files.length > 0 && (
-        <div className="space-y-3 border rounded-lg divide-y">
-          {files.map((item, i) => (
-            <div key={i} className="p-4 space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium truncate">{item.file.name}</span>
-                <button
-                  type="button"
-                  onClick={() => removeFile(i)}
-                  className="text-xs text-red-500"
-                >
-                  Remove
-                </button>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <label className="text-xs text-muted-foreground">Title</label>
-                  <input
-                    value={item.title}
-                    onChange={(e) => updateFile(i, "title", e.target.value)}
-                    className="w-full rounded border px-2 py-1 text-sm"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-xs text-muted-foreground">Category</label>
-                  <select
-                    value={item.categoryId}
-                    onChange={(e) => updateFile(i, "categoryId", e.target.value)}
-                    className="w-full rounded border px-2 py-1 text-sm"
-                  >
-                    {categories.map((cat) => (
-                      <option key={cat.id} value={cat.id}>
-                        {cat.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="space-y-1">
-                  <label className="text-xs text-muted-foreground">Year</label>
-                  <select
-                    value={item.year}
-                    onChange={(e) => updateFile(i, "year", parseInt(e.target.value))}
-                    className="w-full rounded border px-2 py-1 text-sm"
-                  >
-                    {years.map((y) => (
-                      <option key={y} value={y}>
-                        {y}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="space-y-1">
-                  <label className="text-xs text-muted-foreground">Month</label>
-                  <select
-                    value={item.month}
-                    onChange={(e) => updateFile(i, "month", parseInt(e.target.value))}
-                    className="w-full rounded border px-2 py-1 text-sm"
-                  >
-                    {months.map((m) => (
-                      <option key={m.value} value={m.value}>
-                        {m.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className="space-y-1">
-                <label className="text-xs text-muted-foreground">Description (optional)</label>
-                <input
-                  value={item.description}
-                  onChange={(e) => updateFile(i, "description", e.target.value)}
-                  className="w-full rounded border px-2 py-1 text-sm"
-                />
-              </div>
-            </div>
-          ))}
+      {file && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <label htmlFor="title" className="text-sm font-medium">Title</label>
+            <input
+              id="title"
+              name="title"
+              required
+              className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+            />
+          </div>
+          <div className="space-y-1.5">
+            <label htmlFor="category" className="text-sm font-medium">Category</label>
+            <select
+              id="category"
+              name="category"
+              required
+              className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+            >
+              <option value="">Select category</option>
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
+            </select>
+          </div>
+          <div className="space-y-1.5">
+            <label htmlFor="year" className="text-sm font-medium">Year</label>
+            <select
+              id="year"
+              name="year"
+              required
+              defaultValue={currentYear}
+              className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+            >
+              {years.map((y) => (
+                <option key={y} value={y}>{y}</option>
+              ))}
+            </select>
+          </div>
+          <div className="space-y-1.5">
+            <label htmlFor="month" className="text-sm font-medium">Month</label>
+            <select
+              id="month"
+              name="month"
+              required
+              className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+            >
+              {months.map((m, i) => (
+                <option key={i + 1} value={i + 1}>{m}</option>
+              ))}
+            </select>
+          </div>
+          <div className="space-y-1.5 md:col-span-2">
+            <label htmlFor="description" className="text-sm font-medium">Description (optional)</label>
+            <textarea
+              id="description"
+              name="description"
+              rows={2}
+              className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+            />
+          </div>
         </div>
       )}
 
-      {success.length > 0 && (
-        <div className="text-sm text-green-600">
-          Uploaded: {success.join(", ")}
+      {message && (
+        <div className="rounded-lg bg-red-50 dark:bg-red-950 px-3 py-2 text-sm text-red-600 dark:text-red-400">
+          {message}
         </div>
       )}
-      {error && <div className="text-sm text-red-500">{error}</div>}
 
-      {files.length > 0 && (
+      {file && (
         <button
-          type="button"
-          onClick={handleUploadAll}
+          type="submit"
           disabled={uploading}
-          className="w-full rounded-lg bg-foreground text-background px-4 py-2 text-sm font-medium disabled:opacity-50"
+          className="w-full rounded-lg bg-primary text-primary-foreground px-4 py-2.5 text-sm font-medium disabled:opacity-50 hover:brightness-110 transition-all"
         >
-          {uploading
-            ? `Uploading ${success.length}/${files.length}...`
-            : `Upload ${files.length} file${files.length !== 1 ? "s" : ""}`}
+          {uploading ? "Uploading..." : "Upload PDF"}
         </button>
       )}
-    </div>
+    </form>
   )
 }

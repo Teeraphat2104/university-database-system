@@ -10,7 +10,7 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={toggleTheme}
-      className="rounded-md px-3 py-2 text-sm hover:bg-muted flex items-center gap-2 w-full"
+      className="flex items-center gap-2"
     >
       {theme === "light" ? (
         <IconMoon className="h-4 w-4" />

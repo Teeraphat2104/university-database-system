@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
-import { EditPdfForm } from "./edit-form"
+import { EditForm as EditPdfForm } from "./edit-form"
 
 export default async function EditPdfPage({
   params,
@@ -20,12 +20,11 @@ export default async function EditPdfPage({
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December",
   ]
-  const years = Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - i)
 
   return (
     <div className="max-w-md space-y-6">
       <h1 className="text-2xl font-semibold">Edit PDF</h1>
-      <EditPdfForm pdf={pdf} categories={categories} months={months} years={years} />
+      <EditPdfForm pdf={pdf} categories={categories} months={months} />
     </div>
   )
 }

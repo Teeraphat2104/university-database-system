@@ -1,42 +1,40 @@
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
-import Link from "next/link"
 import { redirect } from "next/navigation"
+import Link from "next/link"
 import { DeleteAdminButton } from "./delete-button"
+import { IconUserPlus } from "@tabler/icons-react"
 
 export default async function AdminsPage() {
   const session = await auth()
-  if (!session?.user || (session.user as any).role !== "admin") redirect("/dashboard")
+  if (!session?.user) redirect("/login")
+  if ((session.user as any).role !== "admin") redirect("/dashboard")
 
-  const users = await prisma.user.findMany({
-    orderBy: { createdAt: "desc" },
-  })
+  const admins = await prisma.user.findMany({ orderBy: { name: "asc" } })
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Manage Admins</h1>
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">Manage Admins</h1>
+          <p className="text-sm text-muted-foreground mt-1">Add or remove system users</p>
+        </div>
         <Link
           href="/admins/create"
-          className="rounded-lg bg-foreground text-background px-4 py-2 text-sm font-medium"
+          className="rounded-lg bg-primary text-primary-foreground px-3 py-2 text-sm font-medium hover:brightness-110 transition-all flex items-center gap-1.5"
         >
-          Add User
+          <IconUserPlus className="h-4 w-4" /> Add User
         </Link>
       </div>
 
       <div className="border rounded-lg divide-y">
-        {users.map((user) => (
-          <div key={user.id} className="flex items-center justify-between px-4 py-3">
-            <div>
-              <p className="text-sm font-medium">{user.name}</p>
-              <p className="text-xs text-muted-foreground">{user.email}</p>
+        {admins.map((a) => (
+          <div key={a.id} className="flex items-center justify-between px-4 py-3">
+            <div className="space-y-0.5">
+              <p className="text-sm font-medium">{a.name}</p>
+              <p className="text-xs text-muted-foreground">{a.email} &middot; {a.role}</p>
             </div>
-            <div className="flex items-center gap-3">
-              <span className={`text-xs px-2 py-0.5 rounded-full border ${user.role === "admin" ? "border-blue-500 text-blue-600" : "border-gray-300"}`}>
-                {user.role}
-              </span>
-              <DeleteAdminButton id={user.id} />
-            </div>
+            {session.user && a.email !== session.user.email && <DeleteAdminButton id={a.id} />}
           </div>
         ))}
       </div>
