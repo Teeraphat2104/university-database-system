@@ -55,7 +55,7 @@ export function AppShell({
         </div>
       </aside>
 
-      <main className="flex-1 p-4 md:p-6 pt-16 md:pt-6 min-w-0">
+      <main className="flex-1 p-4 md:p-6 pt-16 md:pt-6 min-w-0 mx-auto w-full max-w-6xl">
         {children}
       </main>
     </div>
