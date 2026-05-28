@@ -15,7 +15,12 @@ export default async function CategoriesPage() {
 
   return (
     <CategoriesClient
-      categories={categories.map((c) => ({ id: c.id, name: c.name, pdfCount: c._count.pdfs }))}
+      categories={categories.map((c) => ({
+        id: c.id,
+        name: c.name,
+        pdfCount: c._count.pdfs,
+        createdAt: c.createdAt.toISOString(),
+      }))}
     />
   )
 }
