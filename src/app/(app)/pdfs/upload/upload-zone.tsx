@@ -1,20 +1,24 @@
 "use client"
 
-import { useCallback, useState } from "react"
+import { useCallback, useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import {
-  IconUpload, IconFileDescription, IconX, IconChevronLeft, IconFile,
+  IconUpload, IconFileDescription, IconX, IconChevronLeft,
+  IconFile, IconCircleCheck, IconAlertCircle, IconProgress,
 } from "@tabler/icons-react"
 import { MONTHS, getYears } from "@/lib/constants"
 
+type Step = 1 | 2 | "uploading" | "done"
+
 export function UploadZone({ categories }: { categories: { id: string; name: string }[] }) {
   const router = useRouter()
-  const [step, setStep] = useState<1 | 2>(1)
+  const [step, setStep] = useState<Step>(1)
   const [file, setFile] = useState<File | null>(null)
   const [dragging, setDragging] = useState(false)
-  const [uploading, setUploading] = useState(false)
+  const [progress, setProgress] = useState(0)
   const [message, setMessage] = useState<string | null>(null)
-
+  const [messageType, setMessageType] = useState<"error" | "success">("error")
+  const formRef = useRef<HTMLFormElement>(null)
   const years = getYears()
 
   const handleDrop = useCallback((e: React.DragEvent) => {
@@ -40,43 +44,89 @@ export function UploadZone({ categories }: { categories: { id: string; name: str
     setMessage(null)
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     if (!file) return
-    setUploading(true)
+
+    setStep("uploading")
+    setProgress(0)
     setMessage(null)
 
     const formData = new FormData(e.currentTarget)
     formData.set("file", file)
 
-    const res = await fetch("/api/upload", { method: "POST", body: formData })
-    const data = await res.json()
-    setUploading(false)
+    const xhr = new XMLHttpRequest()
 
-    if (!res.ok) {
-      setMessage(data.error || "Upload failed")
-    } else {
-      router.push("/pdfs")
-      router.refresh()
+    xhr.upload.onprogress = (evt) => {
+      if (evt.lengthComputable) {
+        setProgress(Math.round((evt.loaded / evt.total) * 100))
+      }
     }
+
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        setProgress(100)
+        setStep("done")
+        setTimeout(() => {
+          router.push("/pdfs")
+          router.refresh()
+        }, 1200)
+      } else {
+        try {
+          const data = JSON.parse(xhr.responseText)
+          setMessage(data.error || "Upload failed")
+        } catch {
+          setMessage("Upload failed")
+        }
+        setMessageType("error")
+        setStep(2)
+      }
+    }
+
+    xhr.onerror = () => {
+      setMessage("Network error")
+      setMessageType("error")
+      setStep(2)
+    }
+
+    xhr.open("POST", "/api/upload")
+    xhr.send(formData)
+  }
+
+  const formatSize = (bytes: number) => {
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
       {/* Steps indicator */}
       <div className="flex items-center gap-4 text-sm">
         <div className={`flex items-center gap-2 ${step === 1 ? "text-primary font-semibold" : "text-muted-foreground"}`}>
-          <span className={`flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold border-2 ${
+          <span className={`flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold border-2 transition-all ${
             step === 1 ? "border-primary bg-primary text-primary-foreground" : "border-border"
-          }`}>1</span>
+          }`}>
+            {step === "done" ? <IconCircleCheck className="h-3.5 w-3.5" /> : "1"}
+          </span>
           Select File
         </div>
-        <div className="h-px flex-1 bg-border" />
-        <div className={`flex items-center gap-2 ${step === 2 ? "text-primary font-semibold" : "text-muted-foreground"}`}>
-          <span className={`flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold border-2 ${
-            step === 2 ? "border-primary bg-primary text-primary-foreground" : "border-border"
-          }`}>2</span>
+        <div className={`h-px flex-1 border-t transition-colors ${step === 2 || step === "uploading" || step === "done" ? "border-primary" : "border-border"}`} />
+        <div className={`flex items-center gap-2 ${step === 2 || step === "uploading" ? "text-primary font-semibold" : "text-muted-foreground"}`}>
+          <span className={`flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold border-2 transition-all ${
+            step === 2 || step === "uploading" ? "border-primary bg-primary text-primary-foreground" : "border-border"
+          }`}>
+            {step === "done" ? <IconCircleCheck className="h-3.5 w-3.5" /> : "2"}
+          </span>
           Details
+        </div>
+        <div className={`h-px flex-1 border-t transition-colors ${step === "uploading" || step === "done" ? "border-primary" : "border-border"}`} />
+        <div className={`flex items-center gap-2 ${step === "uploading" || step === "done" ? "text-primary font-semibold" : "text-muted-foreground"}`}>
+          <span className={`flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold border-2 transition-all ${
+            step === "done" ? "border-green-500 bg-green-500 text-white" : "border-border"
+          } ${step === "uploading" ? "border-primary bg-primary text-primary-foreground" : ""}`}>
+            {step === "done" ? <IconCircleCheck className="h-3.5 w-3.5" /> : "3"}
+          </span>
+          Upload
         </div>
       </div>
 
@@ -87,21 +137,23 @@ export function UploadZone({ categories }: { categories: { id: string; name: str
             onDragOver={(e) => { e.preventDefault(); setDragging(true) }}
             onDragLeave={() => setDragging(false)}
             onDrop={handleDrop}
-            className={`border-2 border-dashed rounded-xl py-16 px-8 text-center space-y-4 transition-all cursor-pointer ${
+            className={`relative border-2 border-dashed rounded-xl py-16 px-8 text-center space-y-4 transition-all ${
               dragging
                 ? "border-primary bg-primary/5 scale-[1.01]"
-                : "border-muted-foreground/30 hover:border-primary/50 hover:bg-muted/30"
+                : file
+                  ? "border-green-400/50 bg-green-50/30 dark:bg-green-950/10"
+                  : "border-muted-foreground/30 hover:border-primary/50 hover:bg-muted/30"
             }`}
           >
             {file ? (
-              <div className="space-y-3">
-                <div className="w-14 h-14 mx-auto rounded-xl bg-primary/10 flex items-center justify-center">
-                  <IconFileDescription className="h-7 w-7 text-primary" />
+              <div className="space-y-4">
+                <div className="w-16 h-16 mx-auto rounded-2xl bg-primary/10 flex items-center justify-center">
+                  <IconFileDescription className="h-8 w-8 text-primary" />
                 </div>
                 <div>
                   <p className="text-sm font-medium">{file.name}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">
-                    {(file.size / 1024).toFixed(0)} KB &middot; PDF
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {formatSize(file.size)} &middot; PDF
                   </p>
                 </div>
                 <button
@@ -109,13 +161,13 @@ export function UploadZone({ categories }: { categories: { id: string; name: str
                   onClick={() => { setFile(null); setMessage(null) }}
                   className="inline-flex items-center gap-1 text-xs text-red-500 hover:text-red-600 transition-colors"
                 >
-                  <IconX className="h-3 w-3" /> Remove file
+                  <IconX className="h-3 w-3" /> Remove and select a different file
                 </button>
               </div>
             ) : (
               <>
-                <div className="w-14 h-14 mx-auto rounded-xl bg-muted flex items-center justify-center">
-                  <IconUpload className="h-7 w-7 text-muted-foreground" />
+                <div className="w-16 h-16 mx-auto rounded-2xl bg-muted flex items-center justify-center">
+                  <IconUpload className="h-8 w-8 text-muted-foreground" />
                 </div>
                 <div>
                   <p className="text-sm font-medium">Drop your PDF here</p>
@@ -137,7 +189,7 @@ export function UploadZone({ categories }: { categories: { id: string; name: str
               type="button"
               disabled={!file}
               onClick={handleNext}
-              className="rounded-lg bg-primary text-primary-foreground px-5 py-2 text-sm font-medium disabled:opacity-40 hover:brightness-110 transition-all flex items-center gap-1.5"
+              className="rounded-lg bg-primary text-primary-foreground px-6 py-2.5 text-sm font-medium disabled:opacity-40 hover:brightness-110 transition-all flex items-center gap-1.5"
             >
               Continue <IconChevronLeft className="h-4 w-4 rotate-180" />
             </button>
@@ -147,125 +199,161 @@ export function UploadZone({ categories }: { categories: { id: string; name: str
 
       {/* Step 2: Metadata */}
       {step === 2 && file && (
-        <div className="space-y-5">
-          {/* Selected file summary */}
-          <div className="flex items-center gap-3 rounded-xl border border-border bg-muted/30 p-3">
+        <div className="space-y-5 animate-in fade-in slide-in-from-top-2 duration-200">
+          {/* File summary */}
+          <div className="flex items-center gap-3 rounded-xl border border-border bg-gradient-to-r from-muted/30 to-transparent p-3.5">
             <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
               <IconFile className="h-5 w-5 text-primary" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium truncate">{file.name}</p>
-              <p className="text-xs text-muted-foreground">{(file.size / 1024).toFixed(0)} KB</p>
+              <p className="text-xs text-muted-foreground">{formatSize(file.size)}</p>
             </div>
             <button
               type="button"
               onClick={handleBack}
-              className="text-xs text-muted-foreground hover:text-primary transition-colors shrink-0"
+              className="text-xs font-medium text-muted-foreground hover:text-primary transition-colors shrink-0"
             >
               Change
             </button>
           </div>
 
           {/* Form fields */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-1.5 md:col-span-2">
+          <div className="rounded-xl border border-border p-5 space-y-4">
+            <div className="space-y-1.5">
               <label htmlFor="title" className="text-sm font-medium">Title</label>
               <input
                 id="title"
                 name="title"
                 required
                 placeholder="e.g. Introduction to Computer Science"
-                className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-muted-foreground/50"
+                className="w-full rounded-lg border border-border px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-muted-foreground/40"
               />
             </div>
-            <div className="space-y-1.5">
-              <label htmlFor="category" className="text-sm font-medium">Category</label>
-              <select
-                id="category"
-                name="categoryId"
-                required
-                defaultValue=""
-                className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-              >
-                <option value="" disabled>Select category</option>
-                {categories.map((c) => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
-                ))}
-              </select>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label htmlFor="category" className="text-sm font-medium">Category</label>
+                <select
+                  id="category"
+                  name="categoryId"
+                  required
+                  defaultValue=""
+                  className="w-full rounded-lg border border-border px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                >
+                  <option value="" disabled>Select category</option>
+                  {categories.map((c) => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <label htmlFor="year" className="text-sm font-medium">Year</label>
+                  <select
+                    id="year"
+                    name="year"
+                    required
+                    defaultValue={years[0]}
+                    className="w-full rounded-lg border border-border px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                  >
+                    {years.map((y) => (
+                      <option key={y} value={y}>{y}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-1.5">
+                  <label htmlFor="month" className="text-sm font-medium">Month</label>
+                  <select
+                    id="month"
+                    name="month"
+                    required
+                    defaultValue={new Date().getMonth() + 1}
+                    className="w-full rounded-lg border border-border px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                  >
+                    {MONTHS.map((m, i) => (
+                      <option key={i + 1} value={i + 1}>{m}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
             </div>
             <div className="space-y-1.5">
-              <label htmlFor="year" className="text-sm font-medium">Year</label>
-              <select
-                id="year"
-                name="year"
-                required
-                defaultValue={years[0]}
-                className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-              >
-                {years.map((y) => (
-                  <option key={y} value={y}>{y}</option>
-                ))}
-              </select>
-            </div>
-            <div className="space-y-1.5">
-              <label htmlFor="month" className="text-sm font-medium">Month</label>
-              <select
-                id="month"
-                name="month"
-                required
-                defaultValue={new Date().getMonth() + 1}
-                className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-              >
-                {MONTHS.map((m, i) => (
-                  <option key={i + 1} value={i + 1}>{m}</option>
-                ))}
-              </select>
-            </div>
-            <div className="space-y-1.5 md:col-span-2">
-              <label htmlFor="description" className="text-sm font-medium">Description <span className="text-muted-foreground font-normal">(optional)</span></label>
+              <label htmlFor="description" className="text-sm font-medium">
+                Description <span className="text-muted-foreground font-normal">(optional)</span>
+              </label>
               <textarea
                 id="description"
                 name="description"
                 rows={3}
                 placeholder="Brief description of the document..."
-                className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none placeholder:text-muted-foreground/50"
+                className="w-full rounded-lg border border-border px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none placeholder:text-muted-foreground/40"
               />
             </div>
           </div>
 
-          {/* Error message */}
+          {/* Error */}
           {message && (
-            <div className="rounded-lg bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-900 px-3 py-2.5 text-sm text-red-600 dark:text-red-400">
-              {message}
+            <div className="rounded-lg bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-900 px-4 py-3 text-sm text-red-600 dark:text-red-400 flex items-start gap-2.5">
+              <IconAlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+              <span>{message}</span>
             </div>
           )}
 
-          {/* Action buttons */}
+          {/* Actions */}
           <div className="flex items-center gap-3 justify-end">
             <button
               type="button"
               onClick={handleBack}
-              className="rounded-lg border border-border px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
+              className="rounded-lg border border-border px-5 py-2.5 text-sm font-medium hover:bg-muted transition-colors"
             >
               Back
             </button>
             <button
               type="submit"
-              disabled={uploading}
-              className="rounded-lg bg-primary text-primary-foreground px-6 py-2 text-sm font-medium disabled:opacity-50 hover:brightness-110 transition-all flex items-center gap-1.5 min-w-[140px] justify-center"
+              className="rounded-lg bg-primary text-primary-foreground px-6 py-2.5 text-sm font-medium hover:brightness-110 transition-all flex items-center gap-1.5"
             >
-              {uploading ? (
-                <>
-                  <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                  </svg>
-                  Uploading...
-                </>
-              ) : (
-                "Upload PDF"
-              )}
+              <IconUpload className="h-4 w-4" /> Upload PDF
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Upload progress */}
+      {step === "uploading" && (
+        <div className="space-y-5 py-8">
+          <div className="text-center space-y-3">
+            <div className="w-16 h-16 mx-auto rounded-2xl bg-primary/10 flex items-center justify-center">
+              <IconFileDescription className="h-8 w-8 text-primary" />
+            </div>
+            <div>
+              <p className="text-sm font-medium">Uploading {file?.name}</p>
+              <p className="text-xs text-muted-foreground mt-1">{progress}% complete</p>
+            </div>
+          </div>
+          <div className="w-full max-w-sm mx-auto bg-muted rounded-full h-2 overflow-hidden">
+            <div
+              className="h-full bg-primary rounded-full transition-all duration-300 ease-out"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          <p className="text-xs text-center text-muted-foreground">
+            {progress < 30 ? "Preparing your file..." :
+             progress < 70 ? "Uploading to server..." :
+             progress < 100 ? "Saving to database..." :
+             "Upload complete!"}
+          </p>
+        </div>
+      )}
+
+      {/* Success */}
+      {step === "done" && (
+        <div className="space-y-5 py-8 text-center animate-in fade-in zoom-in-95 duration-300">
+          <div className="w-20 h-20 mx-auto rounded-full bg-green-100 dark:bg-green-950 flex items-center justify-center">
+            <IconCircleCheck className="h-10 w-10 text-green-600 dark:text-green-400" />
+          </div>
+          <div>
+            <p className="text-base font-semibold">Upload Successful!</p>
+            <p className="text-sm text-muted-foreground mt-1">Redirecting to PDFs...</p>
           </div>
         </div>
       )}
