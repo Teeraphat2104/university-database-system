@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { IconX } from "@tabler/icons-react"
 import { Topbar } from "./topbar"
 
@@ -15,15 +15,6 @@ export function AppShell({
 }) {
   const [open, setOpen] = useState(false)
 
-  useEffect(() => {
-    if (open) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = ""
-    }
-    return () => { document.body.style.overflow = "" }
-  }, [open])
-
   return (
     <div className="flex min-h-screen">
       {open && (
@@ -34,14 +25,14 @@ export function AppShell({
       )}
 
       <aside
-        className={`fixed md:sticky top-0 z-40 h-screen transition-transform duration-200 md:translate-x-0 ${
-          open ? "translate-x-0" : "-translate-x-full"
+        className={`w-60 bg-sidebar border-r border-border flex flex-col shrink-0 fixed top-0 left-0 z-40 h-screen transition-transform duration-200 md:static md:z-auto md:h-screen md:transition-none ${
+          open ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
-        <div className="relative h-full">
+        <div className="relative h-full flex flex-col overflow-hidden">
           <button
             onClick={() => setOpen(false)}
-            className="absolute top-3 right-3 rounded-lg p-1 text-muted-foreground hover:text-foreground md:hidden"
+            className="absolute top-3 right-3 z-10 rounded-lg p-1 text-muted-foreground hover:text-foreground md:hidden"
             aria-label="Close menu"
           >
             <IconX className="h-5 w-5" />
@@ -51,7 +42,11 @@ export function AppShell({
       </aside>
 
       <main className="flex-1 flex flex-col min-w-0">
-        <Topbar userName={user.name} role={user.role} onOpenSidebar={() => setOpen(true)} />
+        <Topbar
+          userName={user.name}
+          role={user.role}
+          onOpenSidebar={() => setOpen(true)}
+        />
         <div className="flex-1 p-4 md:p-6 mx-auto w-full max-w-6xl">
           {children}
         </div>
