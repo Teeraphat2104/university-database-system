@@ -60,7 +60,7 @@ export function HeroSection({
 
       {/* Hero content */}
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-20 relative z-10">
-        <div className="max-w-2xl w-full mx-auto text-center space-y-8">
+        <div className="max-w-4xl w-full mx-auto text-center space-y-8">
           <motion.div
             className="space-y-4"
             variants={fadeUp}
@@ -83,7 +83,7 @@ export function HeroSection({
             initial="hidden"
             animate="visible"
             custom={1}
-            className="max-w-xl mx-auto"
+            className="max-w-4xl mx-auto"
           >
             <LandingSearch
               categories={categories}

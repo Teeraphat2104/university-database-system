@@ -41,19 +41,14 @@ export default async function BrowsePdfDetailPage({
       </div>
 
       <div className="mx-auto max-w-6xl w-full px-4 py-4">
-        <Breadcrumbs
-          items={[
-            { label: "Home", href: "/" },
-            { label: "Browse Categories", href: "/browse/categories" },
-            { label: pdf.title },
-          ]}
-        />
-
-        <div className="flex items-start justify-between gap-4 mb-6">
-          <div className="space-y-1 min-w-0">
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight">{pdf.title}</h1>
-            <p className="text-sm text-muted-foreground">{pdf.originalName}</p>
-          </div>
+        <div className="flex items-center justify-between mb-6">
+          <Breadcrumbs
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Browse Categories", href: "/browse/categories" },
+              { label: pdf.title },
+            ]}
+          />
           <Link
             href="/browse/categories"
             className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors shrink-0"
@@ -61,6 +56,13 @@ export default async function BrowsePdfDetailPage({
             <IconArrowLeft className="h-4 w-4" />
             Browse Categories
           </Link>
+        </div>
+
+        <div className="flex items-start justify-between gap-4 mb-6">
+          <div className="space-y-1 min-w-0">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight">{pdf.title}</h1>
+            <p className="text-sm text-muted-foreground">{pdf.originalName}</p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

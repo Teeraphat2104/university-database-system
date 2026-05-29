@@ -41,13 +41,22 @@ export default async function BrowseCategoryPage({
 
       <section className="bg-gradient-to-b from-primary/5 via-primary/[0.02] to-background border-b border-border">
         <div className="mx-auto max-w-5xl px-4 py-10 sm:py-12 space-y-4">
-          <Breadcrumbs
-            items={[
-              { label: "Home", href: "/" },
-              { label: "Browse Categories", href: "/browse/categories" },
-              { label: category.name },
-            ]}
-          />
+          <div className="flex items-center justify-between">
+            <Breadcrumbs
+              items={[
+                { label: "Home", href: "/" },
+                { label: "Browse Categories", href: "/browse/categories" },
+                { label: category.name },
+              ]}
+            />
+            <Link
+              href="/browse/categories"
+              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors shrink-0"
+            >
+              <IconArrowLeft className="h-4 w-4" />
+              Browse Categories
+            </Link>
+          </div>
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center gap-4 min-w-0">
               {category.imagePath ? (
@@ -68,13 +77,6 @@ export default async function BrowseCategoryPage({
                 </p>
               </div>
             </div>
-            <Link
-              href="/browse/categories"
-              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors shrink-0"
-            >
-              <IconArrowLeft className="h-4 w-4" />
-              Browse Categories
-            </Link>
           </div>
         </div>
       </section>

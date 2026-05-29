@@ -27,8 +27,10 @@ export default async function BrowseCategoriesPage() {
 
       <section className="relative bg-gradient-to-b from-primary/5 via-primary/[0.02] to-background border-b border-border">
         <div className="mx-auto max-w-5xl px-4 py-10 sm:py-12 space-y-4">
-          <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Browse Categories" }]} />
-          <div className="flex justify-end">
+          <div className="flex items-center justify-between">
+            <Breadcrumbs
+              items={[{ label: "Home", href: "/" }, { label: "Browse Categories" }]}
+            />
             <Link
               href="/"
               className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
