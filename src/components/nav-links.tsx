@@ -8,6 +8,7 @@ import {
   IconUpload,
   IconFolder,
   IconShield,
+  IconSettings,
 } from "@tabler/icons-react"
 
 const linkIcons: Record<string, React.ReactNode> = {
@@ -16,6 +17,7 @@ const linkIcons: Record<string, React.ReactNode> = {
   "/pdfs/upload": <IconUpload className="h-4 w-4" />,
   "/categories": <IconFolder className="h-4 w-4" />,
   "/admins": <IconShield className="h-4 w-4" />,
+  "/settings": <IconSettings className="h-4 w-4" />,
 }
 
 export function NavLinks({ role }: { role: string }) {
@@ -24,7 +26,10 @@ export function NavLinks({ role }: { role: string }) {
   const topLinks = [
     { href: "/dashboard", label: "Dashboard" },
     { href: "/categories", label: "Categories" },
-    ...(role === "admin" ? [{ href: "/admins", label: "Manage Admins" }] : []),
+    ...(role === "admin" ? [
+      { href: "/admins", label: "Manage Admins" },
+      { href: "/settings", label: "Settings" },
+    ] : []),
   ]
 
   const isPdfsActive = pathname === "/pdfs"

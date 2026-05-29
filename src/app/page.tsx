@@ -3,8 +3,10 @@ import { HeroSection } from "@/components/landing/hero-section"
 import { StatsSection } from "@/components/landing/stats-section"
 import { CategoryShowcase } from "@/components/landing/category-showcase"
 import { RecentPdfs } from "@/components/recent-pdfs"
+import { getCachedSettings } from "@/lib/settings"
 
 export default async function HomePage() {
+  const settings = await getCachedSettings()
   const categories = await prisma.category.findMany({ orderBy: { name: "asc" } })
 
   const recentPdfs = await prisma.pdf.findMany({
@@ -35,6 +37,7 @@ export default async function HomePage() {
         categories={categories}
         years={years}
         months={months}
+        settings={settings}
       />
 
       <main className="flex-1 mx-auto max-w-5xl w-full px-4 pb-16 space-y-12 -mt-16 relative z-20">
@@ -55,7 +58,7 @@ export default async function HomePage() {
       </main>
 
       <footer className="border-t border-border py-6 text-center text-xs text-muted-foreground">
-        University Database System
+        {settings.footerText}
       </footer>
     </div>
   )

@@ -15,15 +15,36 @@ const fadeUp = {
   }),
 }
 
+function HeroTitle({ title, highlight }: { title: string; highlight: string }) {
+  if (!highlight || !title.includes(highlight)) {
+    return <>{title}</>
+  }
+  const parts = title.split(highlight)
+  return (
+    <>
+      {parts[0]}
+      <span className="text-primary">{highlight}</span>
+      {parts.slice(1).join(highlight)}
+    </>
+  )
+}
+
 export function HeroSection({
   categories,
   years,
   months,
+  settings,
 }: {
   categories: { id: string; name: string; imagePath?: string | null }[]
   years: number[]
   months: string[]
+  settings?: Record<string, string>
 }) {
+  const heroTitle = settings?.heroTitle ?? "University Database System"
+  const heroHighlight = settings?.heroTitleHighlight ?? "Database"
+  const heroSubtitle = settings?.heroSubtitle ?? "Browse and search the university\u2019s archive of PDF documents, organized by category, year, and month."
+  const siteName = settings?.siteName ?? "University DB"
+
   return (
     <section className="relative min-h-[85vh] flex flex-col">
       <AnimatedGradient />
@@ -38,7 +59,7 @@ export function HeroSection({
             animate="visible"
             custom={0}
           >
-            University DB
+            {siteName}
           </motion.span>
           <motion.div
             className="flex items-center gap-2"
@@ -69,12 +90,10 @@ export function HeroSection({
             custom={0}
           >
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">
-              University{" "}
-              <span className="text-primary">Database</span> System
+              <HeroTitle title={heroTitle} highlight={heroHighlight} />
             </h1>
             <p className="text-muted-foreground text-base sm:text-lg max-w-lg mx-auto leading-relaxed">
-              Browse and search the university&apos;s archive of PDF documents,
-              organized by category, year, and month.
+              {heroSubtitle}
             </p>
           </motion.div>
 

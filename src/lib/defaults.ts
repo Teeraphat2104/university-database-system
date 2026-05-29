@@ -1,0 +1,17 @@
+export const SETTINGS_DEFAULTS: Record<string, string> = {
+  siteName: "University DB",
+  siteDescription: "Browse and search the university archive of PDF documents, organized by category, year, and month.",
+  footerText: "University Database System",
+  maxFileSizeMB: "10",
+  allowedFileTypes: ".pdf,.doc,.docx",
+  contactEmail: "",
+  contactPhone: "",
+  aboutText: "",
+  address: "",
+  facebookLink: "",
+  lineId: "",
+  mapEmbedUrl: "",
+  heroTitle: "University Database System",
+  heroSubtitle: "Browse and search the university\u2019s archive of PDF documents, organized by category, year, and month.",
+  heroTitleHighlight: "Database",
+}
