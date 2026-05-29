@@ -1,13 +1,16 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { IconMenu2, IconX } from "@tabler/icons-react"
+import { IconX } from "@tabler/icons-react"
+import { Topbar } from "./topbar"
 
 export function AppShell({
   sidebar,
+  user,
   children,
 }: {
   sidebar: React.ReactNode
+  user: { name: string; role: string }
   children: React.ReactNode
 }) {
   const [open, setOpen] = useState(false)
@@ -23,14 +26,6 @@ export function AppShell({
 
   return (
     <div className="flex min-h-screen">
-      <button
-        onClick={() => setOpen(true)}
-        className="fixed top-3 left-3 z-40 rounded-lg p-2 bg-background border border-border md:hidden"
-        aria-label="Open menu"
-      >
-        <IconMenu2 className="h-5 w-5" />
-      </button>
-
       {open && (
         <div
           className="fixed inset-0 z-30 bg-black/40 md:hidden"
@@ -55,8 +50,11 @@ export function AppShell({
         </div>
       </aside>
 
-      <main className="flex-1 p-4 md:p-6 pt-16 md:pt-6 min-w-0 mx-auto w-full max-w-6xl">
-        {children}
+      <main className="flex-1 flex flex-col min-w-0">
+        <Topbar userName={user.name} role={user.role} onOpenSidebar={() => setOpen(true)} />
+        <div className="flex-1 p-4 md:p-6 mx-auto w-full max-w-6xl">
+          {children}
+        </div>
       </main>
     </div>
   )

@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/prisma"
-import { auth, signOut } from "@/lib/auth"
+import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
-import { ThemeToggle } from "@/components/theme-toggle"
 import { NavLinks } from "@/components/nav-links"
 import { CategoryNav } from "@/components/category-nav"
 
@@ -32,28 +31,6 @@ export async function Sidebar() {
       <div className="flex-1 py-3 overflow-y-auto">
         <NavLinks role={role} />
         <CategoryNav categories={categories} />
-      </div>
-
-      <div className="py-3 space-y-1 border-t border-border px-3">
-        <div className="px-3 py-1.5 text-[13px] text-muted-foreground">
-          {session.user.name} ({role})
-        </div>
-        <div className="[&_button]:w-full [&_button]:flex [&_button]:items-center [&_button]:gap-3 [&_button]:rounded-lg [&_button]:px-3 [&_button]:py-2 [&_button]:text-sm [&_button]:text-sidebar-foreground/70 [&_button]:hover:text-primary [&_button]:hover:bg-primary/10 [&_button]:transition-colors">
-          <ThemeToggle />
-        </div>
-        <form
-          action={async () => {
-            "use server"
-            await signOut({ redirectTo: "/" })
-          }}
-        >
-          <button
-            type="submit"
-            className="w-full flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-sidebar-foreground/70 hover:text-primary hover:bg-primary/10 transition-colors"
-          >
-            Sign out
-          </button>
-        </form>
       </div>
     </aside>
   )
