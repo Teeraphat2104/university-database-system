@@ -1,14 +1,23 @@
 "use client"
 
-import { useActionState, Suspense } from "react"
+import { useActionState, Suspense, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
+import { IconCheck } from "@tabler/icons-react"
 import { updateSettingsAction } from "@/lib/actions/settings"
+
+const COLOR_PRESETS = [
+  "#E66239", "#D43F3F", "#E8913A", "#F59E0B",
+  "#10B981", "#059669", "#0D9488", "#06B6D4",
+  "#3B82F6", "#6366F1", "#8B5CF6", "#DB2777",
+  "#525252", "#1E293B",
+]
 
 const TABS = [
   { key: "general", label: "General" },
   { key: "upload", label: "Upload" },
   { key: "contact", label: "Contact" },
+  { key: "appearance", label: "Appearance" },
   { key: "landing", label: "Landing" },
 ] as const
 
@@ -190,6 +199,10 @@ function SettingsForm({ settings }: { settings: Record<string, string> }) {
           </div>
         )}
 
+        {tab === "appearance" && (
+          <ColorPicker initialColor={settings.primaryColor} />
+        )}
+
         {tab === "landing" && (
           <div className="space-y-4">
             <div className="space-y-1.5">
@@ -238,6 +251,50 @@ function SettingsForm({ settings }: { settings: Record<string, string> }) {
           {pending ? "Saving..." : "Save Settings"}
         </button>
       </form>
+    </div>
+  )
+}
+
+function ColorPicker({ initialColor }: { initialColor: string }) {
+  const [selected, setSelected] = useState(initialColor)
+
+  return (
+    <div className="space-y-4">
+      <div className="space-y-1.5">
+        <label className="text-sm font-medium">Primary Color</label>
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <span className="w-5 h-5 rounded border border-border" style={{ backgroundColor: selected }} />
+          <span className="font-mono">{selected}</span>
+        </div>
+        <input type="hidden" name="primaryColor" value={selected} />
+      </div>
+      <div className="grid grid-cols-7 gap-2">
+        {COLOR_PRESETS.map((color) => (
+          <button
+            key={color}
+            type="button"
+            onClick={() => setSelected(color)}
+            className="relative h-9 w-9 rounded-full border-2 transition-all hover:scale-110"
+            style={{
+              backgroundColor: color,
+              borderColor: selected === color ? "var(--foreground)" : "transparent",
+            }}
+            title={color}
+          >
+            {selected === color && (
+              <IconCheck className="absolute inset-0 m-auto h-4 w-4 text-white drop-shadow-md" />
+            )}
+          </button>
+        ))}
+      </div>
+      <div className="rounded-lg border border-border p-4 space-y-2">
+        <p className="text-xs text-muted-foreground font-medium">Preview</p>
+        <div className="flex flex-wrap gap-2" style={{ "--primary": selected } as React.CSSProperties}>
+          <div className="rounded-lg bg-primary text-primary-foreground px-3 py-1.5 text-xs font-medium">Primary Button</div>
+          <div className="rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-foreground">Default</div>
+          <span className="inline-flex items-center rounded-full bg-primary/10 text-primary px-2 py-0.5 text-xs font-medium">Badge</span>
+        </div>
+      </div>
     </div>
   )
 }

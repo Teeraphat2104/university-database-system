@@ -14,4 +14,5 @@ export const SETTINGS_DEFAULTS: Record<string, string> = {
   heroTitle: "University Database System",
   heroSubtitle: "Browse and search the university\u2019s archive of PDF documents, organized by category, year, and month.",
   heroTitleHighlight: "Database",
+  primaryColor: "#E66239",
 }

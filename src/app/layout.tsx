@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Noto_Sans_Thai } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
+import { getCachedSettings } from "@/lib/settings";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -24,11 +25,13 @@ export const metadata: Metadata = {
   description: "Manage and browse university PDF archives",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await getCachedSettings();
+
   return (
     <html
       lang="en"
@@ -36,7 +39,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider primaryColor={settings.primaryColor}>{children}</ThemeProvider>
       </body>
     </html>
   );
