@@ -10,7 +10,7 @@ export function Topbar({ userName, role, onOpenSidebar }: { userName: string; ro
   const [showLogout, setShowLogout] = useState(false)
 
   return (
-    <div className="flex items-center justify-between px-4 md:px-6 h-14 border-b border-border shrink-0">
+    <div className="sticky top-0 z-30 bg-background flex items-center justify-between px-4 md:px-6 h-14 border-b border-border shrink-0">
       <button
         type="button"
         onClick={onOpenSidebar}

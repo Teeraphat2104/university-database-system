@@ -1,9 +1,11 @@
 "use client"
 
 import { useState, useRef, useEffect, useCallback, useLayoutEffect } from "react"
+import { createPortal } from "react-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { IconChevronDown } from "@tabler/icons-react"
 import { cn } from "@/lib/utils"
+import { useModalPortal } from "@/components/modal-context"
 
 export type SelectOption = {
   value: string
@@ -34,6 +36,7 @@ export function Select({
   const panelRef = useRef<HTMLDivElement>(null)
   const [pos, setPos] = useState({ top: 0, left: 0, width: 0 })
   const selected = options.find((o) => o.value === value)
+  const { portalTarget } = useModalPortal()
 
   const updatePos = useCallback(() => {
     if (!triggerRef.current) return
@@ -127,44 +130,47 @@ export function Select({
       )}
 
       <AnimatePresence>
-        {open && (
-          <motion.div
-            ref={panelRef}
-            initial={{ opacity: 0, y: -4, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -4, scale: 0.97 }}
-            transition={{ duration: 0.15, ease: [0.25, 0.4, 0.25, 1] as const }}
-            style={{ position: "fixed", top: pos.top, left: pos.left, width: pos.width, zIndex: 9999 }}
-            className="bg-background border border-border rounded-lg shadow-lg overflow-hidden"
-          >
-            <div className="py-1 max-h-60 overflow-y-auto">
-              {options.map((opt) => (
-                <button
-                  key={opt.value}
-                  type="button"
-                  onClick={() => handleSelect(opt)}
-                  className={cn(
-                    "w-full flex items-center gap-2 px-3 py-2 text-sm text-left transition-colors hover:bg-muted",
-                    opt.value === value && "bg-primary/5 text-primary font-medium",
-                  )}
-                >
-                  <span className="w-4 shrink-0">
-                    {opt.value === value && (
-                      <motion.span
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ duration: 0.15 }}
-                      >
-                        ✓
-                      </motion.span>
+        {open && (() => {
+          const panel = (
+            <motion.div
+              ref={panelRef}
+              initial={{ opacity: 0, y: -4, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -4, scale: 0.97 }}
+              transition={{ duration: 0.15, ease: [0.25, 0.4, 0.25, 1] as const }}
+              style={{ position: "fixed", top: pos.top, left: pos.left, width: pos.width, zIndex: 9999 }}
+              className={cn("bg-background border border-border rounded-lg shadow-lg overflow-hidden")}
+            >
+              <div className="py-1 max-h-60 overflow-y-auto">
+                {options.map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => handleSelect(opt)}
+                    className={cn(
+                      "w-full flex items-center gap-2 px-3 py-2 text-sm text-left transition-colors hover:bg-muted",
+                      opt.value === value && "bg-primary/5 text-primary font-medium",
                     )}
-                  </span>
-                  <span>{opt.label}</span>
-                </button>
-              ))}
-            </div>
-          </motion.div>
-        )}
+                  >
+                    <span className="w-4 shrink-0">
+                      {opt.value === value && (
+                        <motion.span
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ duration: 0.15 }}
+                        >
+                          ✓
+                        </motion.span>
+                      )}
+                    </span>
+                    <span>{opt.label}</span>
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )
+          return portalTarget ? createPortal(panel, portalTarget) : panel
+        })()}
       </AnimatePresence>
     </div>
   )

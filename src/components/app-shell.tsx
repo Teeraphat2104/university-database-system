@@ -25,7 +25,7 @@ export function AppShell({
       )}
 
       <aside
-        className={`w-60 bg-sidebar border-r border-border flex flex-col shrink-0 fixed top-0 left-0 z-40 h-screen transition-transform duration-200 md:static md:z-auto md:h-screen md:transition-none ${
+        className={`w-60 bg-sidebar border-r border-border flex flex-col shrink-0 fixed top-0 left-0 z-40 h-screen transition-transform duration-200 ${
           open ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
@@ -41,7 +41,7 @@ export function AppShell({
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col min-w-0">
+      <main className="flex-1 flex flex-col min-w-0 md:ml-60">
         <Topbar
           userName={user.name}
           role={user.role}
