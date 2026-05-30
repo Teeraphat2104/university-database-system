@@ -14,6 +14,7 @@
   --color-sidebar-foreground: var(--sidebar-foreground);
   --font-sans: var(--font-geist-sans), var(--font-noto-sans-thai);
   --font-mono: var(--font-geist-mono);
+  --border-width: 1px;
 }
 
 :root {
