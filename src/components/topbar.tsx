@@ -1,7 +1,14 @@
+"use client"
+
+import { useRef, useState } from "react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { logoutAction } from "@/lib/actions/logout"
+import { Modal } from "@/components/modal"
 
 export function Topbar({ userName, role, onOpenSidebar }: { userName: string; role: string; onOpenSidebar?: () => void }) {
+  const formRef = useRef<HTMLFormElement>(null)
+  const [showLogout, setShowLogout] = useState(false)
+
   return (
     <div className="flex items-center justify-between px-4 md:px-6 h-14 border-b border-border shrink-0">
       <button
@@ -17,15 +24,35 @@ export function Topbar({ userName, role, onOpenSidebar }: { userName: string; ro
       </span>
       <div className="flex items-center gap-2 ml-auto">
         <ThemeToggle />
-        <form action={logoutAction}>
+        <button
+          type="button"
+          onClick={() => setShowLogout(true)}
+          className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+        >
+          Sign out
+        </button>
+        <form ref={formRef} action={logoutAction} className="hidden" />
+      </div>
+
+      <Modal open={showLogout} onClose={() => setShowLogout(false)} title="Sign out">
+        <p className="text-sm text-muted-foreground mb-4">
+          Are you sure you want to sign out?
+        </p>
+        <div className="flex gap-2 justify-end">
           <button
-            type="submit"
-            className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+            onClick={() => setShowLogout(false)}
+            className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => formRef.current?.requestSubmit()}
+            className="rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:brightness-110 transition-all"
           >
             Sign out
           </button>
-        </form>
-      </div>
+        </div>
+      </Modal>
     </div>
   )
 }
