@@ -10,7 +10,7 @@ import {
 import { Select, type SelectOption } from "@/components/ui/select"
 import { Modal } from "@/components/modal"
 import { EditPdfForm } from "@/components/edit-pdf-form"
-import { PdfDetailModal } from "@/components/pdf-detail-modal"
+
 import { usePersistedState } from "@/hooks/use-persisted-state"
 
 type ViewMode = "table" | "card"
@@ -44,7 +44,6 @@ export function PdfList({
   const [category, setCategory] = useState(initialCategory)
   const [year, setYear] = useState(initialYear)
   const [month, setMonth] = useState(initialMonth)
-  const [selectedPdfId, setSelectedPdfId] = useState<string | null>(null)
   const [editPdf, setEditPdf] = useState<any | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<any | null>(null)
   const [deleting, setDeleting] = useState(false)
@@ -186,7 +185,7 @@ export function PdfList({
                   {filtered.map((pdf, i) => (
                     <tr
                       key={pdf.id}
-                      onClick={() => setSelectedPdfId(pdf.id)}
+                      onClick={() => router.push(`/pdfs/${pdf.id}`)}
                       className="hover:bg-muted/20 transition-colors cursor-pointer"
                     >
                       <td className="px-4 py-3 text-xs text-muted-foreground">{i + 1}</td>
@@ -252,7 +251,7 @@ export function PdfList({
               {filtered.map((pdf) => (
                 <div
                   key={pdf.id}
-                  onClick={() => setSelectedPdfId(pdf.id)}
+                  onClick={() => router.push(`/pdfs/${pdf.id}`)}
                   className="group border border-border rounded-xl p-4 hover:shadow-sm transition-all space-y-3 cursor-pointer"
                 >
                   <div className="flex items-start justify-between">
@@ -317,11 +316,6 @@ export function PdfList({
         </>
       )}
 
-      <PdfDetailModal
-        pdfId={selectedPdfId}
-        onClose={() => setSelectedPdfId(null)}
-        onSuccess={() => router.refresh()}
-      />
       <Modal open={!!editPdf} onClose={() => setEditPdf(null)} title="Edit PDF">
         {editPdf && (
           <EditPdfForm

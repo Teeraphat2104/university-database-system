@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { IconArrowLeft, IconDownload, IconEdit, IconTrash, IconFileDescription, IconCalendar, IconFolder, IconUser, IconWeight } from "@tabler/icons-react"
+import { IconArrowLeft, IconChevronRight, IconDownload, IconEdit, IconTrash, IconCalendar, IconFolder, IconUser, IconWeight } from "@tabler/icons-react"
 import { Modal } from "@/components/modal"
 import { EditPdfForm } from "@/components/edit-pdf-form"
 
@@ -22,13 +22,14 @@ export function PdfDetail({
     year: number
     month: number
     categoryId: string
+    filePath: string
     fileSize: number
     originalName: string
     createdAt: Date
     category: { name: string; imagePath?: string | null }
     uploadedBy: { name: string }
   }
-    categories: { id: string; name: string; imagePath?: string | null }[]
+  categories: { id: string; name: string; imagePath?: string | null }[]
   months: string[]
   years: number[]
   canEdit: boolean
@@ -48,90 +49,106 @@ export function PdfDetail({
   }
 
   return (
-    <div className="space-y-6">
-      <Link
-        href="/pdfs"
-        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
-      >
-        <IconArrowLeft className="h-4 w-4" />
-        Back to PDFs
-      </Link>
-
-      <div className="border border-border rounded-xl p-6 space-y-6">
-        <div className="flex items-start justify-between gap-4">
-          <div className="space-y-1">
-            <h1 className="text-xl font-semibold tracking-tight">{pdf.title}</h1>
-            <p className="text-sm text-muted-foreground">{pdf.originalName}</p>
+    <>
+      <div className="flex items-center justify-between pb-3">
+        <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+          <Link href="/pdfs" className="hover:text-primary transition-colors">PDFs</Link>
+          <IconChevronRight className="h-3.5 w-3.5" />
+          <span className="text-foreground font-medium truncate max-w-[300px]">{pdf.title}</span>
+        </div>
+        <Link
+          href="/pdfs"
+          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
+        >
+          <IconArrowLeft className="h-4 w-4" />
+          Back
+        </Link>
+      </div>
+      <div className="flex flex-col lg:flex-row gap-4 min-h-[70vh]">
+        {/* Left: PDF preview */}
+        <div className="flex-1 flex flex-col border border-border rounded-xl overflow-hidden bg-muted/10">
+          <div className="px-4 py-3 border-b border-border bg-background">
+            <p className="text-sm font-medium truncate">{pdf.title}</p>
+            <p className="text-xs text-muted-foreground truncate">{pdf.originalName}</p>
           </div>
-          <div className="flex items-center gap-1 shrink-0">
-            <a
-              href={`/api/pdfs/${pdf.id}/download`}
-              className="rounded-lg p-2.5 text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors"
-              title="Download"
-            >
-              <IconDownload className="h-5 w-5" />
-            </a>
-            {canEdit && (
-              <button
-                onClick={() => setEditOpen(true)}
-                className="rounded-lg p-2.5 text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors"
-                title="Edit"
-              >
-                <IconEdit className="h-5 w-5" />
-              </button>
-            )}
-            {canDelete && (
-              <button
-                onClick={() => setDeleteOpen(true)}
-                className="rounded-lg p-2.5 text-muted-foreground hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950 transition-colors"
-                title="Delete"
-              >
-                <IconTrash className="h-5 w-5" />
-              </button>
-            )}
-          </div>
+          <iframe
+            src={`/api/pdfs/${pdf.id}/download`}
+            className="flex-1 w-full min-h-[60vh]"
+            title={pdf.title}
+          />
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="space-y-1">
-            <p className="text-xs text-muted-foreground flex items-center gap-1">
-              <IconFolder className="h-3 w-3" /> Category
-            </p>
+        {/* Right: details */}
+        <div className="w-full lg:w-80 xl:w-96 shrink-0">
+          <div className="border border-border rounded-xl p-5 space-y-5 bg-background">
+            {/* Actions */}
             <div className="flex items-center gap-2">
-              {pdf.category.imagePath && (
-                <img src={`/api/categories/${pdf.categoryId}/image`} alt="" className="w-5 h-5 rounded object-cover border border-border" />
+              <a
+                href={`/api/pdfs/${pdf.id}/download`}
+                className="flex-1 rounded-lg border px-3 py-2 text-sm font-medium hover:bg-muted transition-colors flex items-center justify-center gap-1.5"
+              >
+                <IconDownload className="h-4 w-4" /> Download
+              </a>
+              {canEdit && (
+                <button
+                  onClick={() => setEditOpen(true)}
+                  className="flex-1 rounded-lg border px-3 py-2 text-sm font-medium hover:bg-muted transition-colors flex items-center justify-center gap-1.5"
+                >
+                  <IconEdit className="h-4 w-4" /> Edit
+                </button>
               )}
-              <p className="text-sm font-medium">{pdf.category.name}</p>
+              {canDelete && (
+                <button
+                  onClick={() => setDeleteOpen(true)}
+                  className="rounded-lg border px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-950 transition-colors"
+                  title="Delete"
+                >
+                  <IconTrash className="h-4 w-4" />
+                </button>
+              )}
             </div>
-          </div>
-          <div className="space-y-1">
-            <p className="text-xs text-muted-foreground flex items-center gap-1">
-              <IconCalendar className="h-3 w-3" /> Date
-            </p>
-            <p className="text-sm font-medium">{months[pdf.month - 1]} {pdf.year}</p>
-          </div>
-          <div className="space-y-1">
-            <p className="text-xs text-muted-foreground flex items-center gap-1">
-              <IconWeight className="h-3 w-3" /> Size
-            </p>
-            <p className="text-sm font-medium">
-              {pdf.fileSize ? `${(pdf.fileSize / 1024).toFixed(0)} KB` : "—"}
-            </p>
-          </div>
-          <div className="space-y-1">
-            <p className="text-xs text-muted-foreground flex items-center gap-1">
-              <IconUser className="h-3 w-3" /> Uploaded by
-            </p>
-            <p className="text-sm font-medium">{pdf.uploadedBy.name}</p>
+
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <IconFolder className="h-4 w-4 text-muted-foreground shrink-0" />
+                <div>
+                  <p className="text-xs text-muted-foreground">Category</p>
+                  <p className="text-sm font-medium">{pdf.category.name}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <IconCalendar className="h-4 w-4 text-muted-foreground shrink-0" />
+                <div>
+                  <p className="text-xs text-muted-foreground">Date</p>
+                  <p className="text-sm font-medium">{months[pdf.month - 1]} {pdf.year}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <IconWeight className="h-4 w-4 text-muted-foreground shrink-0" />
+                <div>
+                  <p className="text-xs text-muted-foreground">Size</p>
+                  <p className="text-sm font-medium">
+                    {pdf.fileSize ? `${(pdf.fileSize / 1024).toFixed(0)} KB` : "—"}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <IconUser className="h-4 w-4 text-muted-foreground shrink-0" />
+                <div>
+                  <p className="text-xs text-muted-foreground">Uploaded by</p>
+                  <p className="text-sm font-medium">{pdf.uploadedBy.name}</p>
+                </div>
+              </div>
+            </div>
+
+            {pdf.description && (
+              <div className="space-y-1.5 pt-3 border-t border-border">
+                <p className="text-xs text-muted-foreground font-medium">Description</p>
+                <p className="text-sm">{pdf.description}</p>
+              </div>
+            )}
           </div>
         </div>
-
-        {pdf.description && (
-          <div className="space-y-1.5">
-            <p className="text-xs text-muted-foreground font-medium">Description</p>
-            <p className="text-sm">{pdf.description}</p>
-          </div>
-        )}
       </div>
 
       <Modal open={editOpen} onClose={() => setEditOpen(false)} title="Edit PDF">
@@ -163,6 +180,6 @@ export function PdfDetail({
           </button>
         </div>
       </Modal>
-    </div>
+    </>
   )
 }
