@@ -28,7 +28,7 @@ export function PdfList({
   initialMonth = "",
 }: {
   pdfs: any[]
-  categories: { id: string; name: string; imagePath?: string | null }[]
+  categories: { id: string; name: string; }[]
   years: number[]
   months: string[]
   canEdit: boolean
@@ -194,9 +194,6 @@ export function PdfList({
                       </td>
                       <td className="px-4 py-3">
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2 py-0.5 text-xs font-medium">
-                          {pdf.category?.imagePath && (
-                            <img src={`/api/categories/${pdf.categoryId}/image`} alt="" className="w-3.5 h-3.5 rounded object-cover" />
-                          )}
                           {pdf.category?.name}
                         </span>
                       </td>

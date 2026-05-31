@@ -10,6 +10,7 @@ type BrowsePdf = {
   description: string | null
   year: number
   month: number
+  categoryId: string
   category: { name: string; imagePath?: string | null }
 }
 
@@ -53,7 +54,10 @@ export function BrowsePdfGrid({ pdfs }: { pdfs: BrowsePdf[] }) {
             className="block border border-border rounded-lg p-4 space-y-2 hover:shadow-sm hover:border-primary/30 transition-all duration-200"
           >
             <p className="text-sm font-medium leading-snug line-clamp-2">{pdf.title}</p>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground flex items-center gap-1">
+              {pdf.category.imagePath && (
+                <img src={`/api/categories/${pdf.categoryId}/image`} alt="" className="w-3 h-3 rounded object-cover shrink-0" />
+              )}
               {pdf.category.name} &middot; {MONTHS[pdf.month - 1]} {pdf.year}
             </p>
             {pdf.description && (
