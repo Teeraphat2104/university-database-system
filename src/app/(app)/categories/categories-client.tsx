@@ -304,38 +304,58 @@ export function CategoriesClient({
               {categories.map((c) => (
                 <div
                   key={c.id}
-                  className="group border border-border rounded-xl p-4 hover:shadow-sm transition-all space-y-3"
+                  className="group relative border border-border rounded-xl overflow-hidden hover:shadow-md transition-all"
                 >
-                  <div className="flex items-start justify-between">
-                    {c.imagePath ? (
-                      <img src={`/api/categories/${c.id}/image`} alt="" className="w-10 h-10 rounded-lg object-cover border border-border" />
-                    ) : (
-                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                        <IconFolder className="h-5 w-5 text-primary" />
+                  {c.imagePath ? (
+                    <div className="aspect-[4/3] relative">
+                      <img
+                        src={`/api/categories/${c.id}/image`}
+                        alt={c.name}
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                      <div className="absolute bottom-0 left-0 right-0 p-4">
+                        <p className="text-sm font-medium text-white drop-shadow-sm">{c.name}</p>
+                        <p className="text-xs text-white/70">{c.pdfCount} PDF{c.pdfCount === 1 ? "" : "s"}</p>
                       </div>
-                    )}
-                    {c.pdfCount === 0 && (
                       <button
-                        onClick={() => setDeleteTarget({ id: c.id, name: c.name })}
-                        className="opacity-0 group-hover:opacity-100 rounded-md p-1 text-muted-foreground hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950 transition-all"
-                        title="Delete"
+                        onClick={() => setEditTarget(c)}
+                        className="absolute top-2 left-2 rounded-md px-2 py-1 bg-black/30 text-white/70 hover:text-white hover:bg-black/50 transition-all text-xs opacity-0 group-hover:opacity-100"
                       >
-                        <IconTrash className="h-4 w-4" />
+                        Edit
                       </button>
-                    )}
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium">{c.name}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">{c.pdfCount} PDF{c.pdfCount === 1 ? "" : "s"}</p>
-                  </div>
-                  <div className="flex gap-1">
-                    <button
-                      onClick={() => setEditTarget(c)}
-                      className="flex-1 rounded-md border border-border px-2 py-1.5 text-xs font-medium text-muted-foreground hover:text-primary hover:border-primary/30 transition-colors"
-                    >
-                      Edit
-                    </button>
-                  </div>
+                      {c.pdfCount === 0 && (
+                        <button
+                          onClick={() => setDeleteTarget({ id: c.id, name: c.name })}
+                          className="absolute top-2 right-2 rounded-md p-1.5 bg-black/30 text-white/70 hover:text-red-400 hover:bg-black/50 transition-all opacity-0 group-hover:opacity-100"
+                          title="Delete"
+                        >
+                          <IconTrash className="h-4 w-4" />
+                        </button>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="aspect-[4/3] relative bg-gradient-to-br from-muted to-muted/50 flex flex-col items-center justify-center p-4 text-center">
+                      <IconFolder className="h-10 w-10 text-muted-foreground/40 mb-2" />
+                      <p className="text-sm font-medium">{c.name}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{c.pdfCount} PDF{c.pdfCount === 1 ? "" : "s"}</p>
+                      <button
+                        onClick={() => setEditTarget(c)}
+                        className="mt-3 rounded-md border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-primary hover:border-primary/30 transition-colors"
+                      >
+                        Edit
+                      </button>
+                      {c.pdfCount === 0 && (
+                        <button
+                          onClick={() => setDeleteTarget({ id: c.id, name: c.name })}
+                          className="absolute top-2 right-2 rounded-md p-1.5 text-muted-foreground hover:text-red-600 transition-all opacity-0 group-hover:opacity-100"
+                          title="Delete"
+                        >
+                          <IconTrash className="h-4 w-4" />
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
