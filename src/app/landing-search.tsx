@@ -68,7 +68,7 @@ export function LandingSearch({
     if (cat) params.set("category", cat as string)
     if (yr) params.set("year", yr as string)
     if (mon) params.set("month", mon as string)
-    router.push(`/pdfs?${params.toString()}`)
+    router.push(`/browse/search?${params.toString()}`)
   }
 
   const inputClass = hero
