@@ -40,7 +40,7 @@ export default async function HomePage() {
         settings={settings}
       />
 
-      <main className="flex-1 mx-auto max-w-5xl w-full px-4 pb-16 space-y-12 -mt-16 relative z-20">
+      <main className="flex-1 mx-auto max-w-5xl w-full px-4 pb-16 space-y-12 -mt-16 relative">
         <section className="bg-background border border-border rounded-xl shadow-sm p-5">
           <StatsSection data={{ pdfCount, categoryCount, userCount, pdfsThisMonth }} />
         </section>

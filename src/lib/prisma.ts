@@ -13,6 +13,7 @@ const adapter = new PrismaMariaDb({
   database: process.env.DB_NAME ?? "my_database",
   connectionLimit: 5,
   connectTimeout: 5000,
+  allowPublicKeyRetrieval: true,
 });
 
 export const prisma =
