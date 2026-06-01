@@ -82,6 +82,7 @@ export default async function BrowseSearchPage({
           </div>
 
           <SearchForm
+            key={JSON.stringify(params)}
             categories={categories}
             years={years}
             months={[...MONTHS]}
