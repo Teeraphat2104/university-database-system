@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-01T19:57:00.000Z",
+  "title": "Design System: University Database System",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Terracotta",
+        "canonical": "#E66239",
+        "tonalRamp": ["#4a1a0a", "#7a2e15", "#a6411f", "#c9542a", "#e66239", "#f08a5e", "#f5ae89", "#fad1b8", "#fde8db"]
+      },
+      "neutral-bg": {
+        "role": "neutral",
+        "displayName": "White",
+        "canonical": "#ffffff",
+        "tonalRamp": ["#1a1a1a", "#333333", "#4d4d4d", "#666666", "#808080", "#999999", "#b3b3b3", "#cccccc", "#ffffff"]
+      },
+      "neutral-ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#262626",
+        "tonalRamp": ["#0d0d0d", "#1a1a1a", "#262626", "#333333", "#4d4d4d", "#666666", "#808080", "#999999", "#b3b3b3"]
+      },
+      "neutral-muted": {
+        "role": "neutral",
+        "displayName": "Muted Surface",
+        "canonical": "#f5f5f5",
+        "tonalRamp": ["#1a1a1a", "#333333", "#4d4d4d", "#666666", "#808080", "#999999", "#b3b3b3", "#d9d9d9", "#f5f5f5"]
+      },
+      "muted-ink": {
+        "role": "neutral",
+        "displayName": "Muted Ink",
+        "canonical": "#737373",
+        "tonalRamp": ["#1a1a1a", "#2e2e2e", "#424242", "#565656", "#6a6a6a", "#7e7e7e", "#929292", "#a6a6a6", "#bababa"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero headings only. One per page." },
+      "body": { "displayName": "Body", "purpose": "Primary reading text. Line length capped at 65-75ch." }
+    },
+    "shadows": [
+      { "name": "hover-subtle", "value": "0 1px 3px rgba(0,0,0,0.08)", "purpose": "Subtle hover state for interactive cards." },
+      { "name": "dropdown", "value": "0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1)", "purpose": "Floating dropdown panels and select menus." }
+    ],
+    "motion": [
+      { "name": "ease-standard", "value": "cubic-bezier(0.25, 0.4, 0.25, 1)", "purpose": "Default easing for state transitions." },
+      { "name": "duration-entrance", "value": "400-700ms", "purpose": "Entrance animation duration range." },
+      { "name": "duration-micro", "value": "150-200ms", "purpose": "Micro-interaction duration (dropdown, hover effects)." },
+      { "name": "stagger-default", "value": "60-120ms", "purpose": "Stagger delay between child items in a list." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary action button. Terracotta background, white text. Used for login, upload, save.",
+      "html": "<button class=\"ds-btn-primary\">Upload PDF</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 32px; padding: 4px 16px; background: #E66239; color: #fff; font-size: 14px; font-weight: 500; border: none; border-radius: 8px; cursor: pointer; white-space: nowrap; transition: filter 0.15s, transform 0.15s; } .ds-btn-primary:hover { filter: brightness(1.1); } .ds-btn-primary:active { transform: translateY(1px); } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(230, 98, 57, 0.25); }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary action. Transparent with 1px border. Used for Cancel, Download.",
+      "html": "<button class=\"ds-btn-outline\">Download</button>",
+      "css": ".ds-btn-outline { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 32px; padding: 4px 16px; background: transparent; color: #262626; font-size: 14px; font-weight: 500; border: 1px solid #e5e5e5; border-radius: 8px; cursor: pointer; white-space: nowrap; transition: background 0.15s, transform 0.15s; } .ds-btn-outline:hover { background: #f5f5f5; } .ds-btn-outline:active { transform: translateY(1px); } .ds-btn-outline:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(230, 98, 57, 0.25); }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Standard text input field. Compact 32px height, 8px radius.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Search documents...\">",
+      "css": ".ds-input { width: 100%; height: 32px; min-width: 0; padding: 4px 10px; font-size: 14px; color: #262626; background: transparent; border: 1px solid #e5e5e5; border-radius: 8px; outline: none; transition: border-color 0.15s, box-shadow 0.15s; } .ds-input::placeholder { color: #737373; } .ds-input:focus { border-color: #E66239; box-shadow: 0 0 0 3px rgba(230, 98, 57, 0.15); } .ds-input:disabled { opacity: 0.5; background: #f5f5f5; cursor: not-allowed; }"
+    },
+    {
+      "name": "Card Container",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Content card. 12px radius, 1px border, no shadow at rest.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-content\">Card content</div></div>",
+      "css": ".ds-card { border: 1px solid #e5e5e5; border-radius: 12px; padding: 16px; background: #ffffff; } .ds-card-content { font-size: 14px; color: #262626; line-height: 1.6; }"
+    },
+    {
+      "name": "Sidebar Navigation Item",
+      "kind": "nav",
+      "refersTo": "sidebar-nav-item",
+      "description": "Sidebar tree navigation item. Hover and active states use Terracotta.",
+      "html": "<a class=\"ds-nav-item\" href=\"#\">Dashboard</a>",
+      "css": ".ds-nav-item { display: flex; align-items: center; gap: 12px; padding: 8px 12px; font-size: 14px; color: rgba(38, 38, 38, 0.8); border-radius: 8px; text-decoration: none; transition: color 0.15s, background 0.15s; } .ds-nav-item:hover { color: #E66239; background: rgba(230, 98, 57, 0.1); } .ds-nav-item.active { color: #E66239; background: rgba(230, 98, 57, 0.1); font-weight: 500; }"
+    },
+    {
+      "name": "Select Dropdown",
+      "kind": "custom",
+      "refersTo": "select",
+      "description": "Custom select dropdown with fixed-positioned panel.",
+      "html": "<button class=\"ds-select-trigger\"><span class=\"ds-select-label\">Select category</span><svg class=\"ds-select-chevron\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M6 9l6 6 6-6\"/></svg></button>",
+      "css": ".ds-select-trigger { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 12px; font-size: 14px; color: #262626; background: transparent; border: 1px solid #e5e5e5; border-radius: 8px; cursor: pointer; transition: border-color 0.15s; } .ds-select-trigger:focus { border-color: #E66239; box-shadow: 0 0 0 3px rgba(230, 98, 57, 0.15); } .ds-select-label { color: #737373; } .ds-select-chevron { color: #737373; transition: transform 0.2s; } .ds-select-trigger[aria-expanded=\"true\"] .ds-select-chevron { transform: rotate(180deg); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Quiet Archive",
+    "overview": "The interface of a special collections reading room: calm, orderly, and deliberately backgrounded. Every surface is flat and matter-of-fact. Borders, not shadows, separate content regions. The typography is clean and legible \u2014 Geist with Noto Sans Thai for Thai-language support. The single accent, Terracotta, is used sparingly: buttons, links, active navigation states. Its rarity is the point.\n\nThis system explicitly rejects the visual language of corporate SaaS dashboards: no rainbow-colored stat cards, no glassmorphism, no gradient text, no heavy drop shadows. The design never competes with the documents it exists to surface.",
+    "keyCharacteristics": [
+      "Flat surfaces with 1px borders for hierarchy",
+      "Single restrained accent (Terracotta, used on <10% of any screen)",
+      "Clean geometric sans typography",
+      "Generous whitespace, capped line lengths",
+      "Dark mode achieved through tonal inversion, not hue shifts"
+    ],
+    "rules": [
+      { "name": "The Restraint Rule", "body": "Terracotta occupies no more than 10% of any given screen. If a layout requires more visual weight, use weight or spacing before reaching for color.", "section": "colors" },
+      { "name": "The One-Family Rule", "body": "No competing typefaces. Geist covers display, body, and UI. Mono is Geist Mono. Thai content uses Noto Sans Thai with matching proportions.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Surfaces are flat at rest. Shadows appear only as a response to state (hover, focus), and only at minimum perceptible intensity. The one exception: floating dropdown panels that must visually escape their trigger.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use Terracotta sparingly \u2014 buttons, active nav, links. Let the neutral palette carry 90%+ of the surface.",
+      "Do use 1px borders for surface separation instead of shadows. Flat is the default.",
+      "Do use text-wrap: balance on headings and text-wrap: pretty on prose paragraphs.",
+      "Do prefer the compact height (32px) for buttons and inputs as the default.",
+      "Do test every screen in both light and dark mode before shipping."
+    ],
+    "donts": [
+      "Don't use rainbow-colored stat cards with per-item gradients.",
+      "Don't combine border: 1px solid with box-shadow blur \u2265 16px on the same element.",
+      "Don't use border-radius larger than 12px on cards or 8px on buttons/inputs.",
+      "Don't use gradient text, glassmorphism, or side-stripe borders of any kind.",
+      "Don't use all-caps body copy.",
+      "Don't use the hero-metric template (big number + small label + gradient accent).",
+      "Don't use <4.5:1 contrast for body text or 4.5:1 for placeholder text.",
+      "Don't create nested cards."
+    ]
+  }
+}
