@@ -82,7 +82,7 @@ export function PdfDetail({
         <div className="w-full lg:w-80 xl:w-96 shrink-0">
           <div className="border border-border rounded-xl p-5 space-y-5 bg-background">
             {/* Actions */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <a
                 href={`/api/pdfs/${pdf.id}/download`}
                 className="flex-1 rounded-lg border px-3 py-2 text-sm font-medium hover:bg-muted transition-colors flex items-center justify-center gap-1.5"

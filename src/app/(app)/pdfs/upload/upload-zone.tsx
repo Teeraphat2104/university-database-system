@@ -105,32 +105,32 @@ export function UploadZone({ categories }: { categories: { id: string; name: str
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
       {/* Steps indicator */}
-      <div className="flex items-center gap-4 text-sm">
-        <div className={`flex items-center gap-2 ${step === 1 ? "text-primary font-semibold" : "text-muted-foreground"}`}>
-          <span className={`flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold border-2 transition-all ${
+      <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm">
+        <div className={`flex items-center gap-1 sm:gap-2 ${step === 1 ? "text-primary font-semibold" : "text-muted-foreground"}`}>
+          <span className={`flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-full text-xs font-bold border-2 transition-all ${
             step === 1 ? "border-primary bg-primary text-primary-foreground" : "border-border"
           }`}>
-            {step === "done" ? <IconCircleCheck className="h-3.5 w-3.5" /> : "1"}
+            {step === "done" ? <IconCircleCheck className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> : "1"}
           </span>
-          Select File
+          <span className="hidden sm:inline">Select File</span>
         </div>
         <div className={`h-px flex-1 border-t transition-colors ${step === 2 || step === "uploading" || step === "done" ? "border-primary" : "border-border"}`} />
-        <div className={`flex items-center gap-2 ${step === 2 || step === "uploading" ? "text-primary font-semibold" : "text-muted-foreground"}`}>
-          <span className={`flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold border-2 transition-all ${
+        <div className={`flex items-center gap-1 sm:gap-2 ${step === 2 || step === "uploading" ? "text-primary font-semibold" : "text-muted-foreground"}`}>
+          <span className={`flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-full text-xs font-bold border-2 transition-all ${
             step === 2 || step === "uploading" ? "border-primary bg-primary text-primary-foreground" : "border-border"
           }`}>
-            {step === "done" ? <IconCircleCheck className="h-3.5 w-3.5" /> : "2"}
+            {step === "done" ? <IconCircleCheck className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> : "2"}
           </span>
-          Details
+          <span className="hidden sm:inline">Details</span>
         </div>
         <div className={`h-px flex-1 border-t transition-colors ${step === "uploading" || step === "done" ? "border-primary" : "border-border"}`} />
-        <div className={`flex items-center gap-2 ${step === "uploading" || step === "done" ? "text-primary font-semibold" : "text-muted-foreground"}`}>
-          <span className={`flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold border-2 transition-all ${
+        <div className={`flex items-center gap-1 sm:gap-2 ${step === "uploading" || step === "done" ? "text-primary font-semibold" : "text-muted-foreground"}`}>
+          <span className={`flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-full text-xs font-bold border-2 transition-all ${
             step === "done" ? "border-green-500 bg-green-500 text-white" : "border-border"
           } ${step === "uploading" ? "border-primary bg-primary text-primary-foreground" : ""}`}>
-            {step === "done" ? <IconCircleCheck className="h-3.5 w-3.5" /> : "3"}
+            {step === "done" ? <IconCircleCheck className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> : "3"}
           </span>
-          Upload
+          <span className="hidden sm:inline">Upload</span>
         </div>
       </div>
 

@@ -100,7 +100,7 @@ export function StatsSection({ data }: { data: StatsData }) {
           <motion.div
             key={stat.label}
             variants={itemVariants}
-            className={`border border-border rounded-xl p-5 space-y-2 hover:shadow-sm transition-shadow bg-gradient-to-br ${stat.gradient}`}
+            className={`border border-border rounded-xl p-4 sm:p-5 space-y-2 hover:shadow-sm transition-shadow bg-gradient-to-br ${stat.gradient}`}
           >
             <div className="flex items-center justify-between">
               <div

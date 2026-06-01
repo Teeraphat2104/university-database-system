@@ -43,7 +43,7 @@ export default async function DashboardPage() {
 
       {/* Stat cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="border border-border rounded-xl p-5 space-y-2 hover:shadow-sm transition-shadow bg-gradient-to-br from-orange-50 to-transparent dark:from-orange-950/10">
+        <div className="border border-border rounded-xl p-4 sm:p-5 space-y-2 hover:shadow-sm transition-shadow bg-gradient-to-br from-orange-50 to-transparent dark:from-orange-950/10">
           <div className="flex items-center justify-between">
             <div className="h-10 w-10 rounded-lg bg-orange-100 dark:bg-orange-950 flex items-center justify-center">
               <IconFileDescription className="h-5 w-5 text-orange-600 dark:text-orange-400" />
@@ -55,7 +55,7 @@ export default async function DashboardPage() {
           <p className="text-2xl font-bold">{pdfCount}</p>
           <p className="text-xs text-muted-foreground">Total PDFs</p>
         </div>
-        <div className="border border-border rounded-xl p-5 space-y-2 hover:shadow-sm transition-shadow bg-gradient-to-br from-blue-50 to-transparent dark:from-blue-950/10">
+        <div className="border border-border rounded-xl p-4 sm:p-5 space-y-2 hover:shadow-sm transition-shadow bg-gradient-to-br from-blue-50 to-transparent dark:from-blue-950/10">
           <div className="flex items-center justify-between">
             <div className="h-10 w-10 rounded-lg bg-blue-100 dark:bg-blue-950 flex items-center justify-center">
               <IconFolder className="h-5 w-5 text-blue-600 dark:text-blue-400" />
@@ -64,7 +64,7 @@ export default async function DashboardPage() {
           <p className="text-2xl font-bold">{categoryCount}</p>
           <p className="text-xs text-muted-foreground">Categories</p>
         </div>
-        <div className="border border-border rounded-xl p-5 space-y-2 hover:shadow-sm transition-shadow bg-gradient-to-br from-purple-50 to-transparent dark:from-purple-950/10">
+        <div className="border border-border rounded-xl p-4 sm:p-5 space-y-2 hover:shadow-sm transition-shadow bg-gradient-to-br from-purple-50 to-transparent dark:from-purple-950/10">
           <div className="flex items-center justify-between">
             <div className="h-10 w-10 rounded-lg bg-purple-100 dark:bg-purple-950 flex items-center justify-center">
               <IconUsers className="h-5 w-5 text-purple-600 dark:text-purple-400" />

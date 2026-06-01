@@ -95,7 +95,7 @@ export default async function BrowseSearchPage({
 
       <main className="flex-1 mx-auto max-w-5xl w-full px-4 py-10">
         {pdfs.length > 0 ? (
-          <BrowsePdfGrid pdfs={pdfs} />
+          <BrowsePdfGrid key={JSON.stringify(params)} pdfs={pdfs} />
         ) : (
           <div className="text-center py-16 space-y-3">
             <IconSearch className="h-10 w-10 mx-auto text-muted-foreground" />

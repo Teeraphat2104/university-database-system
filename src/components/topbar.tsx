@@ -19,7 +19,7 @@ export function Topbar({ userName, role, onOpenSidebar }: { userName: string; ro
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="tabler-icon tabler-icon-menu-2"><path d="M4 6l16 0"></path><path d="M4 12l16 0"></path><path d="M4 18l16 0"></path></svg>
       </button>
-      <span className="text-sm text-muted-foreground hidden md:block">
+      <span className="text-sm text-muted-foreground truncate max-w-[200px]">
         {userName} ({role})
       </span>
       <div className="flex items-center gap-2 ml-auto">

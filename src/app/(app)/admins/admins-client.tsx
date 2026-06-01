@@ -138,7 +138,8 @@ export function AdminsClient({
 
       {/* Table view */}
       {view === "table" && (
-        <div className="border border-border rounded-xl overflow-hidden">
+        <div className="overflow-x-auto">
+          <div className="border border-border rounded-xl min-w-[500px]">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border bg-muted/50">
@@ -186,6 +187,7 @@ export function AdminsClient({
               )}
             </tbody>
           </table>
+        </div>
         </div>
       )}
 

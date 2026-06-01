@@ -1,6 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { IconSearch } from "@tabler/icons-react"
 import { Select, type SelectOption } from "@/components/ui/select"
 
@@ -22,9 +23,14 @@ export function SearchForm({
   initialMonth?: string
 }) {
   const router = useRouter()
+  const [pending, setPending] = useState(false)
+  const [category, setCategory] = useState(initialCategory)
+  const [year, setYear] = useState(initialYear)
+  const [month, setMonth] = useState(initialMonth)
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    setPending(true)
     const data = new FormData(e.currentTarget)
     const params = new URLSearchParams()
     const q = data.get("q")
@@ -67,31 +73,36 @@ export function SearchForm({
       <div className="flex items-center gap-2 flex-wrap [&>*]:flex-1">
         <Select
           options={categoryOptions}
-          value={initialCategory}
-          onChange={() => {}}
+          value={category}
+          onChange={setCategory}
           placeholder="All Categories"
           name="category"
         />
         <Select
           options={yearOptions}
-          value={initialYear}
-          onChange={() => {}}
+          value={year}
+          onChange={setYear}
           placeholder="All Years"
           name="year"
         />
         <Select
           options={monthOptions}
-          value={initialMonth}
-          onChange={() => {}}
+          value={month}
+          onChange={setMonth}
           placeholder="All Months"
           name="month"
         />
         <button
           type="submit"
-          className="rounded-xl bg-primary text-primary-foreground dark:bg-white dark:text-gray-900 px-6 py-3 text-sm font-medium hover:brightness-110 transition-all flex items-center gap-2"
+          disabled={pending}
+          className="rounded-xl bg-primary text-primary-foreground dark:bg-white dark:text-gray-900 px-6 py-3 text-sm font-medium hover:brightness-110 transition-all flex items-center gap-2 disabled:opacity-60"
         >
-          <IconSearch className="h-4 w-4" />
-          Search
+          {pending ? (
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+          ) : (
+            <IconSearch className="h-4 w-4" />
+          )}
+          {pending ? "Searching..." : "Search"}
         </button>
       </div>
     </form>

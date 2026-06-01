@@ -69,8 +69,7 @@ export default async function BrowsePdfDetailPage({
           <div className="lg:col-span-2">
             <iframe
               src={`/api/pdfs/${pdf.id}/download`}
-              className="w-full border border-border rounded-xl"
-              style={{ minHeight: "80vh" }}
+              className="w-full border border-border rounded-xl min-h-[50vh] lg:min-h-[80vh]"
               title={pdf.title}
             />
           </div>
