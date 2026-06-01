@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { IconEye, IconCalendar } from "@tabler/icons-react"
 import { PdfDetailModal } from "@/components/pdf-detail-modal"
+import { CategoryImage } from "@/components/category-image"
 import { MONTHS } from "@/lib/constants"
 
 type RecentPdf = {
@@ -33,7 +34,7 @@ export function DashboardRecent({ pdfs }: { pdfs: RecentPdf[] }) {
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium">
                   {pdf.category.imagePath && (
-                    <img src={`/api/categories/${pdf.categoryId}/image`} alt="" className="w-3 h-3 rounded object-cover" />
+                    <CategoryImage categoryId={pdf.categoryId} alt="" className="w-3 h-3 rounded object-cover" />
                   )}
                   {pdf.category.name}
                 </span>

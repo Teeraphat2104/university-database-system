@@ -10,6 +10,7 @@ import {
 import { Select, type SelectOption } from "@/components/ui/select"
 import { Modal } from "@/components/modal"
 import { EditPdfForm } from "@/components/edit-pdf-form"
+import { CategoryImage } from "@/components/category-image"
 
 import { usePersistedState } from "@/hooks/use-persisted-state"
 
@@ -59,7 +60,7 @@ export function PdfList({
   async function handleDelete() {
     if (!deleteTarget) return
     setDeleting(true)
-    await fetch(`/api/pdfs/${deleteTarget.id}`, { method: "DELETE" })
+    await fetch(`/api/pdf/${deleteTarget.id}/delete`, { method: "POST" })
     setDeleting(false)
     setDeleteTarget(null)
     router.refresh()
@@ -210,7 +211,7 @@ export function PdfList({
                       <td className="px-4 py-3">
                         <div className="flex items-center justify-end gap-1" onClick={(e) => e.stopPropagation()}>
                           <a
-                            href={`/api/pdfs/${pdf.id}/download`}
+                            href={`/api/pdf/${pdf.id}/download`}
                             className="rounded-md p-1.5 text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors"
                             title="Download"
                           >
@@ -259,7 +260,7 @@ export function PdfList({
                     </div>
                     <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity" onClick={(e) => e.stopPropagation()}>
                       <a
-                        href={`/api/pdfs/${pdf.id}/download`}
+                        href={`/api/pdf/${pdf.id}/download`}
                         className="rounded-md p-1.5 text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors"
                         title="Download"
                       >
@@ -290,7 +291,7 @@ export function PdfList({
                     <div className="flex flex-wrap gap-1.5">
                       <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium">
                         {pdf.category?.imagePath && (
-                          <img src={`/api/categories/${pdf.categoryId}/image`} alt="" className="w-3 h-3 rounded object-cover" />
+                          <CategoryImage categoryId={pdf.categoryId} alt="" className="w-3 h-3 rounded object-cover" />
                         )}
                         {pdf.category?.name}
                       </span>

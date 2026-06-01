@@ -13,9 +13,14 @@ export async function GET(
   }
 
   const filePath = path.join(process.cwd(), "uploads", pdf.filePath)
-  const buffer = await readFile(filePath)
+  let buffer: Buffer
+  try {
+    buffer = await readFile(filePath)
+  } catch {
+    return Response.json({ error: "File not found on disk" }, { status: 404 })
+  }
 
-  return new Response(buffer, {
+  return new Response(new Uint8Array(buffer), {
     headers: {
       "Content-Type": "application/pdf",
       "Content-Disposition": `inline; filename="${pdf.originalName}"`,

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import Link from "next/link"
+import { CategoryImage } from "@/components/category-image"
 import { MONTHS } from "@/lib/constants"
 
 type BrowsePdf = {
@@ -56,7 +57,7 @@ export function BrowsePdfGrid({ pdfs }: { pdfs: BrowsePdf[] }) {
             <p className="text-sm font-medium leading-snug line-clamp-2">{pdf.title}</p>
             <p className="text-xs text-muted-foreground flex items-center gap-1">
               {pdf.category.imagePath && (
-                <img src={`/api/categories/${pdf.categoryId}/image`} alt="" className="w-3 h-3 rounded object-cover shrink-0" />
+                <CategoryImage categoryId={pdf.categoryId} alt="" className="w-3 h-3 rounded object-cover shrink-0" />
               )}
               {pdf.category.name} &middot; {MONTHS[pdf.month - 1]} {pdf.year}
             </p>

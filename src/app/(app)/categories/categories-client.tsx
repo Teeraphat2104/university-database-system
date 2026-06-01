@@ -4,6 +4,7 @@ import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { useActionState } from "react"
 import { Modal } from "@/components/modal"
+import { CategoryImage } from "@/components/category-image"
 import { usePersistedState } from "@/hooks/use-persisted-state"
 import {
   IconFolderPlus, IconTrash, IconEdit, IconTable, IconLayoutGrid,
@@ -52,7 +53,7 @@ function ImageInput({ name, currentImage, onRemove }: { name: string; currentIma
         <ImagePreview src={preview} onRemove={() => { setPreview(null); if (fileRef.current) fileRef.current.value = "" }} />
       ) : currentImage ? (
         <div className="flex items-center gap-3">
-          <ImagePreview src={`/api/categories/${currentImage}/image`} />
+          <CategoryImage categoryId={currentImage} alt="" className="w-20 h-20 rounded-lg object-cover border border-border" />
           <button type="button" onClick={onRemove} className="text-xs text-red-500 hover:text-red-600 underline">Remove</button>
         </div>
       ) : (
@@ -138,7 +139,7 @@ function EditCategoryForm({ category, onSuccess }: { category: CategoryData & { 
           </div>
         ) : category.imagePath ? (
           <div className="flex items-center gap-3">
-            <ImagePreview src={`/api/categories/${category.id}/image`} />
+            <CategoryImage categoryId={category.id} alt="" className="w-20 h-20 rounded-lg object-cover border border-border" />
             <button type="button" onClick={() => setRemoveImage(true)} className="text-xs text-red-500 hover:text-red-600 underline">Remove</button>
           </div>
         ) : (
@@ -241,7 +242,7 @@ export function CategoriesClient({
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
                       {c.imagePath ? (
-                        <img src={`/api/categories/${c.id}/image`} alt="" className="w-8 h-8 rounded-md object-cover border border-border shrink-0" />
+                        <CategoryImage categoryId={c.id} alt="" className="w-8 h-8 rounded-md object-cover border border-border shrink-0" />
                       ) : (
                         <div className="w-8 h-8 rounded-md bg-primary/10 flex items-center justify-center shrink-0">
                           <IconFolder className="h-4 w-4 text-primary" />
@@ -310,8 +311,8 @@ export function CategoriesClient({
                 >
                   {c.imagePath ? (
                     <div className="aspect-[4/3] relative">
-                      <img
-                        src={`/api/categories/${c.id}/image`}
+                      <CategoryImage
+                        categoryId={c.id}
                         alt={c.name}
                         className="absolute inset-0 w-full h-full object-cover"
                       />

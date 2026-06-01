@@ -30,8 +30,8 @@ export function EditPdfForm({
     setSaving(true)
     setMessage(null)
     const data = new FormData(e.currentTarget)
-    const res = await fetch(`/api/pdfs/${pdf.id}`, {
-      method: "PATCH",
+    const res = await fetch(`/api/pdf/${pdf.id}/update`, {
+      method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(Object.fromEntries(data)),
     })

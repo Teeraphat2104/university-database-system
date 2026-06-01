@@ -93,7 +93,7 @@ export function UploadZone({ categories }: { categories: { id: string; name: str
       setStep(2)
     }
 
-    xhr.open("POST", "/api/upload")
+    xhr.open("POST", "/api/pdf/create")
     xhr.send(formData)
   }
 

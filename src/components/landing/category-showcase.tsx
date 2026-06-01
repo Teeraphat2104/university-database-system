@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import Link from "next/link"
+import { CategoryImage } from "@/components/category-image"
 import { IconFolder } from "@tabler/icons-react"
 
 const containerVariants = {
@@ -58,8 +59,8 @@ export function CategoryShowcase({
             >
               <div className="aspect-[4/3] relative">
                 {cat.imagePath ? (
-                  <img
-                    src={`/api/categories/${cat.id}/image`}
+                  <CategoryImage
+                    categoryId={cat.id}
                     alt={cat.name}
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />

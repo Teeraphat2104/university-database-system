@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import Link from "next/link"
+import { CategoryImage } from "@/components/category-image"
 import { MONTHS } from "@/lib/constants"
 
 type RecentPdf = {
@@ -36,7 +37,7 @@ export function RecentPdfs({ pdfs }: { pdfs: RecentPdf[] }) {
             <p className="text-sm font-medium">{pdf.title}</p>
             <p className="text-xs text-muted-foreground flex items-center gap-1">
               {pdf.category.imagePath && (
-                <img src={`/api/categories/${pdf.categoryId}/image`} alt="" className="w-3.5 h-3.5 rounded object-cover" />
+                <CategoryImage categoryId={pdf.categoryId} alt="" className="w-3.5 h-3.5 rounded object-cover" />
               )}
               {pdf.category.name} &middot; {MONTHS[pdf.month - 1]} {pdf.year}
             </p>

@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { Modal } from "@/components/modal"
 import { EditPdfForm } from "@/components/edit-pdf-form"
+import { CategoryImage } from "@/components/category-image"
 import { MONTHS } from "@/lib/constants"
 import {
   IconDownload, IconEdit, IconTrash,
@@ -34,7 +35,7 @@ export function PdfDetailModal({
     setMode("view")
     setPdf(null)
     try {
-      const res = await fetch(`/api/pdfs/${id}`)
+      const res = await fetch(`/api/pdf/${id}/detail`, { method: "POST" })
       if (!res.ok) {
         setError("Failed to load PDF")
         return
@@ -59,7 +60,7 @@ export function PdfDetailModal({
     if (!pdf) return
     setDeleting(true)
     try {
-      await fetch(`/api/pdfs/${pdf.id}`, { method: "DELETE" })
+      await fetch(`/api/pdf/${pdf.id}/delete`, { method: "POST" })
       onSuccess?.()
       onClose()
     } catch {
@@ -103,7 +104,7 @@ export function PdfDetailModal({
               <p className="text-xs text-muted-foreground flex items-center gap-1"><IconFolder className="h-3 w-3" /> Category</p>
               <div className="flex items-center gap-2">
                 {pdf.category?.imagePath && (
-                  <img src={`/api/categories/${pdf.categoryId}/image`} alt="" className="w-5 h-5 rounded object-cover border border-border" />
+                  <CategoryImage categoryId={pdf.categoryId} alt="" className="w-5 h-5 rounded object-cover border border-border" />
                 )}
                 <p className="text-sm font-medium">{pdf.category?.name}</p>
               </div>
@@ -129,7 +130,7 @@ export function PdfDetailModal({
           )}
           <div className="flex gap-2 pt-2 border-t border-border">
             <a
-              href={`/api/pdfs/${pdf.id}/download`}
+              href={`/api/pdf/${pdf.id}/download`}
               className="rounded-lg border px-3 py-2 text-sm font-medium hover:bg-muted transition-colors flex items-center gap-1.5"
             >
               <IconDownload className="h-4 w-4" /> Download

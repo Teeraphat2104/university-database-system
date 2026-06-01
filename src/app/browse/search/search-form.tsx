@@ -1,7 +1,7 @@
 "use client"
 
-import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { useEffect, useState } from "react"
 import { IconSearch } from "@tabler/icons-react"
 import { Select, type SelectOption } from "@/components/ui/select"
 
@@ -23,10 +23,15 @@ export function SearchForm({
   initialMonth?: string
 }) {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [pending, setPending] = useState(false)
   const [category, setCategory] = useState(initialCategory)
   const [year, setYear] = useState(initialYear)
   const [month, setMonth] = useState(initialMonth)
+
+  useEffect(() => {
+    setPending(false)
+  }, [searchParams])
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()

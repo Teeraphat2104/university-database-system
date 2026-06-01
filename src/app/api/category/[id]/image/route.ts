@@ -10,7 +10,7 @@ const MIME: Record<string, string> = {
   ".svg": "image/svg+xml",
 }
 
-export async function GET(
+export async function POST(
   _req: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
@@ -22,7 +22,7 @@ export async function GET(
   })
 
   if (!category?.imagePath) {
-    return new Response("Not found", { status: 404 })
+    return Response.json({ image: null })
   }
 
   const ext = path.extname(category.imagePath).toLowerCase()
@@ -31,10 +31,9 @@ export async function GET(
 
   try {
     const buffer = await readFile(filePath)
-    return new Response(buffer, {
-      headers: { "Content-Type": contentType, "Cache-Control": "public, max-age=31536000, immutable" },
-    })
+    const base64 = buffer.toString("base64")
+    return Response.json({ image: `data:${contentType};base64,${base64}` })
   } catch {
-    return new Response("Not found", { status: 404 })
+    return Response.json({ image: null })
   }
 }

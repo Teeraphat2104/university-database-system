@@ -2,6 +2,8 @@ import "dotenv/config"
 import { PrismaMariaDb } from "@prisma/adapter-mariadb"
 import { PrismaClient } from "@prisma/client"
 import bcrypt from "bcryptjs"
+import { writeFileSync, mkdirSync, existsSync } from "fs"
+import path from "path"
 
 const adapter = new PrismaMariaDb({
   host: process.env.DB_HOST ?? "127.0.0.1",
@@ -127,17 +129,29 @@ async function main() {
     createdCategories[cat.slug] = created.id
   }
 
+  const MINIMAL_PDF = Buffer.from(
+    "%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj\n3 0 obj<</Type/Page/MediaBox[0 0 612 792]/Parent 2 0 R>>endobj\nxref\n0 4\n0000000000 65535 f \n0000000009 00000 n \n0000000058 00000 n \n0000000115 00000 n \ntrailer<</Size 4/Root 1 0 R>>\nstartxref\n190\n%%EOF",
+  )
+
   console.log("Seeding PDFs...")
+  const uploadDir = path.join(__dirname, "..", "uploads")
+  mkdirSync(uploadDir, { recursive: true })
+
   const pdfData = PDF_TEMPLATES.map((pdf) => {
     const categoryId = createdCategories[pdf.slug]
     if (!categoryId) throw new Error(`Category not found for slug: ${pdf.slug}`)
     const createdAt = new Date(pdf.year, pdf.month - 1, 1)
+    const filename = `${crypto.randomUUID()}.pdf`
+    const pdfPath = path.join(uploadDir, filename)
+    if (!existsSync(pdfPath)) {
+      writeFileSync(pdfPath, MINIMAL_PDF)
+    }
     return {
       title: pdf.title,
       description: `Seed data — ${pdf.title}`,
       year: pdf.year,
       month: pdf.month,
-      filePath: `/uploads/seed/${pdf.title.replace(/\s+/g, "-")}.pdf`,
+      filePath: filename,
       originalName: `${pdf.title}.pdf`,
       fileSize: Math.floor(Math.random() * 2000000) + 100000,
       uploadedById: adminUser.id,

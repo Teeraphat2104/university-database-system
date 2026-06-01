@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { CategoryImage } from "@/components/category-image"
 import { BrowsePdfGrid } from "@/components/browse/browse-pdf-grid"
 import { IconArrowLeft, IconFolder } from "@tabler/icons-react"
 
@@ -60,8 +61,8 @@ export default async function BrowseCategoryPage({
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center gap-4 min-w-0">
               {category.imagePath ? (
-                <img
-                  src={`/api/categories/${category.id}/image`}
+                <CategoryImage
+                  categoryId={category.id}
                   alt={category.name}
                   className="w-14 h-14 rounded-xl object-cover border border-border shrink-0"
                 />

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { CategoryImage } from "@/components/category-image"
 import { MONTHS } from "@/lib/constants"
 import { IconArrowLeft, IconCalendar, IconFolder, IconUser, IconWeight, IconDownload } from "@tabler/icons-react"
 
@@ -68,7 +69,7 @@ export default async function BrowsePdfDetailPage({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
             <iframe
-              src={`/api/pdfs/${pdf.id}/download`}
+              src={`/api/pdf/${pdf.id}/download`}
               className="w-full border border-border rounded-xl min-h-[50vh] lg:min-h-[80vh]"
               title={pdf.title}
             />
@@ -82,7 +83,7 @@ export default async function BrowsePdfDetailPage({
                 </p>
                 <div className="flex items-center gap-2">
                   {pdf.category.imagePath && (
-                    <img src={`/api/categories/${pdf.categoryId}/image`} alt="" className="w-5 h-5 rounded object-cover border border-border" />
+                    <CategoryImage categoryId={pdf.categoryId} alt="" className="w-5 h-5 rounded object-cover border border-border" />
                   )}
                   <p className="text-sm font-medium">{pdf.category.name}</p>
                 </div>
@@ -120,7 +121,7 @@ export default async function BrowsePdfDetailPage({
             </div>
 
             <a
-              href={`/api/pdfs/${pdf.id}/download`}
+              href={`/api/pdf/${pdf.id}/download`}
               download
               className="flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground px-6 py-3 text-sm font-medium hover:brightness-110 transition-all"
             >
