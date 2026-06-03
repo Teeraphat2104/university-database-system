@@ -38,7 +38,7 @@ export function LoginForm() {
               autoFocus
               autoComplete="username"
               placeholder="name@example.com"
-              className="w-full rounded-lg border border-border bg-background pl-9 pr-3 py-2 text-sm placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              className="w-full rounded-lg border border-border bg-background pl-9 pr-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
             />
           </div>
         </div>
@@ -48,12 +48,12 @@ export function LoginForm() {
             <label htmlFor="password" className="text-sm font-medium">
               Password
             </label>
-            <button
-              type="button"
+            <a
+              href="mailto:support@university.edu"
               className="text-xs text-primary hover:text-primary/80 transition-colors"
             >
               Forgot password?
-            </button>
+            </a>
           </div>
           <div className="relative">
             <IconLock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -64,7 +64,7 @@ export function LoginForm() {
               required
               autoComplete="current-password"
               placeholder="Enter your password"
-              className="w-full rounded-lg border border-border bg-background pl-9 pr-3 py-2 text-sm placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              className="w-full rounded-lg border border-border bg-background pl-9 pr-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
             />
           </div>
         </div>

@@ -34,14 +34,15 @@ export function Modal({
       ref={dialogRef}
       onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
       onClose={onClose}
-      className={`fixed inset-0 z-50 m-auto w-full rounded-xl border border-border bg-background p-0 shadow-lg open:flex open:flex-col overflow-visible ${wide ? "max-w-2xl" : "max-w-md"}`}
+      className={`fixed inset-0 z-50 m-auto w-full rounded-xl border border-border bg-background p-0 open:flex open:flex-col overflow-visible ${wide ? "max-w-2xl" : "max-w-md"}`}
     >
       <div className="flex items-center justify-between px-5 py-4 border-b border-border shrink-0">
         <h2 className="text-sm font-semibold">{title}</h2>
         <button
           type="button"
           onClick={onClose}
-          className="rounded-md p-1 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+          aria-label="Close dialog"
+          className="rounded-md p-1 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
         >
           <IconX className="h-4 w-4" />
         </button>

@@ -1,19 +1,6 @@
-"use client"
-
-import { motion } from "framer-motion"
-import { AnimatedGradient } from "./animated-gradient"
 import { LandingSearch } from "@/app/landing-search"
 import { ThemeToggle } from "@/components/theme-toggle"
 import Link from "next/link"
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, delay: i * 0.15, ease: [0.25, 0.4, 0.25, 1] as const },
-  }),
-}
 
 function HeroTitle({ title, highlight }: { title: string; highlight: string }) {
   if (!highlight || !title.includes(highlight)) {
@@ -46,28 +33,12 @@ export function HeroSection({
   const siteName = settings?.siteName ?? "University DB"
 
   return (
-    <section className="relative min-h-[85vh] flex flex-col">
-      <AnimatedGradient />
-
+    <section className="flex flex-col border-b border-border">
       {/* Navbar */}
-      <div className="sticky top-0 z-50 backdrop-blur-xl bg-background/60 border-b border-border/50">
+      <div className="sticky top-0 z-50 bg-background border-b border-border">
         <div className="mx-auto max-w-5xl px-4 py-3 flex items-center justify-between">
-          <motion.span
-            className="text-sm font-semibold"
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            custom={0}
-          >
-            {siteName}
-          </motion.span>
-          <motion.div
-            className="flex items-center gap-2"
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            custom={1}
-          >
+          <span className="text-sm font-semibold">{siteName}</span>
+          <div className="flex items-center gap-2">
             <ThemeToggle />
             <Link
               href="/login"
@@ -75,74 +46,32 @@ export function HeroSection({
             >
               Sign in
             </Link>
-          </motion.div>
+          </div>
         </div>
       </div>
 
       {/* Hero content */}
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-12 sm:py-20 relative z-10">
+      <div className="flex flex-col items-center justify-center px-4 py-16 sm:py-24">
         <div className="max-w-4xl w-full mx-auto text-center space-y-8">
-          <motion.div
-            className="space-y-4"
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            custom={0}
-          >
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">
+          <div className="space-y-4">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-foreground">
               <HeroTitle title={heroTitle} highlight={heroHighlight} />
             </h1>
-            <p className="text-muted-foreground text-base sm:text-lg max-w-lg mx-auto leading-relaxed">
+            <p className="text-muted-foreground text-sm sm:text-base max-w-md mx-auto leading-relaxed">
               {heroSubtitle}
             </p>
-          </motion.div>
+          </div>
 
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            custom={1}
-            className="max-w-4xl mx-auto"
-          >
+          <div className="max-w-4xl mx-auto">
             <LandingSearch
               categories={categories}
               years={years}
               months={months}
               hero
             />
-          </motion.div>
-
-          <motion.p
-            className="text-xs text-muted-foreground"
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            custom={2}
-          >
-            Search thousands of documents across all categories and years
-          </motion.p>
+          </div>
         </div>
       </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.5, duration: 0.8 }}
-      >
-        <motion.div
-          className="w-5 h-8 rounded-full border border-muted-foreground/30 flex items-start justify-center p-1"
-          animate={{ opacity: [0.4, 1, 0.4] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <motion.div
-            className="w-1 h-2 rounded-full bg-muted-foreground/60"
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          />
-        </motion.div>
-      </motion.div>
     </section>
   )
 }

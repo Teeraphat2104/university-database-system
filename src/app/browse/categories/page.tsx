@@ -10,7 +10,7 @@ export default async function BrowseCategoriesPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="sticky top-0 z-50 backdrop-blur-xl bg-background/60 border-b border-border/50">
+      <div className="sticky top-0 z-50 bg-background border-b border-border">
         <div className="mx-auto max-w-5xl px-4 py-3 flex items-center justify-between">
           <Link href="/" className="text-sm font-semibold">University DB</Link>
           <div className="flex items-center gap-2">
@@ -25,7 +25,7 @@ export default async function BrowseCategoriesPage() {
         </div>
       </div>
 
-      <section className="relative bg-gradient-to-b from-primary/5 via-primary/[0.02] to-background border-b border-border">
+      <section className="relative border-b border-border">
         <div className="mx-auto max-w-5xl px-4 py-10 sm:py-12 space-y-4">
           <div className="flex items-center justify-between">
             <Breadcrumbs

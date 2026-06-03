@@ -22,10 +22,11 @@ export function DashboardRecent({ pdfs }: { pdfs: RecentPdf[] }) {
     <>
       <div className="border border-border rounded-xl divide-y divide-border overflow-hidden">
         {pdfs.map((pdf) => (
-          <div
+          <button
+            type="button"
             key={pdf.id}
             onClick={() => setSelectedPdfId(pdf.id)}
-            className="flex items-center justify-between px-4 py-3.5 hover:bg-muted/30 transition-colors cursor-pointer group"
+            className="flex items-center justify-between w-full px-4 py-3.5 hover:bg-muted/30 transition-colors cursor-pointer group text-left"
           >
             <div className="space-y-1 min-w-0 flex-1">
               <p className="text-sm font-medium group-hover:text-primary transition-colors truncate">
@@ -45,7 +46,7 @@ export function DashboardRecent({ pdfs }: { pdfs: RecentPdf[] }) {
               </div>
             </div>
             <IconEye className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0 ml-3" />
-          </div>
+          </button>
         ))}
       </div>
       <PdfDetailModal

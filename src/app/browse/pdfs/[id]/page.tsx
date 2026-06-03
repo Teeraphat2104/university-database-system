@@ -26,7 +26,7 @@ export default async function BrowsePdfDetailPage({
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="sticky top-0 z-50 backdrop-blur-xl bg-background/60 border-b border-border/50">
+      <div className="sticky top-0 z-50 bg-background border-b border-border">
         <div className="mx-auto max-w-5xl px-4 py-3 flex items-center justify-between">
           <Link href="/" className="text-sm font-semibold">University DB</Link>
           <div className="flex items-center gap-2">

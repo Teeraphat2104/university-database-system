@@ -120,7 +120,8 @@ function TreeBranch({
     <div>
       <button
         onClick={onToggle}
-        className={`w-full rounded-lg py-2 text-sm flex items-center gap-3 text-sidebar-foreground/80 hover:text-primary hover:bg-primary/10 transition-colors ${
+        aria-expanded={expanded}
+        className={`w-full rounded-lg py-2 text-sm flex items-center gap-3 text-sidebar-foreground/80 hover:text-primary hover:bg-primary/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
           LEVEL_PADDING[level] ?? "pl-3"
         }`}
       >
@@ -154,7 +155,7 @@ function TreeLeaf({
   return (
     <Link
       href={href}
-      className={`rounded-lg py-2 text-sm flex items-center gap-3 transition-colors ${
+      className={`rounded-lg py-2 text-sm flex items-center gap-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
         LEVEL_PADDING[level] ?? "pl-3"
       } ${active ? "text-primary bg-primary/10" : "text-sidebar-foreground/80 hover:text-primary hover:bg-primary/10"}`}
     >

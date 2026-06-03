@@ -95,7 +95,7 @@ export function SearchForm({
         <button
           type="submit"
           disabled={pending}
-          className="rounded-xl bg-primary text-primary-foreground dark:bg-white dark:text-gray-900 px-6 py-3 text-sm font-medium hover:brightness-110 transition-all flex items-center gap-2 disabled:opacity-60"
+          className="rounded-lg bg-primary text-primary-foreground px-6 py-3 text-sm font-medium hover:brightness-110 transition-all flex items-center gap-2 disabled:opacity-60"
         >
           {pending ? (
             <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />

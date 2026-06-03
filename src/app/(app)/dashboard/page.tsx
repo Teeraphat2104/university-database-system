@@ -43,33 +43,33 @@ export default async function DashboardPage() {
 
       {/* Stat cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="border border-border rounded-xl p-4 sm:p-5 space-y-2 hover:shadow-sm transition-shadow bg-gradient-to-br from-orange-50 to-transparent dark:from-orange-950/10">
+        <div className="border border-border rounded-xl p-4 sm:p-5 space-y-2 hover:shadow-sm transition-shadow">
           <div className="flex items-center justify-between">
-            <div className="h-10 w-10 rounded-lg bg-orange-100 dark:bg-orange-950 flex items-center justify-center">
-              <IconFileDescription className="h-5 w-5 text-orange-600 dark:text-orange-400" />
+            <div className="h-10 w-10 rounded-lg bg-muted text-primary flex items-center justify-center">
+              <IconFileDescription className="h-5 w-5" />
             </div>
-            <span className="text-xs text-muted-foreground bg-background/80 rounded-full px-2 py-0.5 border">
+            <span className="text-xs text-muted-foreground rounded-full px-2 py-0.5 border">
               +{pdfsThisMonth} this month
             </span>
           </div>
           <p className="text-2xl font-bold">{pdfCount}</p>
           <p className="text-xs text-muted-foreground">Total PDFs</p>
         </div>
-        <div className="border border-border rounded-xl p-4 sm:p-5 space-y-2 hover:shadow-sm transition-shadow bg-gradient-to-br from-blue-50 to-transparent dark:from-blue-950/10">
+        <div className="border border-border rounded-xl p-4 sm:p-5 space-y-2 hover:shadow-sm transition-shadow">
           <div className="flex items-center justify-between">
-            <div className="h-10 w-10 rounded-lg bg-blue-100 dark:bg-blue-950 flex items-center justify-center">
-              <IconFolder className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+            <div className="h-10 w-10 rounded-lg bg-muted text-primary flex items-center justify-center">
+              <IconFolder className="h-5 w-5" />
             </div>
           </div>
           <p className="text-2xl font-bold">{categoryCount}</p>
           <p className="text-xs text-muted-foreground">Categories</p>
         </div>
-        <div className="border border-border rounded-xl p-4 sm:p-5 space-y-2 hover:shadow-sm transition-shadow bg-gradient-to-br from-purple-50 to-transparent dark:from-purple-950/10">
+        <div className="border border-border rounded-xl p-4 sm:p-5 space-y-2 hover:shadow-sm transition-shadow">
           <div className="flex items-center justify-between">
-            <div className="h-10 w-10 rounded-lg bg-purple-100 dark:bg-purple-950 flex items-center justify-center">
-              <IconUsers className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+            <div className="h-10 w-10 rounded-lg bg-muted text-primary flex items-center justify-center">
+              <IconUsers className="h-5 w-5" />
             </div>
-            <span className="text-xs text-muted-foreground bg-background/80 rounded-full px-2 py-0.5 border">
+            <span className="text-xs text-muted-foreground rounded-full px-2 py-0.5 border">
               {adminCount} admin{adminCount === 1 ? "" : "s"}
             </span>
           </div>
@@ -99,8 +99,8 @@ export default async function DashboardPage() {
             href="/pdfs"
             className="border border-border rounded-xl p-4 flex items-center gap-3 hover:shadow-sm hover:border-primary/30 transition-all group"
           >
-            <div className="h-9 w-9 rounded-lg bg-blue-100 dark:bg-blue-950 flex items-center justify-center group-hover:bg-blue-200 dark:group-hover:bg-blue-900 transition-colors">
-              <IconFileDescription className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            <div className="h-9 w-9 rounded-lg bg-muted text-primary flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+              <IconFileDescription className="h-4 w-4" />
             </div>
             <div className="flex-1">
               <p className="text-sm font-medium">Browse PDFs</p>
@@ -112,8 +112,8 @@ export default async function DashboardPage() {
             href="/categories"
             className="border border-border rounded-xl p-4 flex items-center gap-3 hover:shadow-sm hover:border-primary/30 transition-all group"
           >
-            <div className="h-9 w-9 rounded-lg bg-purple-100 dark:bg-purple-950 flex items-center justify-center group-hover:bg-purple-200 dark:group-hover:bg-purple-900 transition-colors">
-              <IconFolder className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+            <div className="h-9 w-9 rounded-lg bg-muted text-primary flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+              <IconFolder className="h-4 w-4" />
             </div>
             <div className="flex-1">
               <p className="text-sm font-medium">Categories</p>
