@@ -5,6 +5,8 @@ import { CategoryShowcase } from "@/components/landing/category-showcase"
 import { RecentPdfs } from "@/components/recent-pdfs"
 import { getCachedSettings } from "@/lib/settings"
 
+export const dynamic = 'force-dynamic'
+
 export default async function HomePage() {
   const settings = await getCachedSettings()
   const categories = await prisma.category.findMany({ orderBy: { name: "asc" } })

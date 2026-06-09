@@ -5,6 +5,8 @@ import { Breadcrumbs } from "@/components/breadcrumbs"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { IconArrowLeft } from "@tabler/icons-react"
 
+export const dynamic = 'force-dynamic'
+
 export default async function BrowseCategoriesPage() {
   const categories = await prisma.category.findMany({ orderBy: { name: "asc" } })
 
