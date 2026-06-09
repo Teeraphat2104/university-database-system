@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
+import { del } from "@vercel/blob"
 import { unlink } from "fs/promises"
 import path from "path"
 
@@ -30,8 +31,12 @@ export async function deletePdfAction(id: string) {
   const pdf = await prisma.pdf.findUnique({ where: { id } })
   if (!pdf) return { error: "Not found" }
 
-  const filePath = path.join(process.cwd(), "uploads", pdf.filePath)
-  await unlink(filePath).catch(() => {})
+  if (pdf.filePath.startsWith("https://") && pdf.filePath.includes("blob.vercel-storage.com")) {
+    await del(pdf.filePath)
+  } else {
+    const filePath = path.join(process.cwd(), "uploads", pdf.filePath)
+    await unlink(filePath).catch(() => {})
+  }
   await prisma.pdf.delete({ where: { id } })
 
   revalidatePath("/pdfs")

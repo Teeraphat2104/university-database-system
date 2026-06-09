@@ -1,21 +1,11 @@
 import "dotenv/config"
-import { PrismaMariaDb } from "@prisma/adapter-mariadb"
 import { PrismaClient } from "@prisma/client"
 import bcrypt from "bcryptjs"
 import { writeFileSync, mkdirSync, existsSync } from "fs"
 import path from "path"
+import { put } from "@vercel/blob"
 
-const adapter = new PrismaMariaDb({
-  host: process.env.DB_HOST ?? "127.0.0.1",
-  port: Number(process.env.DB_PORT) || 3306,
-  user: process.env.DB_USER ?? "user",
-  password: process.env.DB_PASSWORD ?? "1111",
-  database: process.env.DB_NAME ?? "my_database",
-  connectionLimit: 5,
-  connectTimeout: 5000,
-})
-
-const prisma = new PrismaClient({ adapter })
+const prisma = new PrismaClient()
 
 const SETTINGS_DEFAULTS: Record<string, string> = {
   siteName: "University DB",
@@ -134,33 +124,52 @@ async function main() {
   )
 
   console.log("Seeding PDFs...")
+  const useBlob = !!process.env.BLOB_READ_WRITE_TOKEN
   const uploadDir = path.join(__dirname, "..", "uploads")
-  mkdirSync(uploadDir, { recursive: true })
+  if (!useBlob) {
+    mkdirSync(uploadDir, { recursive: true })
+  }
 
-  const pdfData = PDF_TEMPLATES.map((pdf) => {
-    const categoryId = createdCategories[pdf.slug]
-    if (!categoryId) throw new Error(`Category not found for slug: ${pdf.slug}`)
-    const createdAt = new Date(pdf.year, pdf.month - 1, 1)
-    const filename = `${crypto.randomUUID()}.pdf`
-    const pdfPath = path.join(uploadDir, filename)
-    if (!existsSync(pdfPath)) {
-      writeFileSync(pdfPath, MINIMAL_PDF)
-    }
-    return {
-      title: pdf.title,
-      description: `Seed data — ${pdf.title}`,
-      year: pdf.year,
-      month: pdf.month,
-      filePath: filename,
-      originalName: `${pdf.title}.pdf`,
-      fileSize: Math.floor(Math.random() * 2000000) + 100000,
-      uploadedById: adminUser.id,
-      categoryId,
-      createdAt,
-    }
-  })
+  const pdfData = await Promise.all(
+    PDF_TEMPLATES.map(async (pdf) => {
+      const categoryId = createdCategories[pdf.slug]
+      if (!categoryId) throw new Error(`Category not found for slug: ${pdf.slug}`)
+      const createdAt = new Date(pdf.year, pdf.month - 1, 1)
+      const filename = `${crypto.randomUUID()}.pdf`
 
-  await prisma.pdf.createMany({ data: pdfData })
+      let filePath: string
+      if (useBlob) {
+        const blob = await put(filename, MINIMAL_PDF, {
+          access: "public",
+          contentType: "application/pdf",
+        })
+        filePath = blob.url
+      } else {
+        const pdfPath = path.join(uploadDir, filename)
+        if (!existsSync(pdfPath)) {
+          writeFileSync(pdfPath, MINIMAL_PDF)
+        }
+        filePath = filename
+      }
+
+      return {
+        title: pdf.title,
+        description: `Seed data — ${pdf.title}`,
+        year: pdf.year,
+        month: pdf.month,
+        filePath,
+        originalName: `${pdf.title}.pdf`,
+        fileSize: Math.floor(Math.random() * 2000000) + 100000,
+        uploadedById: adminUser.id,
+        categoryId,
+        createdAt,
+      }
+    }),
+  )
+
+  for (const pdf of pdfData) {
+    await prisma.pdf.create({ data: pdf })
+  }
 
   console.log("\nSeed complete!")
   console.log(`  • 2 users (admin / editor) — password: admin123`)

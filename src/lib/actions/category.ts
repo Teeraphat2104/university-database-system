@@ -2,11 +2,16 @@
 
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
+import { put, del } from "@vercel/blob"
 import { writeFile, unlink, mkdir } from "fs/promises"
 import path from "path"
 
 const ALLOWED_TYPES = ["image/png", "image/jpeg", "image/webp", "image/svg+xml"]
 const MAX_SIZE = 5 * 1024 * 1024
+
+function isBlobUrl(url: string) {
+  return url.startsWith("https://") && url.includes("blob.vercel-storage.com")
+}
 
 async function saveImage(file: File): Promise<string | null> {
   if (!ALLOWED_TYPES.includes(file.type)) throw new Error("Invalid image type")
@@ -14,13 +19,17 @@ async function saveImage(file: File): Promise<string | null> {
 
   const ext = path.extname(file.name)
   const filename = `${crypto.randomUUID()}${ext}`
+
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    const blob = await put(`category-images/${filename}`, file, { access: "public" })
+    return blob.url
+  }
+
   const uploadDir = path.join(process.cwd(), "uploads", "category-images")
   const filePath = path.join(uploadDir, filename)
-
   await mkdir(uploadDir, { recursive: true })
   const bytes = await file.arrayBuffer()
   await writeFile(filePath, Buffer.from(bytes))
-
   return filename
 }
 
@@ -48,6 +57,15 @@ export async function createCategoryAction(formData: FormData) {
   return { error: null }
 }
 
+async function deleteStoredFile(imagePath: string) {
+  if (isBlobUrl(imagePath)) {
+    await del(imagePath)
+  } else {
+    const filePath = path.join(process.cwd(), "uploads", "category-images", imagePath)
+    await unlink(filePath).catch(() => {})
+  }
+}
+
 export async function deleteCategoryAction(id: string) {
   const pdfCount = await prisma.pdf.count({ where: { categoryId: id } })
   if (pdfCount > 0) {
@@ -56,8 +74,7 @@ export async function deleteCategoryAction(id: string) {
 
   const category = await prisma.category.findUnique({ where: { id } })
   if (category?.imagePath) {
-    const filePath = path.join(process.cwd(), "uploads", "category-images", category.imagePath)
-    await unlink(filePath).catch(() => {})
+    await deleteStoredFile(category.imagePath)
   }
 
   await prisma.category.delete({ where: { id } })
@@ -85,8 +102,7 @@ export async function updateCategoryAction(formData: FormData) {
     try {
       imagePath = await saveImage(image)
       if (category?.imagePath) {
-        const oldPath = path.join(process.cwd(), "uploads", "category-images", category.imagePath)
-        await unlink(oldPath).catch(() => {})
+        await deleteStoredFile(category.imagePath)
       }
     } catch (e: any) {
       return { error: e.message }
@@ -95,8 +111,7 @@ export async function updateCategoryAction(formData: FormData) {
 
   const removeImage = formData.get("removeImage") === "true"
   if (removeImage && category?.imagePath) {
-    const oldPath = path.join(process.cwd(), "uploads", "category-images", category.imagePath)
-    await unlink(oldPath).catch(() => {})
+    await deleteStoredFile(category.imagePath)
     imagePath = null
   }
 

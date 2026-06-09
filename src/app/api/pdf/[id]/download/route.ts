@@ -2,6 +2,10 @@ import { prisma } from "@/lib/prisma"
 import { readFile } from "fs/promises"
 import path from "path"
 
+async function isBlobUrl(url: string) {
+  return url.startsWith("https://") && url.includes("blob.vercel-storage.com")
+}
+
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ id: string }> },
@@ -10,6 +14,10 @@ export async function GET(
   const pdf = await prisma.pdf.findUnique({ where: { id } })
   if (!pdf) {
     return Response.json({ error: "Not found" }, { status: 404 })
+  }
+
+  if (await isBlobUrl(pdf.filePath)) {
+    return Response.redirect(pdf.filePath)
   }
 
   const filePath = path.join(process.cwd(), "uploads", pdf.filePath)

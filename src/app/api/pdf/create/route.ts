@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
+import { put } from "@vercel/blob"
 import { writeFile, mkdir } from "fs/promises"
 import path from "path"
 
@@ -23,13 +24,18 @@ export async function POST(req: Request) {
 
   const ext = path.extname(file.name)
   const filename = `${crypto.randomUUID()}${ext}`
-  const uploadDir = path.join(process.cwd(), "uploads")
-  const filePath = path.join(uploadDir, filename)
 
-  await mkdir(uploadDir, { recursive: true })
-
-  const bytes = await file.arrayBuffer()
-  await writeFile(filePath, Buffer.from(bytes))
+  let filePath: string
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    const blob = await put(filename, file, { access: "public" })
+    filePath = blob.url
+  } else {
+    const uploadDir = path.join(process.cwd(), "uploads")
+    filePath = path.join(uploadDir, filename)
+    await mkdir(uploadDir, { recursive: true })
+    const bytes = await file.arrayBuffer()
+    await writeFile(filePath, Buffer.from(bytes))
+  }
 
   const pdf = await prisma.pdf.create({
     data: {
@@ -37,7 +43,7 @@ export async function POST(req: Request) {
       description,
       year,
       month,
-      filePath: filename,
+      filePath,
       originalName: file.name,
       fileSize: file.size,
       uploadedById: session.user.id,

@@ -10,6 +10,10 @@ const MIME: Record<string, string> = {
   ".svg": "image/svg+xml",
 }
 
+async function isBlobUrl(url: string) {
+  return url.startsWith("https://") && url.includes("blob.vercel-storage.com")
+}
+
 export async function POST(
   _req: Request,
   { params }: { params: Promise<{ id: string }> },
@@ -23,6 +27,10 @@ export async function POST(
 
   if (!category?.imagePath) {
     return Response.json({ image: null })
+  }
+
+  if (await isBlobUrl(category.imagePath)) {
+    return Response.json({ image: category.imagePath })
   }
 
   const ext = path.extname(category.imagePath).toLowerCase()

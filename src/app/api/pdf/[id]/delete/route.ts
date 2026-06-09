@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
+import { del } from "@vercel/blob"
 import { unlink } from "fs/promises"
 import path from "path"
 
@@ -18,8 +19,12 @@ export async function POST(
     return Response.json({ error: "Not found" }, { status: 404 })
   }
 
-  const filePath = path.join(process.cwd(), "uploads", pdf.filePath)
-  await unlink(filePath).catch(() => {})
+  if (pdf.filePath.startsWith("https://") && pdf.filePath.includes("blob.vercel-storage.com")) {
+    await del(pdf.filePath)
+  } else {
+    const filePath = path.join(process.cwd(), "uploads", pdf.filePath)
+    await unlink(filePath).catch(() => {})
+  }
   await prisma.pdf.delete({ where: { id } })
 
   return Response.json({ success: true })
