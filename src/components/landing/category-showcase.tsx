@@ -15,7 +15,7 @@ export function CategoryShowcase({
     <section className="space-y-5">
       {!hideHeader && (
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold">Browse by Category</h2>
+          <h2 className="text-base font-semibold">Browse by Category</h2>
           <Link
             href="/browse/categories"
             className="text-xs text-muted-foreground hover:text-primary transition-colors"
@@ -25,12 +25,12 @@ export function CategoryShowcase({
         </div>
       )}
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
         {categories.map((cat) => (
           <Link
             key={cat.id}
             href={`/browse/categories/${cat.id}`}
-            className="group block relative rounded-xl overflow-hidden border border-border hover:shadow-sm transition-shadow"
+            className="group block relative rounded-2xl overflow-hidden border border-border hover:border-foreground/20 transition-colors"
           >
             <div className="aspect-[4/3] relative">
               {cat.imagePath ? (

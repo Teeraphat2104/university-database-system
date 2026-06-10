@@ -42,7 +42,7 @@ export default async function HomePage() {
         settings={settings}
       />
 
-      <main className="flex-1 mx-auto max-w-5xl w-full px-4 pb-16 space-y-12">
+      <main className="flex-1 mx-auto max-w-5xl w-full px-4 pb-24 space-y-20">
         <section>
           <StatsSection data={{ pdfCount, categoryCount, userCount, pdfsThisMonth }} />
         </section>
@@ -52,14 +52,14 @@ export default async function HomePage() {
         )}
 
         {recentPdfs.length > 0 && (
-          <section className="space-y-4">
-            <h2 className="text-sm font-semibold">Recent Documents</h2>
+          <section className="space-y-5">
+            <h2 className="text-base font-semibold">Recent Documents</h2>
             <RecentPdfs pdfs={recentPdfs} />
           </section>
         )}
       </main>
 
-      <footer className="border-t border-border py-6 text-center text-xs text-muted-foreground">
+      <footer className="border-t border-border py-8 text-center text-xs text-muted-foreground">
         {settings.footerText}
       </footer>
     </div>

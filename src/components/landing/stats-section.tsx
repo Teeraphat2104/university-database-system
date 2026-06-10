@@ -43,17 +43,17 @@ export function StatsSection({ data }: { data: StatsData }) {
         return (
           <div
             key={stat.label}
-            className="border border-border rounded-xl p-4 sm:p-5 space-y-2 hover:shadow-sm transition-shadow"
+            className="border border-border rounded-2xl p-6 space-y-3"
           >
             <div className="flex items-center justify-between">
-              <div className="h-10 w-10 rounded-lg flex items-center justify-center bg-muted text-primary">
-                <Icon className="h-5 w-5" />
+              <div className="h-12 w-12 rounded-xl flex items-center justify-center bg-muted text-primary">
+                <Icon className="h-6 w-6" />
               </div>
             </div>
-            <p className="text-2xl font-bold tabular-nums">
+            <p className="text-3xl font-bold tabular-nums tracking-tight">
               {stat.getValue(data)}
             </p>
-            <p className="text-xs text-muted-foreground">{stat.label}</p>
+            <p className="text-sm text-muted-foreground">{stat.label}</p>
           </div>
         )
       })}

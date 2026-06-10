@@ -35,9 +35,8 @@ export function HeroSection({
   return (
     <section className="flex flex-col border-b border-border">
       {/* Navbar */}
-      <div className="sticky top-0 z-50 bg-background border-b border-border">
-        <div className="mx-auto max-w-5xl px-4 py-3 flex items-center justify-between">
-          <span className="text-sm font-semibold">{siteName}</span>
+      <div className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
+        <div className="mx-auto max-w-5xl px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <ThemeToggle />
             <Link
@@ -51,13 +50,13 @@ export function HeroSection({
       </div>
 
       {/* Hero content */}
-      <div className="flex flex-col items-center justify-center px-4 py-16 sm:py-24">
-        <div className="max-w-4xl w-full mx-auto text-center space-y-8">
-          <div className="space-y-4">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-foreground">
+      <div className="flex flex-col items-center justify-center px-4 py-24 sm:py-32">
+        <div className="max-w-4xl w-full mx-auto text-center space-y-10">
+          <div className="space-y-5">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold tracking-tight text-foreground leading-tight">
               <HeroTitle title={heroTitle} highlight={heroHighlight} />
             </h1>
-            <p className="text-muted-foreground text-sm sm:text-base max-w-md mx-auto leading-relaxed">
+            <p className="text-muted-foreground text-base sm:text-lg max-w-lg mx-auto leading-relaxed">
               {heroSubtitle}
             </p>
           </div>

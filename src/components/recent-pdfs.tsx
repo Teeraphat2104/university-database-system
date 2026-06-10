@@ -14,10 +14,10 @@ type RecentPdf = {
 
 export function RecentPdfs({ pdfs }: { pdfs: RecentPdf[] }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {pdfs.map((pdf) => (
-        <Link key={pdf.id} href={`/browse/pdfs/${pdf.id}`} className="block border border-border rounded-lg p-4 space-y-1.5 hover:shadow-sm transition-shadow">
-          <p className="text-sm font-medium">{pdf.title}</p>
+        <Link key={pdf.id} href={`/browse/pdfs/${pdf.id}`} className="block border border-border rounded-xl p-5 space-y-2 hover:border-foreground/20 transition-colors">
+          <p className="text-base font-medium">{pdf.title}</p>
           <p className="text-xs text-muted-foreground flex items-center gap-1">
             {pdf.category.imagePath && (
               <CategoryImage categoryId={pdf.categoryId} alt="" className="w-3.5 h-3.5 rounded object-cover" />
