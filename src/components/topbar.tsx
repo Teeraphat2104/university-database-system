@@ -14,7 +14,7 @@ export function Topbar({ userName, role, onOpenSidebar }: { userName: string; ro
       <button
         type="button"
         onClick={onOpenSidebar}
-        className="rounded-lg p-1.5 -ml-1.5 text-muted-foreground hover:text-foreground transition-colors md:hidden"
+        className="p-1.5 -ml-1.5 text-muted-foreground hover:text-foreground transition-colors md:hidden"
         aria-label="Open menu"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="tabler-icon tabler-icon-menu-2"><path d="M4 6l16 0"></path><path d="M4 12l16 0"></path><path d="M4 18l16 0"></path></svg>
@@ -27,7 +27,7 @@ export function Topbar({ userName, role, onOpenSidebar }: { userName: string; ro
         <button
           type="button"
           onClick={() => setShowLogout(true)}
-          className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+          className="flex items-center gap-2 px-3 py-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
         >
           Sign out
         </button>

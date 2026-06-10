@@ -76,7 +76,7 @@ export function AppShell({
           <button
             ref={closeRef}
             onClick={close}
-            className="absolute top-3 right-3 z-10 rounded-lg p-1 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 md:hidden"
+            className="absolute top-3 right-3 z-10 p-1 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 md:hidden"
             aria-label="Close menu"
           >
             <IconX className="h-5 w-5" />

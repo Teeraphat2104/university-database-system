@@ -111,17 +111,17 @@ export function AdminsClient({
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex items-center rounded-lg border border-border p-0.5 bg-muted/30">
+          <div className="flex items-center">
             <button
               onClick={() => setView("table")}
-              className={`rounded-md p-1.5 text-sm transition-colors ${view === "table" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              className={`p-1.5 text-sm transition-colors ${view === "table" ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
               title="Table view"
             >
               <IconTable className="h-4 w-4" />
             </button>
             <button
               onClick={() => setView("card")}
-              className={`rounded-md p-1.5 text-sm transition-colors ${view === "card" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              className={`p-1.5 text-sm transition-colors ${view === "card" ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
               title="Card view"
             >
               <IconLayoutGrid className="h-4 w-4" />
@@ -139,10 +139,10 @@ export function AdminsClient({
       {/* Table view */}
       {view === "table" && (
         <div className="overflow-x-auto">
-          <div className="border border-border rounded-xl min-w-[500px]">
+          <div className="border border-border min-w-[500px]">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border bg-muted/50">
+              <tr className="border-b border-border">
                 <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground w-10">#</th>
                 <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground">Name</th>
                 <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground">Email</th>
@@ -195,7 +195,7 @@ export function AdminsClient({
       {view === "card" && (
         <>
           {admins.length === 0 ? (
-            <div className="border border-dashed border-border rounded-xl px-4 py-16 text-center space-y-2">
+            <div className="border border-dashed border-border px-4 py-16 text-center space-y-2">
               <IconUserPlus className="h-8 w-8 mx-auto text-muted-foreground" />
               <p className="text-sm font-medium">No users yet</p>
               <p className="text-xs text-muted-foreground mt-0.5">Create the first user to get started.</p>
@@ -205,16 +205,12 @@ export function AdminsClient({
               {admins.map((a) => (
                 <div
                   key={a.id}
-                  className="group border border-border rounded-xl p-4 hover:shadow-sm transition-all space-y-3"
+                  className="group border border-border p-4 space-y-3"
                 >
                   <div className="flex items-start justify-between">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                      a.role === "admin" ? "bg-purple-100 dark:bg-purple-950" : "bg-blue-100 dark:bg-blue-950"
-                    }`}>
-                      <IconUser className={`h-5 w-5 ${
-                        a.role === "admin" ? "text-purple-600 dark:text-purple-300" : "text-blue-600 dark:text-blue-300"
-                      }`} />
-                    </div>
+                    <IconUser className={`h-5 w-5 mt-0.5 ${
+                      a.role === "admin" ? "text-purple-600 dark:text-purple-300" : "text-blue-600 dark:text-blue-300"
+                    }`} />
                     {a.email !== currentUserEmail && (
                       <button
                         onClick={() => setDeleteTarget({ id: a.id, name: a.name })}

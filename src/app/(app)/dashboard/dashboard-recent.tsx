@@ -1,9 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { IconEye, IconCalendar } from "@tabler/icons-react"
 import { PdfDetailModal } from "@/components/pdf-detail-modal"
-import { CategoryImage } from "@/components/category-image"
 import { MONTHS } from "@/lib/constants"
 
 type RecentPdf = {
@@ -20,32 +18,27 @@ export function DashboardRecent({ pdfs }: { pdfs: RecentPdf[] }) {
 
   return (
     <>
-      <div className="border border-border rounded-xl divide-y divide-border overflow-hidden">
+      <div className="divide-y divide-border">
         {pdfs.map((pdf) => (
           <button
             type="button"
             key={pdf.id}
             onClick={() => setSelectedPdfId(pdf.id)}
-            className="flex items-center justify-between w-full px-4 py-3.5 hover:bg-muted/30 transition-colors cursor-pointer group text-left"
+            className="flex items-center justify-between w-full py-3 group text-left"
           >
-            <div className="space-y-1 min-w-0 flex-1">
-              <p className="text-sm font-medium group-hover:text-primary transition-colors truncate">
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium truncate group-hover:text-primary transition-colors">
                 {pdf.title}
               </p>
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium">
-                  {pdf.category.imagePath && (
-                    <CategoryImage categoryId={pdf.categoryId} alt="" className="w-3 h-3 rounded object-cover" />
-                  )}
-                  {pdf.category.name}
-                </span>
-                <span className="flex items-center gap-1">
-                  <IconCalendar className="h-3 w-3" />
-                  {MONTHS[pdf.month - 1]} {pdf.year}
-                </span>
-              </div>
             </div>
-            <IconEye className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0 ml-3" />
+            <div className="flex items-center gap-2 shrink-0 ml-4">
+              <span className="text-xs text-muted-foreground border border-border rounded-full px-2 py-0.5">
+                {pdf.category.name}
+              </span>
+              <span className="text-xs text-muted-foreground whitespace-nowrap">
+                {MONTHS[pdf.month - 1]} {pdf.year}
+              </span>
+            </div>
           </button>
         ))}
       </div>

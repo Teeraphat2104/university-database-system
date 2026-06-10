@@ -77,17 +77,17 @@ export function PdfList({
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex items-center rounded-lg border border-border p-0.5 bg-muted/30">
+          <div className="flex items-center">
             <button
               onClick={() => setView("table")}
-              className={`rounded-md p-1.5 text-sm transition-colors ${view === "table" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              className={`p-1.5 text-sm transition-colors ${view === "table" ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
               title="Table view"
             >
               <IconTable className="h-4 w-4" />
             </button>
             <button
               onClick={() => setView("card")}
-              className={`rounded-md p-1.5 text-sm transition-colors ${view === "card" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              className={`p-1.5 text-sm transition-colors ${view === "card" ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
               title="Card view"
             >
               <IconLayoutGrid className="h-4 w-4" />
@@ -147,7 +147,7 @@ export function PdfList({
 
       {/* Empty state */}
       {filtered.length === 0 ? (
-        <div className="text-center py-16 space-y-3 border border-dashed border-border rounded-xl">
+        <div className="text-center py-16 space-y-3 border border-dashed border-border">
           <IconFileDescription className="h-10 w-10 mx-auto text-muted-foreground" />
           <div>
             <p className="text-sm font-medium">No PDFs found</p>
@@ -171,10 +171,10 @@ export function PdfList({
           {/* Table view */}
           {view === "table" && (
             <div className="overflow-x-auto">
-              <div className="border border-border rounded-xl min-w-[640px]">
+              <div className="border border-border min-w-[640px]">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-border bg-muted/50">
+                  <tr className="border-b border-border">
                     <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground w-10">#</th>
                     <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground">Title</th>
                     <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground w-36">Category</th>
@@ -252,12 +252,10 @@ export function PdfList({
                 <div
                   key={pdf.id}
                   onClick={() => router.push(`/pdfs/${pdf.id}`)}
-                  className="group border border-border rounded-xl p-4 hover:shadow-sm transition-all space-y-3 cursor-pointer"
+                  className="group border border-border p-4 space-y-3 cursor-pointer"
                 >
                   <div className="flex items-start justify-between">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <IconFileDescription className="h-5 w-5 text-primary" />
-                    </div>
+                    <IconFileDescription className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                     <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity" onClick={(e) => e.stopPropagation()}>
                       <a
                         href={`/api/pdf/${pdf.id}/download`}

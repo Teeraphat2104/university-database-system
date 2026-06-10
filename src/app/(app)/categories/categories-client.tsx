@@ -89,7 +89,7 @@ function CreateCategoryForm({ onSuccess }: { onSuccess: () => void }) {
         {showImageInput ? (
           <div className="flex items-center gap-3">
             <input type="file" name="image" accept=".png,.jpg,.jpeg,.webp,.svg" className="block w-full text-sm text-muted-foreground file:mr-3 file:rounded-lg file:border-0 file:bg-primary/10 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-primary hover:file:bg-primary/20 transition-colors" />
-            <button type="button" onClick={() => setShowImageInput(false)} className="text-xs text-muted-foreground hover:text-primary shrink-0">Cancel</button>
+            <button type="button" onClick={() => setShowImageInput(false)} className="text-xs text-muted-foreground hover:text-primary shrink-0">Remove</button>
           </div>
         ) : (
           <button type="button" onClick={() => setShowImageInput(true)} className="flex items-center gap-2 rounded-lg border border-dashed border-border px-4 py-3 text-sm text-muted-foreground hover:border-primary/50 hover:text-primary transition-colors w-full">
@@ -197,17 +197,17 @@ export function CategoriesClient({
         </div>
         <div className="flex items-center gap-2">
           {/* View toggle */}
-          <div className="flex items-center rounded-lg border border-border p-0.5 bg-muted/30">
+          <div className="flex items-center">
             <button
               onClick={() => setView("table")}
-              className={`rounded-md p-1.5 text-sm transition-colors ${view === "table" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              className={`p-1.5 text-sm transition-colors ${view === "table" ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
               title="Table view"
             >
               <IconTable className="h-4 w-4" />
             </button>
             <button
               onClick={() => setView("card")}
-              className={`rounded-md p-1.5 text-sm transition-colors ${view === "card" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              className={`p-1.5 text-sm transition-colors ${view === "card" ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
               title="Card view"
             >
               <IconLayoutGrid className="h-4 w-4" />
@@ -225,10 +225,10 @@ export function CategoriesClient({
       {/* Table view */}
       {view === "table" && (
         <div className="overflow-x-auto">
-          <div className="border border-border rounded-xl min-w-[500px]">
+          <div className="border border-border min-w-[500px]">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border bg-muted/50">
+              <tr className="border-b border-border">
                 <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground w-10">#</th>
                 <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground">Name</th>
                 <th className="text-center px-4 py-3 text-xs font-medium text-muted-foreground w-20">PDFs</th>
@@ -252,7 +252,7 @@ export function CategoriesClient({
                     </div>
                   </td>
                   <td className="px-4 py-3 text-center">
-                    <span className="inline-flex items-center justify-center text-xs font-medium tabular-nums bg-primary/10 text-primary rounded-full px-2 py-0.5 min-w-[28px]">
+                    <span className="inline-flex items-center justify-center text-xs font-medium tabular-nums text-primary min-w-[28px]">
                       {c.pdfCount}
                     </span>
                   </td>
@@ -297,7 +297,7 @@ export function CategoriesClient({
       {view === "card" && (
         <>
           {categories.length === 0 ? (
-            <div className="border border-dashed border-border rounded-xl px-4 py-16 text-center space-y-2">
+            <div className="border border-dashed border-border px-4 py-16 text-center space-y-2">
               <IconFolderPlus className="h-8 w-8 mx-auto text-muted-foreground" />
               <p className="text-sm font-medium">No categories yet</p>
               <p className="text-xs text-muted-foreground mt-0.5">Create a category to organize PDFs.</p>
@@ -307,58 +307,43 @@ export function CategoriesClient({
               {categories.map((c) => (
                 <div
                   key={c.id}
-                  className="group relative border border-border rounded-xl overflow-hidden hover:shadow-md transition-all"
+                  className="group border border-border"
                 >
-                  {c.imagePath ? (
-                    <div className="aspect-[4/3] relative">
+                  <div className="aspect-[4/3] relative border-b border-border">
+                    {c.imagePath ? (
                       <CategoryImage
                         categoryId={c.id}
                         alt={c.name}
                         className="absolute inset-0 w-full h-full object-cover"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                      <div className="absolute bottom-0 left-0 right-0 p-4">
-                        <p className="text-sm font-medium text-white drop-shadow-sm">{c.name}</p>
-                        <p className="text-xs text-white/70">{c.pdfCount} PDF{c.pdfCount === 1 ? "" : "s"}</p>
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center bg-muted">
+                        <IconFolder className="h-8 w-8 text-muted-foreground/40" />
                       </div>
-                      <button
-                        onClick={() => setEditTarget(c)}
-                        className="absolute top-2 left-2 rounded-md px-2 py-1 bg-black/30 text-white/70 hover:text-white hover:bg-black/50 transition-all text-xs opacity-0 group-hover:opacity-100"
-                      >
-                        Edit
-                      </button>
-                      {c.pdfCount === 0 && (
-                        <button
-                          onClick={() => setDeleteTarget({ id: c.id, name: c.name })}
-                          className="absolute top-2 right-2 rounded-md p-1.5 bg-black/30 text-white/70 hover:text-red-400 hover:bg-black/50 transition-all opacity-0 group-hover:opacity-100"
-                          title="Delete"
-                        >
-                          <IconTrash className="h-4 w-4" />
-                        </button>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="aspect-[4/3] relative bg-gradient-to-br from-muted to-muted/50 flex flex-col items-center justify-center p-4 text-center">
-                      <IconFolder className="h-10 w-10 text-muted-foreground/40 mb-2" />
+                    )}
+                  </div>
+                  <div className="p-3 space-y-1">
+                    <div className="flex items-center justify-between">
                       <p className="text-sm font-medium">{c.name}</p>
-                      <p className="text-xs text-muted-foreground mt-0.5">{c.pdfCount} PDF{c.pdfCount === 1 ? "" : "s"}</p>
+                      <span className="text-xs tabular-nums text-muted-foreground">{c.pdfCount}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
                       <button
                         onClick={() => setEditTarget(c)}
-                        className="mt-3 rounded-md border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-primary hover:border-primary/30 transition-colors"
+                        className="text-xs text-muted-foreground hover:text-primary transition-colors"
                       >
                         Edit
                       </button>
                       {c.pdfCount === 0 && (
                         <button
                           onClick={() => setDeleteTarget({ id: c.id, name: c.name })}
-                          className="absolute top-2 right-2 rounded-md p-1.5 text-muted-foreground hover:text-red-600 transition-all opacity-0 group-hover:opacity-100"
-                          title="Delete"
+                          className="text-xs text-red-500 hover:text-red-600 transition-colors"
                         >
-                          <IconTrash className="h-4 w-4" />
+                          Delete
                         </button>
                       )}
                     </div>
-                  )}
+                  </div>
                 </div>
               ))}
             </div>
