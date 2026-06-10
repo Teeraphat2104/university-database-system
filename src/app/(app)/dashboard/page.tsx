@@ -39,61 +39,84 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      <div className="flex flex-wrap justify-start gap-x-10 gap-y-4">
-        <div>
-          <p className="text-3xl sm:text-4xl font-bold tabular-nums tracking-tight leading-none">
-            {pdfCount.toLocaleString()}
-          </p>
-          <p className="text-xs text-muted-foreground uppercase tracking-widest mt-1">
-            PDFs
-          </p>
-          <p className="text-xs text-muted-foreground/70 mt-0.5">
-            +{pdfsThisMonth} this month
-          </p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="p-6 rounded-xl border border-border bg-card text-card-foreground shadow-sm space-y-2">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-medium text-muted-foreground">Total PDFs</p>
+            <IconFileDescription className="h-4 w-4 text-primary" />
+          </div>
+          <div className="flex items-baseline gap-2">
+            <p className="text-3xl font-bold tabular-nums tracking-tight">
+              {pdfCount.toLocaleString()}
+            </p>
+            <p className="text-xs text-muted-foreground/70">
+              +{pdfsThisMonth} this month
+            </p>
+          </div>
         </div>
-        <div className="w-px self-stretch bg-border hidden sm:block" />
-        <div>
-          <p className="text-3xl sm:text-4xl font-bold tabular-nums tracking-tight leading-none">
+        <div className="p-6 rounded-xl border border-border bg-card text-card-foreground shadow-sm space-y-2">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-medium text-muted-foreground">Categories</p>
+            <IconFolder className="h-4 w-4 text-primary" />
+          </div>
+          <p className="text-3xl font-bold tabular-nums tracking-tight">
             {categoryCount}
           </p>
-          <p className="text-xs text-muted-foreground uppercase tracking-widest mt-1">
-            Categories
-          </p>
         </div>
-        <div className="w-px self-stretch bg-border hidden sm:block" />
-        <div>
-          <p className="text-3xl sm:text-4xl font-bold tabular-nums tracking-tight leading-none">
-            {userCount}
-          </p>
-          <p className="text-xs text-muted-foreground uppercase tracking-widest mt-1">
-            Users
-          </p>
-          <p className="text-xs text-muted-foreground/70 mt-0.5">
-            {adminCount} admin{adminCount === 1 ? "" : "s"}
-          </p>
+        <div className="p-6 rounded-xl border border-border bg-card text-card-foreground shadow-sm space-y-2">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-medium text-muted-foreground">Users</p>
+            <IconUsers className="h-4 w-4 text-primary" />
+          </div>
+          <div className="flex items-baseline gap-2">
+            <p className="text-3xl font-bold tabular-nums tracking-tight">
+              {userCount}
+            </p>
+            <p className="text-xs text-muted-foreground/70">
+              {adminCount} admin{adminCount === 1 ? "" : "s"}
+            </p>
+          </div>
         </div>
       </div>
 
-      <section className="space-y-3">
+      <section className="space-y-4">
         <h2 className="text-sm font-semibold">Quick Actions</h2>
-        <div className="flex flex-wrap gap-x-6 gap-y-2">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Link
             href="/pdfs/upload"
-            className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
+            className="flex items-center gap-3 p-4 rounded-xl border border-border bg-card text-card-foreground shadow-sm hover:border-primary hover:bg-accent transition-all group"
           >
-            <IconUpload className="h-4 w-4" /> Upload PDF
+            <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+              <IconUpload className="h-5 w-5" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-medium">Upload PDF</span>
+              <span className="text-xs text-muted-foreground">Add new document</span>
+            </div>
           </Link>
           <Link
             href="/pdfs"
-            className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
+            className="flex items-center gap-3 p-4 rounded-xl border border-border bg-card text-card-foreground shadow-sm hover:border-primary hover:bg-accent transition-all group"
           >
-            <IconFileDescription className="h-4 w-4" /> Browse PDFs
+            <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+              <IconFileDescription className="h-5 w-5" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-medium">Browse PDFs</span>
+              <span className="text-xs text-muted-foreground">View all documents</span>
+            </div>
           </Link>
           <Link
             href="/categories"
-            className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
+            className="flex items-center gap-3 p-4 rounded-xl border border-border bg-card text-card-foreground shadow-sm hover:border-primary hover:bg-accent transition-all group"
           >
-            <IconFolder className="h-4 w-4" /> Categories
+            <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+              <IconFolder className="h-5 w-5" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-medium">Categories</span>
+              <span className="text-xs text-muted-foreground">Manage organization</span>
+            </div>
           </Link>
         </div>
       </section>
