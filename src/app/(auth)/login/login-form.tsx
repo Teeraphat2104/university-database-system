@@ -2,7 +2,7 @@
 
 import { useActionState, useRef } from "react"
 import { loginAction } from "@/lib/actions/login"
-import { IconMail, IconLock, IconArrowRight } from "@tabler/icons-react"
+import { IconMail, IconLock, IconArrowRight, IconLoader2 } from "@tabler/icons-react"
 
 export function LoginForm() {
   const formRef = useRef<HTMLFormElement>(null)
@@ -36,9 +36,10 @@ export function LoginForm() {
               type="email"
               required
               autoFocus
+              disabled={pending}
               autoComplete="username"
               placeholder="name@example.com"
-              className="w-full rounded-lg border border-border bg-background pl-9 pr-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              className="w-full rounded-lg border border-border bg-background pl-9 pr-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
         </div>
@@ -62,9 +63,10 @@ export function LoginForm() {
               name="password"
               type="password"
               required
+              disabled={pending}
               autoComplete="current-password"
               placeholder="Enter your password"
-              className="w-full rounded-lg border border-border bg-background pl-9 pr-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              className="w-full rounded-lg border border-border bg-background pl-9 pr-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
         </div>
@@ -92,7 +94,9 @@ export function LoginForm() {
           disabled={pending}
           className="w-full rounded-lg bg-primary text-primary-foreground px-4 py-2.5 text-sm font-medium flex items-center justify-center gap-1.5 disabled:opacity-50 hover:brightness-110 transition-all"
         >
-          {pending ? "Signing in..." : (
+          {pending ? (
+            <IconLoader2 className="h-4 w-4 animate-spin" />
+          ) : (
             <>
               Sign In <IconArrowRight className="h-4 w-4" />
             </>
@@ -111,15 +115,17 @@ export function LoginForm() {
         <div className="flex gap-2">
           <button
             type="button"
+            disabled={pending}
             onClick={() => fillTestLogin("admin@university.edu")}
-            className="flex-1 rounded-lg border border-primary text-primary px-3 py-2 text-xs font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
+            className="flex-1 rounded-lg border border-primary text-primary px-3 py-2 text-xs font-medium hover:bg-primary hover:text-primary-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Admin
           </button>
           <button
             type="button"
+            disabled={pending}
             onClick={() => fillTestLogin("editor@university.edu")}
-            className="flex-1 rounded-lg border border-primary text-primary px-3 py-2 text-xs font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
+            className="flex-1 rounded-lg border border-primary text-primary px-3 py-2 text-xs font-medium hover:bg-primary hover:text-primary-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Editor
           </button>
