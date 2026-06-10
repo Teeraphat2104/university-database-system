@@ -5,7 +5,6 @@ import { createPortal } from "react-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { IconChevronDown } from "@tabler/icons-react"
 import { cn } from "@/lib/utils"
-import { useModalPortal } from "@/components/modal-context"
 
 export type SelectOption = {
   value: string
@@ -36,7 +35,6 @@ export function Select({
   const panelRef = useRef<HTMLDivElement>(null)
   const [pos, setPos] = useState({ top: 0, left: 0, width: 0 })
   const selected = options.find((o) => o.value === value)
-  const { portalTarget } = useModalPortal()
 
   const updatePos = useCallback(() => {
     if (!triggerRef.current) return
@@ -169,7 +167,8 @@ export function Select({
               </div>
             </motion.div>
           )
-          return portalTarget ? createPortal(panel, portalTarget) : panel
+          // Use document.body for portal to avoid clipping and stacking issues in modals
+          return createPortal(panel, document.body)
         })()}
       </AnimatePresence>
     </div>

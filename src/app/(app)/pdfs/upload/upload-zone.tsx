@@ -105,8 +105,8 @@ export function UploadZone({ categories }: { categories: { id: string; name: str
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
       {/* Steps indicator */}
-      <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm">
-        <div className={`flex items-center gap-1 sm:gap-2 ${step === 1 ? "text-primary font-semibold" : "text-muted-foreground"}`}>
+      <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm mb-8">
+        <div className={`flex items-center gap-1 sm:gap-2 transition-colors ${step === 1 ? "text-primary font-semibold" : "text-muted-foreground"}`}>
           <span className={`flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-full text-xs font-bold border-2 transition-all ${
             step === 1 ? "border-primary bg-primary text-primary-foreground" : "border-border"
           }`}>
@@ -115,7 +115,7 @@ export function UploadZone({ categories }: { categories: { id: string; name: str
           <span className="hidden sm:inline">Select File</span>
         </div>
         <div className={`h-px flex-1 border-t transition-colors ${step === 2 || step === "uploading" || step === "done" ? "border-primary" : "border-border"}`} />
-        <div className={`flex items-center gap-1 sm:gap-2 ${step === 2 || step === "uploading" ? "text-primary font-semibold" : "text-muted-foreground"}`}>
+        <div className={`flex items-center gap-1 sm:gap-2 transition-colors ${step === 2 || step === "uploading" ? "text-primary font-semibold" : "text-muted-foreground"}`}>
           <span className={`flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-full text-xs font-bold border-2 transition-all ${
             step === 2 || step === "uploading" ? "border-primary bg-primary text-primary-foreground" : "border-border"
           }`}>
@@ -124,7 +124,7 @@ export function UploadZone({ categories }: { categories: { id: string; name: str
           <span className="hidden sm:inline">Details</span>
         </div>
         <div className={`h-px flex-1 border-t transition-colors ${step === "uploading" || step === "done" ? "border-primary" : "border-border"}`} />
-        <div className={`flex items-center gap-1 sm:gap-2 ${step === "uploading" || step === "done" ? "text-primary font-semibold" : "text-muted-foreground"}`}>
+        <div className={`flex items-center gap-1 sm:gap-2 transition-colors ${step === "uploading" || step === "done" ? "text-primary font-semibold" : "text-muted-foreground"}`}>
           <span className={`flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-full text-xs font-bold border-2 transition-all ${
             step === "done" ? "border-green-500 bg-green-500 text-white" : "border-border"
           } ${step === "uploading" ? "border-primary bg-primary text-primary-foreground" : ""}`}>
@@ -146,7 +146,7 @@ export function UploadZone({ categories }: { categories: { id: string; name: str
                 ? "border-primary bg-primary/5 scale-[1.01]"
                 : file
                   ? "border-green-400/50 bg-green-50/30 dark:bg-green-950/10"
-                  : "border-muted-foreground/30 hover:border-primary/50 hover:bg-muted/30"
+                  : "border-border bg-muted/30 hover:border-primary/50 hover:bg-muted/50"
             }`}
           >
             {file ? (
@@ -154,9 +154,9 @@ export function UploadZone({ categories }: { categories: { id: string; name: str
                 <div className="w-16 h-16 mx-auto rounded-2xl bg-primary/10 flex items-center justify-center">
                   <IconFileDescription className="h-8 w-8 text-primary" />
                 </div>
-                <div>
+                <div className="space-y-1">
                   <p className="text-sm font-medium">{file.name}</p>
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className="text-xs text-muted-foreground">
                     {formatSize(file.size)} &middot; PDF
                   </p>
                 </div>
@@ -170,12 +170,12 @@ export function UploadZone({ categories }: { categories: { id: string; name: str
               </div>
             ) : (
               <>
-                <div className="w-16 h-16 mx-auto rounded-2xl bg-muted flex items-center justify-center">
-                  <IconUpload className="h-8 w-8 text-muted-foreground" />
+                <div className="w-16 h-16 mx-auto rounded-2xl bg-muted flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+                  <IconUpload className="h-8 w-8 text-muted-foreground group-hover:text-primary transition-colors" />
                 </div>
-                <div>
+                <div className="space-y-1">
                   <p className="text-sm font-medium">Drop your PDF here</p>
-                  <p className="text-xs text-muted-foreground mt-1">or click to browse files</p>
+                  <p className="text-xs text-muted-foreground">or click to browse files</p>
                 </div>
                 <input
                   type="file"
@@ -205,7 +205,7 @@ export function UploadZone({ categories }: { categories: { id: string; name: str
       {step === 2 && file && (
         <div className="space-y-5 animate-in fade-in slide-in-from-top-2 duration-200">
           {/* File summary */}
-          <div className="flex items-center gap-3 rounded-xl border border-border bg-gradient-to-r from-muted/30 to-transparent p-3.5">
+          <div className="flex items-center gap-3 rounded-xl border border-border bg-muted/30 p-3.5">
             <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
               <IconFile className="h-5 w-5 text-primary" />
             </div>
@@ -223,7 +223,7 @@ export function UploadZone({ categories }: { categories: { id: string; name: str
           </div>
 
           {/* Form fields */}
-          <div className="rounded-xl border border-border p-5 space-y-4">
+          <div className="rounded-xl border border-border p-5 space-y-4 bg-card">
             <div className="space-y-1.5">
               <label htmlFor="title" className="text-sm font-medium">Title</label>
               <input
@@ -231,7 +231,7 @@ export function UploadZone({ categories }: { categories: { id: string; name: str
                 name="title"
                 required
                 placeholder="e.g. Introduction to Computer Science"
-                className="w-full rounded-lg border border-border px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-muted-foreground/40"
+                className="w-full rounded-lg border border-border px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-muted-foreground/40 bg-background"
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -278,7 +278,7 @@ export function UploadZone({ categories }: { categories: { id: string; name: str
                 name="description"
                 rows={3}
                 placeholder="Brief description of the document..."
-                className="w-full rounded-lg border border-border px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none placeholder:text-muted-foreground/40"
+                className="w-full rounded-lg border border-border px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none placeholder:text-muted-foreground/40 bg-background"
               />
             </div>
           </div>
@@ -302,7 +302,7 @@ export function UploadZone({ categories }: { categories: { id: string; name: str
             </button>
             <button
               type="submit"
-              className="rounded-lg bg-primary text-primary-foreground px-6 py-2.5 text-sm font-medium hover:brightness-110 transition-all flex items-center gap-1.5"
+              className="rounded-lg bg-primary text-primary-foreground px-6 py-2.5 text-sm font-medium hover:brightness-110 transition-all flex items-center gap-1.5 shadow-sm"
             >
               <IconUpload className="h-4 w-4" /> Upload PDF
             </button>

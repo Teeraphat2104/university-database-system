@@ -6,14 +6,16 @@ export default async function UploadPage() {
   const pdfCount = await prisma.pdf.count()
 
   return (
-    <div className="space-y-8">
-      <div>
+    <div className="space-y-8 max-w-3xl mx-auto">
+      <div className="space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight">Upload PDF</h1>
         <p className="text-sm text-muted-foreground mt-1">
           {pdfCount} document{pdfCount === 1 ? "" : "s"} in archive
         </p>
       </div>
-      <UploadZone categories={categories} />
+      <div className="p-6 rounded-xl border border-border bg-card shadow-sm">
+        <UploadZone categories={categories} />
+      </div>
     </div>
   )
 }

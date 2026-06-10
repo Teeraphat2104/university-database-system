@@ -188,26 +188,26 @@ export function CategoriesClient({
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
+        <div className="space-y-1">
           <h1 className="text-2xl font-semibold tracking-tight">Categories</h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-sm text-muted-foreground">
             {categories.length} categor{categories.length === 1 ? "y" : "ies"} &middot;{" "}
             {categories.reduce((s, c) => s + c.pdfCount, 0)} PDFs
           </p>
         </div>
         <div className="flex items-center gap-2">
           {/* View toggle */}
-          <div className="flex items-center">
+          <div className="flex items-center p-1 rounded-lg bg-muted border border-border">
             <button
               onClick={() => setView("table")}
-              className={`p-1.5 text-sm transition-colors ${view === "table" ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              className={`p-1.5 rounded-md text-sm transition-all ${view === "table" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
               title="Table view"
             >
               <IconTable className="h-4 w-4" />
             </button>
             <button
               onClick={() => setView("card")}
-              className={`p-1.5 text-sm transition-colors ${view === "card" ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              className={`p-1.5 rounded-md text-sm transition-all ${view === "card" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
               title="Card view"
             >
               <IconLayoutGrid className="h-4 w-4" />
@@ -215,7 +215,7 @@ export function CategoriesClient({
           </div>
           <button
             onClick={() => setCreateOpen(true)}
-            className="rounded-lg bg-primary text-primary-foreground px-3 py-2 text-sm font-medium hover:brightness-110 transition-all flex items-center gap-1.5"
+            className="rounded-lg bg-primary text-primary-foreground px-3 py-2 text-sm font-medium hover:brightness-110 transition-all flex items-center gap-1.5 shadow-sm"
           >
             <IconFolderPlus className="h-4 w-4" /> Add Category
           </button>
@@ -224,11 +224,11 @@ export function CategoriesClient({
 
       {/* Table view */}
       {view === "table" && (
-        <div className="overflow-x-auto">
-          <div className="border border-border min-w-[500px]">
+        <div className="overflow-x-auto rounded-xl border border-border bg-card shadow-sm">
+          <div className="border-border min-w-[500px]">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border">
+              <tr className="border-b border-border bg-muted/30">
                 <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground w-10">#</th>
                 <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground">Name</th>
                 <th className="text-center px-4 py-3 text-xs font-medium text-muted-foreground w-20">PDFs</th>
@@ -237,7 +237,7 @@ export function CategoriesClient({
             </thead>
             <tbody className="divide-y divide-border">
               {categories.map((c, i) => (
-                <tr key={c.id} className="hover:bg-muted/20 transition-colors">
+                <tr key={c.id} className="hover:bg-muted/50 transition-colors group">
                   <td className="px-4 py-3 text-xs text-muted-foreground">{i + 1}</td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
@@ -248,7 +248,7 @@ export function CategoriesClient({
                           <IconFolder className="h-4 w-4 text-primary" />
                         </div>
                       )}
-                      <p className="text-sm font-medium">{c.name}</p>
+                      <p className="text-sm font-medium group-hover:text-primary transition-colors">{c.name}</p>
                     </div>
                   </td>
                   <td className="px-4 py-3 text-center">
@@ -279,17 +279,17 @@ export function CategoriesClient({
                 </tr>
               ))}
               {categories.length === 0 && (
-                <tr>
-                  <td colSpan={4} className="px-4 py-12 text-center">
+                <tr className="text-center py-12">
+                  <td colSpan={4} className="px-4 py-12 space-y-2">
                     <IconFolderPlus className="h-8 w-8 mx-auto text-muted-foreground" />
-                    <p className="text-sm font-medium mt-2">No categories yet</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">Create a category to organize PDFs.</p>
+                    <p className="text-sm font-medium">No categories yet</p>
+                    <p className="text-xs text-muted-foreground">Create a category to organize PDFs.</p>
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
-        </div>
+          </div>
         </div>
       )}
 
@@ -297,24 +297,24 @@ export function CategoriesClient({
       {view === "card" && (
         <>
           {categories.length === 0 ? (
-            <div className="border border-dashed border-border px-4 py-16 text-center space-y-2">
+            <div className="text-center py-16 space-y-2 rounded-xl border border-dashed border-border bg-card/50">
               <IconFolderPlus className="h-8 w-8 mx-auto text-muted-foreground" />
               <p className="text-sm font-medium">No categories yet</p>
-              <p className="text-xs text-muted-foreground mt-0.5">Create a category to organize PDFs.</p>
+              <p className="text-xs text-muted-foreground">Create a category to organize PDFs.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {categories.map((c) => (
                 <div
                   key={c.id}
-                  className="group border border-border"
+                  className="group rounded-xl border border-border bg-card shadow-sm overflow-hidden hover:border-primary/50 transition-all"
                 >
                   <div className="aspect-[4/3] relative border-b border-border">
                     {c.imagePath ? (
                       <CategoryImage
                         categoryId={c.id}
                         alt={c.name}
-                        className="absolute inset-0 w-full h-full object-cover"
+                        className="absolute inset-0 w-full h-full object-cover transition-transform group-hover:scale-105"
                       />
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center bg-muted">
@@ -322,12 +322,12 @@ export function CategoriesClient({
                       </div>
                     )}
                   </div>
-                  <div className="p-3 space-y-1">
+                  <div className="p-3 space-y-2">
                     <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium">{c.name}</p>
-                      <span className="text-xs tabular-nums text-muted-foreground">{c.pdfCount}</span>
+                      <p className="text-sm font-medium group-hover:text-primary transition-colors">{c.name}</p>
+                      <span className="text-xs tabular-nums text-muted-foreground">{c.pdfCount} PDFs</span>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 pt-1">
                       <button
                         onClick={() => setEditTarget(c)}
                         className="text-xs text-muted-foreground hover:text-primary transition-colors"
@@ -366,10 +366,10 @@ export function CategoriesClient({
       {/* Delete modal */}
       <Modal open={!!deleteTarget} onClose={() => setDeleteTarget(null)} title="Confirm Delete">
         <p className="text-sm text-muted-foreground mb-4">
-          Are you sure you want to delete <strong>{deleteTarget?.name}</strong>? This cannot be undone.
+          Are you sure you want to delete <strong className="text-foreground">{deleteTarget?.name}</strong>? This cannot be undone.
         </p>
         <div className="flex gap-2 justify-end">
-          <button onClick={() => setDeleteTarget(null)} className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted transition-colors">Cancel</button>
+          <button onClick={() => setDeleteTarget(null)} className="rounded-lg border border-border px-4 py-2 text-sm font-medium hover:bg-muted transition-colors">Cancel</button>
           <button onClick={handleDelete} disabled={deletePending} className="rounded-lg bg-red-600 text-white px-4 py-2 text-sm font-medium disabled:opacity-50 hover:brightness-110 transition-all">
             {deletePending ? "Deleting..." : "Delete"}
           </button>

@@ -70,24 +70,24 @@ export function PdfList({
     <div className="space-y-4">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
+        <div className="space-y-1">
           <h1 className="text-2xl font-semibold tracking-tight">PDFs</h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-sm text-muted-foreground">
             {filtered.length} of {pdfs.length} document{pdfs.length === 1 ? "" : "s"}
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex items-center">
+          <div className="flex items-center p-1 rounded-lg bg-muted border border-border">
             <button
               onClick={() => setView("table")}
-              className={`p-1.5 text-sm transition-colors ${view === "table" ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              className={`p-1.5 rounded-md text-sm transition-all ${view === "table" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
               title="Table view"
             >
               <IconTable className="h-4 w-4" />
             </button>
             <button
               onClick={() => setView("card")}
-              className={`p-1.5 text-sm transition-colors ${view === "card" ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              className={`p-1.5 rounded-md text-sm transition-all ${view === "card" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
               title="Card view"
             >
               <IconLayoutGrid className="h-4 w-4" />
@@ -95,7 +95,7 @@ export function PdfList({
           </div>
           <Link
             href="/pdfs/upload"
-            className="rounded-lg bg-primary text-primary-foreground px-3 py-2 text-sm font-medium hover:brightness-110 transition-all flex items-center gap-1.5"
+            className="rounded-lg bg-primary text-primary-foreground px-3 py-2 text-sm font-medium hover:brightness-110 transition-all flex items-center gap-1.5 shadow-sm"
           >
             <IconUpload className="h-4 w-4" /> Upload
           </Link>
@@ -103,14 +103,14 @@ export function PdfList({
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-3 p-4 rounded-xl border border-border bg-card shadow-sm">
         <div className="relative flex-1 min-w-[200px]">
           <IconSearch className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <input
             placeholder="Search by title..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-lg border border-border pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+            className="w-full rounded-lg border border-border pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-background"
           />
         </div>
         <Select
@@ -147,11 +147,11 @@ export function PdfList({
 
       {/* Empty state */}
       {filtered.length === 0 ? (
-        <div className="text-center py-16 space-y-3 border border-dashed border-border">
+        <div className="text-center py-16 space-y-3 rounded-xl border border-dashed border-border bg-card/50">
           <IconFileDescription className="h-10 w-10 mx-auto text-muted-foreground" />
-          <div>
+          <div className="space-y-1">
             <p className="text-sm font-medium">No PDFs found</p>
-            <p className="text-xs text-muted-foreground mt-0.5">
+            <p className="text-xs text-muted-foreground">
               {pdfs.length === 0
                 ? "The archive is empty. Upload the first document."
                 : "Try adjusting your search or filter criteria."}
@@ -252,10 +252,12 @@ export function PdfList({
                 <div
                   key={pdf.id}
                   onClick={() => router.push(`/pdfs/${pdf.id}`)}
-                  className="group border border-border p-4 space-y-3 cursor-pointer"
+                  className="group rounded-xl border border-border p-4 space-y-3 cursor-pointer bg-card hover:border-primary/50 hover:bg-accent transition-all shadow-sm"
                 >
                   <div className="flex items-start justify-between">
-                    <IconFileDescription className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                    <div className="p-2 rounded-lg bg-primary/10 text-primary">
+                      <IconFileDescription className="h-5 w-5" />
+                    </div>
                     <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity" onClick={(e) => e.stopPropagation()}>
                       <a
                         href={`/api/pdf/${pdf.id}/download`}
@@ -285,9 +287,9 @@ export function PdfList({
                     </div>
                   </div>
                   <div className="space-y-1.5">
-                    <p className="text-sm font-medium leading-snug line-clamp-2">{pdf.title}</p>
+                    <p className="text-sm font-medium leading-snug line-clamp-2 group-hover:text-primary transition-colors">{pdf.title}</p>
                     <div className="flex flex-wrap gap-1.5">
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium border border-border">
                         {pdf.category?.imagePath && (
                           <CategoryImage categoryId={pdf.categoryId} alt="" className="w-3 h-3 rounded object-cover" />
                         )}
