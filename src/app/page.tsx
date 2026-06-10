@@ -9,24 +9,17 @@ export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
   const settings = await getCachedSettings()
-  const categories = await prisma.category.findMany({ orderBy: { name: "asc" } })
-
-  const recentPdfs = await prisma.pdf.findMany({
-    take: 6,
-    orderBy: { createdAt: "desc" },
-    include: { category: true },
-  })
-
-  const months = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December",
-  ]
-  const years = Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - i)
 
   const now = new Date()
   const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
 
-  const [pdfCount, categoryCount, userCount, pdfsThisMonth] = await Promise.all([
+  const [categories, recentPdfs, pdfCount, categoryCount, userCount, pdfsThisMonth] = await Promise.all([
+    prisma.category.findMany({ orderBy: { name: "asc" } }),
+    prisma.pdf.findMany({
+      take: 6,
+      orderBy: { createdAt: "desc" },
+      include: { category: true },
+    }),
     prisma.pdf.count(),
     prisma.category.count(),
     prisma.user.count(),
@@ -36,14 +29,12 @@ export default async function HomePage() {
   return (
     <div className="flex flex-col min-h-screen">
       <HeroSection
-        categories={categories}
-        years={years}
-        months={months}
+        pdfCount={pdfCount}
         settings={settings}
       />
 
-      <main className="flex-1 mx-auto max-w-5xl w-full px-4 pb-24 space-y-20">
-        <section>
+      <main className="flex-1 mx-auto max-w-5xl w-full px-4 pb-16 space-y-16">
+        <section className="border-b border-border pb-12">
           <StatsSection data={{ pdfCount, categoryCount, userCount, pdfsThisMonth }} />
         </section>
 
@@ -52,14 +43,14 @@ export default async function HomePage() {
         )}
 
         {recentPdfs.length > 0 && (
-          <section className="space-y-5">
-            <h2 className="text-base font-semibold">Recent Documents</h2>
+          <section className="space-y-4">
+            <h2 className="text-sm font-semibold">Recent Documents</h2>
             <RecentPdfs pdfs={recentPdfs} />
           </section>
         )}
       </main>
 
-      <footer className="border-t border-border py-8 text-center text-xs text-muted-foreground">
+      <footer className="border-t border-border py-6 text-center text-xs text-muted-foreground">
         {settings.footerText}
       </footer>
     </div>
